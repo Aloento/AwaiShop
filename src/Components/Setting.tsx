@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Label, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, tokens } from "@fluentui/react-components";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 
 interface ISetting {
@@ -19,34 +19,42 @@ export function Setting({ Open, Toggle }: ISetting) {
         <DialogBody>
           <DialogTitle>Personal Information</DialogTitle>
 
-          <DialogContent style={Flex}>
-            <div style={{
-              ...ColFlex,
-              flexBasis: "50%",
-              rowGap: tokens.spacingVerticalM
-            }}>
-              <Field label="Name" size="large">
-                <Label>Aloento</Label>
-              </Field>
+          <DialogContent style={{
+            ...ColFlex
+          }}>
+            <div style={Flex}>
+              <div style={{
+                ...ColFlex,
+                flexBasis: "50%",
+                rowGap: tokens.spacingVerticalM
+              }}>
+                <Field label="Name" size="large">
+                  <Label>Aloento</Label>
+                </Field>
 
-              <Field label="E-Mail" size="large">
-                <Label>Aloento</Label>
-              </Field>
+                <Field label="E-Mail" size="large">
+                  <Label>Aloento</Label>
+                </Field>
+              </div>
+
+              <div style={{
+                ...ColFlex,
+                flexBasis: "50%",
+                rowGap: tokens.spacingVerticalM
+              }}>
+                <Field label="Phone" size="large">
+                  <Label>Aloento</Label>
+                </Field>
+
+                <Field label="Name" size="large">
+                  <Label>Aloento</Label>
+                </Field>
+              </div>
             </div>
 
-            <div style={{
-              ...ColFlex,
-              flexBasis: "50%",
-              rowGap: tokens.spacingVerticalM
-            }}>
-              <Field label="Phone" size="large">
-                <Label>Aloento</Label>
-              </Field>
-
-              <Field label="Name" size="large">
-                <Label>Aloento</Label>
-              </Field>
-            </div>
+            <Field>
+              <Input />
+            </Field>
           </DialogContent>
 
           <DialogActions>
