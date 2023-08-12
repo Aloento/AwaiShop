@@ -47,15 +47,15 @@ export function Setting({ Open, Toggle }: ISetting) {
                   <Label>Aloento</Label>
                 </Field>
 
-                <Field label="Name" size="large">
-                  <Label>Aloento</Label>
+                <Field label="What" size="large">
+                  <Label>Placeholder</Label>
                 </Field>
               </div>
             </div>
-            <Field label="Address" size="large">
-              <Input></Input>
-            </Field>
 
+            <Field label="Address" size="large">
+              <Input />
+            </Field>
           </DialogContent>
 
           <DialogActions>
