@@ -20,7 +20,8 @@ export function Setting({ Open, Toggle }: ISetting) {
           <DialogTitle>Personal Information</DialogTitle>
 
           <DialogContent style={{
-            ...ColFlex
+            ...ColFlex,
+            rowGap: tokens.spacingVerticalM
           }}>
             <div style={Flex}>
               <div style={{
@@ -51,10 +52,10 @@ export function Setting({ Open, Toggle }: ISetting) {
                 </Field>
               </div>
             </div>
-
-            <Field>
-              <Input />
+            <Field label="Address" size="large">
+              <Input></Input>
             </Field>
+
           </DialogContent>
 
           <DialogActions>
