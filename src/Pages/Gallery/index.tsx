@@ -1,6 +1,11 @@
-import { Body1, Card, CardFooter, CardPreview, makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { Cover, Flex } from "~/Helpers/Styles";
+import { Body1, Card, CardFooter, CardPreview, Title3, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 const useStyles = makeStyles({
   card: {
     marginTop: "10px",
@@ -20,59 +25,69 @@ const useStyles = makeStyles({
  * @since 0.1.0
  * @version 0.1.0
  */
-
-class ProductInfo {
-  imageUrl: string
-  description: string
-  constructor() {
-    this.imageUrl = "https://source.unsplash.com/random";
-    this.description = "No Description";
-  }
+interface ProductInfo {
+  Image: string;
+  Name: string;
 }
 
+const cardList: ProductInfo[] = [
+  {
+    Image: "https://source.unsplash.com/random",
+    Name: "Product 1"
+  },
+  {
+    Image: "https://source.unsplash.com/random",
+    Name: "Product 2"
+  },
+  {
+    Image: "https://source.unsplash.com/random",
+    Name: "Product 3"
+  },
+  {
+    Image: "https://source.unsplash.com/random",
+    Name: "Product 4"
+  }
+]
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 export function Gallery() {
-  const styles = useStyles();
-  const cardList: ProductInfo[] = [
-    {
-      imageUrl: "https://source.unsplash.com/random",
-      description: "Product 1"
-    },
-    {
-      imageUrl: "https://source.unsplash.com/random",
-      description: "Product 2"
-    },
-    {
-      imageUrl: "https://source.unsplash.com/random",
-      description: "Product 3"
-    },
-    {
-      imageUrl: "https://source.unsplash.com/random",
-      description: "Product 4"
-    }
-  ]
+  const style = useStyles();
+
   return (
     <div style={{
-      ...Flex,
-      flexWrap: "wrap",
-      justifyContent: "space-evenly",
-      columnGap: tokens.spacingVerticalL
+      ...ColFlex,
+      rowGap: tokens.spacingVerticalL
     }}>
-      {
-        cardList.map((item) => (
-          <Card className={styles.card}>
-            <CardPreview>
-              <img className={styles.img} src={item.imageUrl} />
-            </CardPreview>
+      <Title3>T-Shirt</Title3>
 
-            <CardFooter>
-              <Body1>
-                {item.description}
-              </Body1>
-            </CardFooter>
-          </Card>
-        ))
-      }
+      <div style={{
+        ...Flex,
+        flexWrap: "wrap",
+        justifyContent: "space-evenly",
+        columnGap: tokens.spacingVerticalL
+      }}>
+        {
+          cardList.map((item) => (
+            <Card className={style.card}>
+              <CardPreview>
+                <img className={style.img} src={item.Image} />
+              </CardPreview>
 
+              <CardFooter>
+                <Body1>
+                  {item.Name}
+                </Body1>
+              </CardFooter>
+            </Card>
+          ))
+        }
+      </div>
+
+      <Title3>Cap</Title3>
     </div>
   )
 }
