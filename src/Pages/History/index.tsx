@@ -1,16 +1,14 @@
-import { Body1, Body1Strong, Button, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Body1, Body1Strong, Button, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
+import { ICartItem } from "~/Components/ShopCart";
 import { ColFlex, Cover } from "~/Helpers/Styles";
 
-interface ICartItem {
-  Id: number;
-  Image: string;
-  Name: string;
-  Type: string;
-  Quantity: number;
-}
-
-interface IOrderHistoryItem extends ICartItem {
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
+interface IHistoryItem extends ICartItem {
   Status: string,
   TrackNumber: string,
   OrderDate: Date
@@ -21,21 +19,27 @@ interface IOrderHistoryItem extends ICartItem {
  * @since 0.1.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
-  createTableColumn<IOrderHistoryItem>({
+const columns: TableColumnDefinition<IHistoryItem>[] = [
+  createTableColumn<IHistoryItem>({
     columnId: "Cover",
     renderHeaderCell: () => {
       return <div style={{ width: "44px" }} />;
     },
     renderCell(item) {
-      return <Image shape="square" style={{
-        ...Cover,
-        aspectRatio: "1",
-        height: "44px"
-      }} src={item.Image} />
+      return <Image
+        shape="square"
+        style={{
+          ...Cover,
+          aspectRatio: "1",
+          height: "50px",
+          marginTop: tokens.spacingVerticalXS,
+          marginBottom: tokens.spacingVerticalXS,
+        }}
+        src={item.Image}
+      />
     },
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IHistoryItem>({
     columnId: "Product",
     renderHeaderCell: () => {
       return "Product";
@@ -49,7 +53,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IHistoryItem>({
     columnId: "Quantity",
     renderHeaderCell: () => {
       return "Quantity";
@@ -62,7 +66,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IHistoryItem>({
     columnId: "OrderDate",
     renderHeaderCell: () => {
       return "Order Date";
@@ -75,7 +79,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IHistoryItem>({
     columnId: "TrackNumber",
     renderHeaderCell: () => {
       return "Track Number";
@@ -88,7 +92,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IHistoryItem>({
     columnId: "OrderState",
     renderHeaderCell: () => {
       return "Order State";
@@ -101,7 +105,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IHistoryItem>({
     columnId: "Action",
     renderHeaderCell: () => {
       return "Refund";
@@ -112,7 +116,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
   })
 ]
 
-const items: IOrderHistoryItem[] = [
+const items: IHistoryItem[] = [
   {
     Id: 1,
     Image: "https://picsum.photos/550",
