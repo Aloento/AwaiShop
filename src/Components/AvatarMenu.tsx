@@ -20,7 +20,15 @@ export function AvatarMenu() {
       <MenuPopover>
         <MenuList>
           <MenuGroupHeader>Hi Aloento</MenuGroupHeader>
-          <MenuItem><Link appearance="subtle" href="/History">History</Link></MenuItem>
+
+          <MenuItem>
+            <Link appearance="subtle" href="/History">History</Link>
+          </MenuItem>
+
+          <MenuItem>
+            <Link appearance="subtle" href="/Admin">Admin</Link>
+          </MenuItem>
+
           <MenuItem onClick={toggleModal}>Setting</MenuItem>
           <MenuItem>Logout</MenuItem>
         </MenuList>

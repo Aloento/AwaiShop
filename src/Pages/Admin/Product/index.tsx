@@ -2,6 +2,11 @@ import { Body1, Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataG
 import { DeleteRegular } from "@fluentui/react-icons";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 interface IProductItem {
   Id: number;
   Image: string;
@@ -9,7 +14,6 @@ interface IProductItem {
   Category: string,
   Stock: number;
 }
-
 
 /**
  * @author Aloento
@@ -85,7 +89,7 @@ const items: IProductItem[] = [
     Id: 1,
     Image: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
-    Category:"Test",
+    Category: "Test",
     Stock: 10,
 
   },
@@ -113,8 +117,9 @@ export function AdminProduct() {
         ...Flex,
         justifyContent: "right"
       }}>
-        <Button>Add New Product</Button>
+        <Button appearance="primary">Add New Product</Button>
       </div>
+
       <DataGrid
         items={items}
         columns={columns}
@@ -148,8 +153,6 @@ export function AdminProduct() {
           )}
         </DataGridBody>
       </DataGrid>
-
     </div>
   )
 }
-
