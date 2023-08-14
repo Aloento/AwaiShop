@@ -1,5 +1,5 @@
-import { Body1, Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
-import { DeleteRegular } from "@fluentui/react-icons";
+import { Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Image, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
+import { BoxArrowLeftRegular } from "@fluentui/react-icons";
 import { ICartItem } from "~/Components/ShopCart";
 import { Cover } from "~/Helpers/Styles";
 
@@ -66,7 +66,24 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       return <DataGridHeaderCell>Type</DataGridHeaderCell>
     },
     renderCell(item) {
-      return <DataGridCell>{item.Type}</DataGridCell>
+      return (
+        <DataGridCell>
+          <Body1Strong>{item.Type}</Body1Strong>
+        </DataGridCell>
+      )
+    }
+  }),
+  createTableColumn<IHistoryItem>({
+    columnId: "OrderId",
+    renderHeaderCell: () => {
+      return <DataGridHeaderCell>Order Id</DataGridHeaderCell>
+    },
+    renderCell(item) {
+      return (
+        <DataGridCell>
+          {item.Id}
+        </DataGridCell>
+      )
     }
   }),
   createTableColumn<IHistoryItem>({
@@ -75,13 +92,7 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       return <DataGridHeaderCell>Quantity</DataGridHeaderCell>;
     },
     renderCell(item) {
-      return (
-        <DataGridCell>
-          <Field defaultValue={item.Quantity}>
-            <Body1>{item.Quantity}</Body1>
-          </Field>
-        </DataGridCell>
-      )
+      return <DataGridCell>{item.Quantity}</DataGridCell>
     }
   }),
   createTableColumn<IHistoryItem>({
@@ -90,13 +101,7 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       return <DataGridHeaderCell>Order Date</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <DataGridHeaderCell>
-          <Field defaultValue={item.OrderDate.toDateString()}>
-            <Body1>{item.OrderDate.toDateString()}</Body1>
-          </Field>
-        </DataGridHeaderCell>
-      )
+      return <DataGridHeaderCell>{item.OrderDate.toDateString()}</DataGridHeaderCell>
     }
   }),
   createTableColumn<IHistoryItem>({
@@ -105,28 +110,16 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       return <DataGridHeaderCell>Track Number</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <DataGridCell>
-          <Field defaultValue={item.TrackNumber}>
-            <Body1>{item.TrackNumber}</Body1>
-          </Field>
-        </DataGridCell>
-      )
+      return <DataGridCell>{item.TrackNumber}</DataGridCell>
     }
   }),
   createTableColumn<IHistoryItem>({
-    columnId: "OrderState",
+    columnId: "Status",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Order State</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <DataGridCell>
-          <Field defaultValue={item.Status}>
-            <Body1>{item.Status}</Body1>
-          </Field>
-        </DataGridCell>
-      )
+      return <DataGridCell>{item.Status}</DataGridCell>
     }
   }),
   createTableColumn<IHistoryItem>({
@@ -134,7 +127,7 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
     renderHeaderCell: () => {
       return (
         <DataGridHeaderCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
-          Action
+          Refund
         </DataGridHeaderCell>
       )
     },
@@ -143,9 +136,9 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
         <DataGridCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
           <Button
             appearance="subtle"
-            icon={<DeleteRegular />}
+            icon={<BoxArrowLeftRegular />}
             style={{
-              minWidth: "3em"
+              minWidth: "44px"
             }}
           />
         </DataGridCell>
@@ -162,9 +155,8 @@ const items: IHistoryItem[] = [
     Type: "Short Sleeve, S",
     Quantity: 1,
     OrderDate: new Date(),
-    TrackNumber: "abcd1234",
+    TrackNumber: "Number123456789",
     Status: "Finished"
-
   },
   {
     Id: 2,
@@ -173,7 +165,7 @@ const items: IHistoryItem[] = [
     Type: "Red, Long and Long",
     Quantity: 1,
     OrderDate: new Date(),
-    TrackNumber: "abcd1234",
+    TrackNumber: "Number123456789",
     Status: "Finished"
   }
 ]
@@ -205,7 +197,6 @@ export function History() {
           )}
         </DataGridBody>
       </DataGrid>
-
     </div>
   )
 }
