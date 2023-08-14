@@ -30,102 +30,126 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       )
     },
     renderCell(item) {
-      return <Image
-        shape="square"
-        style={{
-          ...Cover,
-          aspectRatio: "1",
-          width: "50px",
-          marginTop: tokens.spacingVerticalXS,
-          marginBottom: tokens.spacingVerticalXS,
-        }}
-        src={item.Image}
-      />
+      return (
+        <DataGridCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
+          <Image
+            shape="square"
+            style={{
+              ...Cover,
+              aspectRatio: "1",
+              width: "50px",
+              marginTop: tokens.spacingVerticalXS,
+              marginBottom: tokens.spacingVerticalXS,
+            }}
+            src={item.Image}
+          />
+        </DataGridCell>
+      )
     },
   }),
   createTableColumn<IHistoryItem>({
     columnId: "Product",
     renderHeaderCell: () => {
-      return "Product";
+      return <DataGridHeaderCell>Product</DataGridHeaderCell>
     },
     renderCell(item) {
-      return <Body1Strong>{item.Name}</Body1Strong>
+      return (
+        <DataGridCell>
+          <Body1Strong>{item.Name}</Body1Strong>
+        </DataGridCell>
+      )
     }
   }),
   createTableColumn<IHistoryItem>({
     columnId: "Type",
     renderHeaderCell: () => {
-      return "Type";
+      return <DataGridHeaderCell>Type</DataGridHeaderCell>
     },
     renderCell(item) {
-      return item.Type
+      return <DataGridCell>{item.Type}</DataGridCell>
     }
   }),
   createTableColumn<IHistoryItem>({
     columnId: "Quantity",
     renderHeaderCell: () => {
-      return "Quantity";
+      return <DataGridHeaderCell>Quantity</DataGridHeaderCell>;
     },
     renderCell(item) {
       return (
-        <Field defaultValue={item.Quantity}>
-          <Body1>{item.Quantity}</Body1>
-        </Field>
+        <DataGridCell>
+          <Field defaultValue={item.Quantity}>
+            <Body1>{item.Quantity}</Body1>
+          </Field>
+        </DataGridCell>
       )
     }
   }),
   createTableColumn<IHistoryItem>({
     columnId: "OrderDate",
     renderHeaderCell: () => {
-      return "Order Date";
+      return <DataGridHeaderCell>Order Date</DataGridHeaderCell>
     },
     renderCell(item) {
       return (
-        <Field defaultValue={item.OrderDate.toDateString()}>
-          <Body1>{item.OrderDate.toDateString()}</Body1>
-        </Field>
+        <DataGridHeaderCell>
+          <Field defaultValue={item.OrderDate.toDateString()}>
+            <Body1>{item.OrderDate.toDateString()}</Body1>
+          </Field>
+        </DataGridHeaderCell>
       )
     }
   }),
   createTableColumn<IHistoryItem>({
     columnId: "TrackNumber",
     renderHeaderCell: () => {
-      return "Track Number";
+      return <DataGridHeaderCell>Track Number</DataGridHeaderCell>
     },
     renderCell(item) {
       return (
-        <Field defaultValue={item.TrackNumber}>
-          <Body1>{item.TrackNumber}</Body1>
-        </Field>
+        <DataGridCell>
+          <Field defaultValue={item.TrackNumber}>
+            <Body1>{item.TrackNumber}</Body1>
+          </Field>
+        </DataGridCell>
       )
     }
   }),
   createTableColumn<IHistoryItem>({
     columnId: "OrderState",
     renderHeaderCell: () => {
-      return "Order State";
+      return <DataGridHeaderCell>Order State</DataGridHeaderCell>
     },
     renderCell(item) {
       return (
-        <Field defaultValue={item.Status}>
-          <Body1>{item.Status}</Body1>
-        </Field>
+        <DataGridCell>
+          <Field defaultValue={item.Status}>
+            <Body1>{item.Status}</Body1>
+          </Field>
+        </DataGridCell>
       )
     }
   }),
   createTableColumn<IHistoryItem>({
     columnId: "Action",
     renderHeaderCell: () => {
-      return "Action";
+      return (
+        <DataGridHeaderCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
+          Action
+        </DataGridHeaderCell>
+      )
     },
     renderCell(item) {
-      return <Button
-        appearance="subtle"
-        icon={<DeleteRegular />}
-        style={{
-          minWidth: "3em"
-        }}
-      />
+      return (
+        <DataGridCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
+          <Button
+            appearance="subtle"
+            icon={<DeleteRegular />}
+            style={{
+              minWidth: "3em"
+            }}
+          />
+        </DataGridCell>
+      )
     },
   })
 ]
@@ -176,16 +200,7 @@ export function History() {
         <DataGridBody<ICartItem>>
           {({ item, rowId }) => (
             <DataGridRow<ICartItem> key={rowId}>
-              {({ columnId, renderCell }) => (
-                <DataGridCell style={
-                  columnId === "Cover" || columnId === "Action" ? {
-                    flexBasis: "unset",
-                    flexGrow: "unset",
-                  } : undefined}
-                >
-                  {renderCell(item)}
-                </DataGridCell>
-              )}
+              {({ renderCell }) => renderCell(item)}
             </DataGridRow>
           )}
         </DataGridBody>
