@@ -11,7 +11,9 @@ interface IProductItem {
   Id: number;
   Image: string;
   Name: string;
-  Category: string,
+  Category: string;
+  Variant: number;
+  Type: number;
   Stock: number;
 }
 
@@ -89,16 +91,19 @@ const items: IProductItem[] = [
     Id: 1,
     Image: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
-    Category: "Test",
+    Category: "Clothes",
+    Variant: 2,
+    Type: 4,
     Stock: 10,
-
   },
   {
     Id: 2,
     Image: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
-    Category: "Test",
-    Stock: 10,
+    Category: "Hat",
+    Variant: 2,
+    Type: 4,
+    Stock: 20,
   }
 ]
 
