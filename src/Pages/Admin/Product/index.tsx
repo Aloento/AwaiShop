@@ -1,7 +1,6 @@
-import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
-import { AddRegular, OpenRegular } from "@fluentui/react-icons";
+import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { OpenRegular } from "@fluentui/react-icons";
 import { CoverCol } from "~/Helpers/CoverCol";
-import { ColFlex, Flex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../../../Components/DelegateDataGrid";
 
 /**
@@ -129,18 +128,6 @@ const items: IProductItem[] = [
  */
 export function AdminProduct() {
   return (
-    <div style={{
-      ...ColFlex,
-      rowGap: tokens.spacingVerticalS
-    }}>
-      <div style={{
-        ...Flex,
-        justifyContent: "right"
-      }}>
-        <Button appearance="primary" icon={<AddRegular />}>New Product</Button>
-      </div>
-
-      <DelegateDataGrid Items={items} Columns={columns} />
-    </div>
+    <DelegateDataGrid Items={items} Columns={columns} />
   )
 }
