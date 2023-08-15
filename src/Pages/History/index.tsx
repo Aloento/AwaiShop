@@ -1,5 +1,6 @@
-import { Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { BoxArrowLeftRegular } from "@fluentui/react-icons";
+import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { ICartItem } from "~/Components/ShopCart";
 import { CoverCol } from "~/Helpers/CoverCol";
 
@@ -151,26 +152,6 @@ const items: IHistoryItem[] = [
  */
 export function History() {
   return (
-    <div>
-      <DataGrid
-        items={items}
-        columns={columns}
-        getRowId={(item: ICartItem) => item.Id}
-      >
-        <DataGridHeader>
-          <DataGridRow<ICartItem>>
-            {({ renderHeaderCell }) => renderHeaderCell()}
-          </DataGridRow>
-        </DataGridHeader>
-
-        <DataGridBody<ICartItem>>
-          {({ item, rowId }) => (
-            <DataGridRow<ICartItem> key={rowId}>
-              {({ renderCell }) => renderCell(item)}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-    </div>
+    <DelegateDataGrid Items={items} Columns={columns} />
   )
 }
