@@ -21,13 +21,13 @@ export function AvatarMenu() {
         <MenuList>
           <MenuGroupHeader>Hi Aloento</MenuGroupHeader>
 
-          <MenuItem>
-            <Link appearance="subtle" href="/History">History</Link>
-          </MenuItem>
+          <Link appearance="subtle" href="/History">
+            <MenuItem>History</MenuItem>
+          </Link>
 
-          <MenuItem>
-            <Link appearance="subtle" href="/Admin">Admin</Link>
-          </MenuItem>
+          <Link appearance="subtle" href="/Admin">
+            <MenuItem>Admin</MenuItem>
+          </Link>
 
           <MenuItem onClick={toggleModal}>Setting</MenuItem>
           <MenuItem>Logout</MenuItem>

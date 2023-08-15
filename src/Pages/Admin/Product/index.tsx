@@ -45,7 +45,11 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       return <DataGridHeaderCell>Category</DataGridHeaderCell>
     },
     renderCell(item) {
-      return <DataGridCell>{item.Category}</DataGridCell>
+      return (
+        <DataGridCell>
+          <Body1Strong>{item.Category}</Body1Strong>
+        </DataGridCell>
+      )
     }
   }),
   createTableColumn<IProductItem>({
