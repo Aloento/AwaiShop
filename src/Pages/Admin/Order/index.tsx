@@ -1,15 +1,14 @@
-import { Body1, Body1Strong, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { ColFlex, Cover } from "~/Helpers/Styles";
+import { Body1, Body1Strong, DataGridCell, DataGridHeaderCell, Field, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
+import { ICartItem } from "~/Components/ShopCart";
+import { CoverCol } from "~/Helpers/CoverCol";
 
-interface ICartItem {
-  Id: number;
-  Image: string;
-  Name: string;
-  Type: string;
-  Quantity: number;
-}
-
-interface IOrderHistoryItem extends ICartItem {
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
+interface IOrderItem extends ICartItem {
   Status: string,
   TrackNumber: string,
   OrderDate: Date
@@ -20,35 +19,22 @@ interface IOrderHistoryItem extends ICartItem {
  * @since 0.1.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
-  createTableColumn<IOrderHistoryItem>({
-    columnId: "Cover",
-    renderHeaderCell: () => {
-      return <div style={{ width: "44px" }} />;
-    },
-    renderCell(item) {
-      return <Image shape="square" style={{
-        ...Cover,
-        aspectRatio: "1",
-        height: "44px"
-      }} src={item.Image} />
-    },
-  }),
-  createTableColumn<IOrderHistoryItem>({
+const columns: TableColumnDefinition<IOrderItem>[] = [
+  CoverCol,
+  createTableColumn<IOrderItem>({
     columnId: "Product",
     renderHeaderCell: () => {
-      return "Product";
+      return <DataGridHeaderCell>Product</DataGridHeaderCell>
     },
     renderCell(item) {
       return (
-        <div style={ColFlex}>
+        <DataGridCell>
           <Body1Strong>{item.Name}</Body1Strong>
-          <Caption1>{item.Type}</Caption1>
-        </div>
+        </DataGridCell>
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "Quantity",
     renderHeaderCell: () => {
       return "Quantity";
@@ -61,7 +47,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "OrderDate",
     renderHeaderCell: () => {
       return "Order Date";
@@ -74,7 +60,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "TrackNumber",
     renderHeaderCell: () => {
       return "Track Number";
@@ -87,7 +73,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
       )
     }
   }),
-  createTableColumn<IOrderHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "OrderState",
     renderHeaderCell: () => {
       return "Order State";
@@ -102,7 +88,7 @@ const columns: TableColumnDefinition<IOrderHistoryItem>[] = [
   })
 ]
 
-const items: IOrderHistoryItem[] = [
+const items: IOrderItem[] = [
   {
     Id: 1,
     Image: "https://picsum.photos/550",
@@ -133,40 +119,6 @@ const items: IOrderHistoryItem[] = [
  */
 export function AdminOrder() {
   return (
-    <div>
-      <DataGrid
-        items={items}
-        columns={columns}
-        getRowId={(item: ICartItem) => item.Id}
-      >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ columnId, renderHeaderCell }) => (
-              <DataGridHeaderCell style={{
-                flexBasis: "unset",
-                flexGrow: columnId === "Product" ? 1 : 0
-              }}>
-                {renderHeaderCell()}
-              </DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-
-        <DataGridBody<ICartItem>>
-          {({ item, rowId }) => (
-            <DataGridRow<ICartItem> key={rowId}>
-              {({ columnId, renderCell }) => (
-                <DataGridCell style={{
-                  flexBasis: "unset",
-                  flexGrow: columnId === "Product" ? 1 : 0
-                }}>
-                  {renderCell(item)}
-                </DataGridCell>
-              )}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-    </div>
+    <DelegateDataGrid Items={items} Columns={columns} />
   )
 }
