@@ -1,7 +1,7 @@
-import { Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Image, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
+import { Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { BoxArrowLeftRegular } from "@fluentui/react-icons";
 import { ICartItem } from "~/Components/ShopCart";
-import { Cover } from "~/Helpers/Styles";
+import { CoverCol } from "~/Helpers/CoverCol";
 
 /**
  * @author Aloento
@@ -20,33 +20,7 @@ interface IHistoryItem extends ICartItem {
  * @version 0.1.0
  */
 const columns: TableColumnDefinition<IHistoryItem>[] = [
-  createTableColumn<IHistoryItem>({
-    columnId: "Cover",
-    renderHeaderCell: () => {
-      return (
-        <DataGridHeaderCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
-          <div style={{ width: "50px" }} />
-        </DataGridHeaderCell>
-      )
-    },
-    renderCell(item) {
-      return (
-        <DataGridCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
-          <Image
-            shape="square"
-            style={{
-              ...Cover,
-              aspectRatio: "1",
-              width: "50px",
-              marginTop: tokens.spacingVerticalXS,
-              marginBottom: tokens.spacingVerticalXS,
-            }}
-            src={item.Image}
-          />
-        </DataGridCell>
-      )
-    },
-  }),
+  CoverCol,
   createTableColumn<IHistoryItem>({
     columnId: "Product",
     renderHeaderCell: () => {

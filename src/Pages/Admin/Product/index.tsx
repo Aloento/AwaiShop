@@ -1,6 +1,7 @@
-import { Body1, Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
-import { DeleteRegular } from "@fluentui/react-icons";
-import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
+import { Body1, Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
+import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
+import { CoverCol } from "~/Helpers/CoverCol";
+import { ColFlex, Flex } from "~/Helpers/Styles";
 
 /**
  * @author Aloento
@@ -23,19 +24,7 @@ interface IProductItem {
  * @version 0.1.0
  */
 const columns: TableColumnDefinition<IProductItem>[] = [
-  createTableColumn<IProductItem>({
-    columnId: "Cover",
-    renderHeaderCell: () => {
-      return <div style={{ width: "44px" }} />;
-    },
-    renderCell(item) {
-      return <Image shape="square" style={{
-        ...Cover,
-        aspectRatio: "1",
-        height: "44px"
-      }} src={item.Image} />
-    },
-  }),
+  CoverCol,
   createTableColumn<IProductItem>({
     columnId: "Product",
     renderHeaderCell: () => {
@@ -122,7 +111,7 @@ export function AdminProduct() {
         ...Flex,
         justifyContent: "right"
       }}>
-        <Button appearance="primary">Add New Product</Button>
+        <Button appearance="primary" icon={<AddRegular />}>New Product</Button>
       </div>
 
       <DataGrid
