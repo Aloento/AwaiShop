@@ -1,5 +1,4 @@
-import { Body1, Body1Strong, Button, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { DeleteRegular } from "@fluentui/react-icons";
+import { Body1, Body1Strong, Caption1, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { ColFlex, Cover } from "~/Helpers/Styles";
 
 interface ICartItem {
@@ -168,7 +167,6 @@ export function AdminOrder() {
           )}
         </DataGridBody>
       </DataGrid>
-
     </div>
   )
 }
