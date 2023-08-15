@@ -101,20 +101,17 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
           Refund
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "unset", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<BoxArrowLeftRegular />}
-            style={{
-              minWidth: "44px"
-            }}
           />
         </DataGridCell>
       )

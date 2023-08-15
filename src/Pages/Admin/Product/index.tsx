@@ -1,5 +1,5 @@
-import { Body1, Body1Strong, Button, DataGridCell, DataGridHeaderCell, Field, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
-import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
+import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
+import { AddRegular, OpenRegular } from "@fluentui/react-icons";
 import { CoverCol } from "~/Helpers/CoverCol";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../../../Components/DelegateDataGrid";
@@ -42,36 +42,57 @@ const columns: TableColumnDefinition<IProductItem>[] = [
   createTableColumn<IProductItem>({
     columnId: "Category",
     renderHeaderCell: () => {
-      return "Category";
+      return <DataGridHeaderCell>Category</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <Field defaultValue={item.Category}>
-          <Body1>{item.Category}</Body1>
-        </Field>
-      )
+      return <DataGridCell>{item.Category}</DataGridCell>
+    }
+  }),
+  createTableColumn<IProductItem>({
+    columnId: "Variant",
+    renderHeaderCell: () => {
+      return <DataGridHeaderCell>Variant</DataGridHeaderCell>
+    },
+    renderCell(item) {
+      return <DataGridCell>{item.Variant}</DataGridCell>
+    }
+  }),
+  createTableColumn<IProductItem>({
+    columnId: "Type",
+    renderHeaderCell: () => {
+      return <DataGridHeaderCell>Type</DataGridHeaderCell>
+    },
+    renderCell(item) {
+      return <DataGridCell>{item.Type}</DataGridCell>
     }
   }),
   createTableColumn<IProductItem>({
     columnId: "Stock",
     renderHeaderCell: () => {
-      return "Stock";
+      return <DataGridHeaderCell>Stock</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <Field defaultValue={item.Stock}>
-          <Body1>{item.Stock}</Body1>
-        </Field>
-      )
+      return <DataGridCell>{item.Stock}</DataGridCell>
     }
   }),
   createTableColumn<IProductItem>({
     columnId: "Action",
     renderHeaderCell: () => {
-      return "Delete";
+      return (
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
+          Action
+        </DataGridHeaderCell>
+      )
     },
     renderCell(item) {
-      return <Button appearance="subtle" icon={<DeleteRegular />} />
+      return (
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+          <Button
+            appearance="subtle"
+            icon={<OpenRegular />}
+          />
+        </DataGridCell>
+      )
     },
   })
 ]
