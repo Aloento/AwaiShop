@@ -1,7 +1,8 @@
-import { Body1, Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
+import { Body1, Body1Strong, Button, DataGridCell, DataGridHeaderCell, Field, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
 import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
 import { CoverCol } from "~/Helpers/CoverCol";
 import { ColFlex, Flex } from "~/Helpers/Styles";
+import { DelegateDataGrid } from "../../../Components/DelegateDataGrid";
 
 /**
  * @author Aloento
@@ -28,13 +29,13 @@ const columns: TableColumnDefinition<IProductItem>[] = [
   createTableColumn<IProductItem>({
     columnId: "Product",
     renderHeaderCell: () => {
-      return "Product";
+      return <DataGridHeaderCell>Product</DataGridHeaderCell>
     },
     renderCell(item) {
       return (
-        <div style={ColFlex}>
+        <DataGridCell>
           <Body1Strong>{item.Name}</Body1Strong>
-        </div>
+        </DataGridCell>
       )
     }
   }),
@@ -114,39 +115,7 @@ export function AdminProduct() {
         <Button appearance="primary" icon={<AddRegular />}>New Product</Button>
       </div>
 
-      <DataGrid
-        items={items}
-        columns={columns}
-        getRowId={(item: IProductItem) => item.Id}
-      >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ columnId, renderHeaderCell }) => (
-              <DataGridHeaderCell style={{
-                flexBasis: "unset",
-                flexGrow: columnId === "Product" ? 1 : 0
-              }}>
-                {renderHeaderCell()}
-              </DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-
-        <DataGridBody<IProductItem>>
-          {({ item, rowId }) => (
-            <DataGridRow<IProductItem> key={rowId}>
-              {({ columnId, renderCell }) => (
-                <DataGridCell style={{
-                  flexBasis: "unset",
-                  flexGrow: columnId === "Product" ? 1 : 0
-                }}>
-                  {renderCell(item)}
-                </DataGridCell>
-              )}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
+      <DelegateDataGrid Items={items} Columns={columns} />
     </div>
   )
 }

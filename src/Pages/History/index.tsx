@@ -158,7 +158,7 @@ export function History() {
         getRowId={(item: ICartItem) => item.Id}
       >
         <DataGridHeader>
-          <DataGridRow>
+          <DataGridRow<ICartItem>>
             {({ renderHeaderCell }) => renderHeaderCell()}
           </DataGridRow>
         </DataGridHeader>
