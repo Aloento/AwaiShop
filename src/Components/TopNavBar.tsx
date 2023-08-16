@@ -2,6 +2,7 @@ import { Image, Link, Portal, Text, makeStyles, shorthands, tokens } from "@flue
 import { Flex, NavH, NavW } from "~/Helpers/Styles";
 import { AdminTopNav } from "~/Pages/Admin/Nav";
 import { AdminProductAddButton } from "~/Pages/Admin/Product/Button";
+import { AdminUserSearch } from "~/Pages/Admin/User/Search";
 import { AvatarMenu } from "./AvatarMenu";
 import { ShopCart } from "./ShopCart";
 
@@ -61,6 +62,8 @@ export function TopNavBar() {
 
           <div className={style.logoBox}>
             <AdminProductAddButton />
+            <AdminUserSearch />
+
             <ShopCart />
             <AvatarMenu />
           </div>
