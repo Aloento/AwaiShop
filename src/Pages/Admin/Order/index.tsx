@@ -1,94 +1,38 @@
-import { Body1, Body1Strong, DataGridCell, DataGridHeaderCell, Field, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { OpenRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
-import { ICartItem } from "~/Components/ShopCart";
-import { CoverCol } from "~/Helpers/CoverCol";
+import { HistoryColumns, IHistoryItem } from "~/Pages/History";
 
 /**
  * @author Aloento
  * @since 0.1.0
  * @version 0.1.0
  */
-interface IOrderItem extends ICartItem {
-  Status: string,
-  TrackNumber: string,
-  OrderDate: Date
-}
-
-/**
- * @author Aloento
- * @since 0.1.0
- * @version 0.1.0
- */
-const columns: TableColumnDefinition<IOrderItem>[] = [
-  CoverCol,
-  createTableColumn<IOrderItem>({
-    columnId: "Product",
+const columns: TableColumnDefinition<IHistoryItem>[] = [
+  ...HistoryColumns.slice(0, -1),
+  createTableColumn<IHistoryItem>({
+    columnId: "Action",
     renderHeaderCell: () => {
-      return <DataGridHeaderCell>Product</DataGridHeaderCell>
+      return (
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
+          Action
+        </DataGridHeaderCell>
+      )
     },
     renderCell(item) {
       return (
-        <DataGridCell>
-          <Body1Strong>{item.Name}</Body1Strong>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+          <Button
+            appearance="subtle"
+            icon={<OpenRegular />}
+          />
         </DataGridCell>
       )
-    }
-  }),
-  createTableColumn<IOrderItem>({
-    columnId: "Quantity",
-    renderHeaderCell: () => {
-      return "Quantity";
     },
-    renderCell(item) {
-      return (
-        <Field defaultValue={item.Quantity}>
-          <Body1>{item.Quantity}</Body1>
-        </Field>
-      )
-    }
-  }),
-  createTableColumn<IOrderItem>({
-    columnId: "OrderDate",
-    renderHeaderCell: () => {
-      return "Order Date";
-    },
-    renderCell(item) {
-      return (
-        <Field defaultValue={item.OrderDate.toDateString()}>
-          <Body1>{item.OrderDate.toDateString()}</Body1>
-        </Field>
-      )
-    }
-  }),
-  createTableColumn<IOrderItem>({
-    columnId: "TrackNumber",
-    renderHeaderCell: () => {
-      return "Track Number";
-    },
-    renderCell(item) {
-      return (
-        <Field defaultValue={item.TrackNumber}>
-          <Body1>{item.TrackNumber}</Body1>
-        </Field>
-      )
-    }
-  }),
-  createTableColumn<IOrderItem>({
-    columnId: "OrderState",
-    renderHeaderCell: () => {
-      return "Order State";
-    },
-    renderCell(item) {
-      return (
-        <Field defaultValue={item.Status}>
-          <Body1>{item.Status}</Body1>
-        </Field>
-      )
-    }
   })
 ]
 
-const items: IOrderItem[] = [
+const items: IHistoryItem[] = [
   {
     Id: 1,
     Image: "https://picsum.photos/550",
@@ -96,9 +40,8 @@ const items: IOrderItem[] = [
     Type: "Short Sleeve, S",
     Quantity: 1,
     OrderDate: new Date(),
-    TrackNumber: "abcd1234",
+    TrackNumber: "Number123456789",
     Status: "Finished"
-
   },
   {
     Id: 2,
@@ -107,7 +50,7 @@ const items: IOrderItem[] = [
     Type: "Red, Long and Long",
     Quantity: 1,
     OrderDate: new Date(),
-    TrackNumber: "abcd1234",
+    TrackNumber: "Number123456789",
     Status: "Finished"
   }
 ]
