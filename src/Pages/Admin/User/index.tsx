@@ -1,12 +1,17 @@
-import { Body1, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
+import { Button, Checkbox, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
-import { ColFlex, Flex } from "~/Helpers/Styles";
+import { ICartItem } from "~/Components/ShopCart";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 interface IUserItem {
-  Name: string,
-  Email: string,
-  Phone: string,
-  Address: string,
+  Id: number;
+  Name: string;
+  Email: string;
+  Admin?: boolean;
 }
 
 /**
@@ -15,18 +20,13 @@ interface IUserItem {
  * @version 0.1.0
  */
 const columns: TableColumnDefinition<IUserItem>[] = [
-
   createTableColumn<IUserItem>({
-    columnId: "UserName",
+    columnId: "Name",
     renderHeaderCell: () => {
-      return "User Name";
+      return "Real Name";
     },
     renderCell(item) {
-      return (
-        <Field defaultValue={item.Name}>
-          <Body1>{item.Name}</Body1>
-        </Field>
-      )
+      return item.Name;
     }
   }),
   createTableColumn<IUserItem>({
@@ -35,42 +35,20 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "E-Mail";
     },
     renderCell(item) {
-      return (
-        <Field defaultValue={item.Email}>
-          <Body1>{item.Email}</Body1>
-        </Field>
-      )
+      return item.Email;
     }
   }),
   createTableColumn<IUserItem>({
-    columnId: "Phone",
+    columnId: "Admin",
     renderHeaderCell: () => {
-      return "Phone";
+      return "Admin";
     },
     renderCell(item) {
-      return (
-        <Field defaultValue={item.Phone}>
-          <Body1>{item.Phone}</Body1>
-        </Field>
-      )
-    }
-  }),
-  createTableColumn<IUserItem>({
-    columnId: "Address",
-    renderHeaderCell: () => {
-      return "Address";
+      return <Checkbox defaultChecked={item.Admin} />
     },
-    renderCell(item) {
-      return (
-        <Field defaultValue={item.Address}>
-          <Body1>{item.Address}</Body1>
-        </Field>
-      )
-    }
   }),
-
   createTableColumn<IUserItem>({
-    columnId: "Action",
+    columnId: "Delete",
     renderHeaderCell: () => {
       return "Delete";
     },
@@ -82,16 +60,15 @@ const columns: TableColumnDefinition<IUserItem>[] = [
 
 const items: IUserItem[] = [
   {
+    Id: 1,
     Name: "Aloento",
-    Phone: "12342342",
-    Email: "user@example.com",
-    Address: "Test Address"
+    Email: "Aloento@T-Systems.com",
+    Admin: true
   },
   {
-    Name: "Aloento",
-    Phone: "12342342",
-    Email: "user@example.com",
-    Address: "Test Address"
+    Id: 2,
+    Name: "SomeOne",
+    Email: "SomeOne@T-Systems.com",
   },
 ]
 
@@ -102,50 +79,32 @@ const items: IUserItem[] = [
  */
 export function AdminUser() {
   return (
-    <div style={{
-      ...ColFlex,
-      rowGap: tokens.spacingVerticalS
-    }}>
-      <div style={{
-        ...Flex,
-        justifyContent: "right"
-      }}>
-        <Button>Add New User</Button>
-      </div>
-      <DataGrid
-        items={items}
-        columns={columns}
-        getRowId={(item: IUserItem) => item.Name}
-      >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ columnId, renderHeaderCell }) => (
-              <DataGridHeaderCell style={{
-                flexBasis: "unset",
-                flexGrow: 0
-              }}>
-                {renderHeaderCell()}
-              </DataGridHeaderCell>
+    <DataGrid
+      items={items}
+      columns={columns}
+      getRowId={(item: ICartItem) => item.Id}
+    >
+      <DataGridHeader>
+        <DataGridRow>
+          {({ renderHeaderCell }) => (
+            <DataGridHeaderCell>
+              {renderHeaderCell()}
+            </DataGridHeaderCell>
+          )}
+        </DataGridRow>
+      </DataGridHeader>
+
+      <DataGridBody<ICartItem>>
+        {({ item, rowId }) => (
+          <DataGridRow<ICartItem> key={rowId}>
+            {({ renderCell }) => (
+              <DataGridCell>
+                {renderCell(item)}
+              </DataGridCell>
             )}
           </DataGridRow>
-        </DataGridHeader>
-
-        <DataGridBody<IUserItem>>
-          {({ item, rowId }) => (
-            <DataGridRow<IUserItem> key={rowId}>
-              {({ columnId, renderCell }) => (
-                <DataGridCell style={{
-                  flexBasis: "unset",
-                  flexGrow: columnId === "Product" ? 1 : 0
-                }}>
-                  {renderCell(item)}
-                </DataGridCell>
-              )}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-
-    </div>
+        )}
+      </DataGridBody>
+    </DataGrid>
   )
 }
