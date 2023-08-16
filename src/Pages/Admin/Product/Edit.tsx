@@ -1,6 +1,20 @@
-import { Button } from "@fluentui/react-components";
+import { Button, Input, Subtitle1, Subtitle2, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
-import { DismissRegular } from "@fluentui/react-icons";
+import { DismissRegular, EditRegular } from "@fluentui/react-icons";
+import { ColFlex, Cover } from "~/Helpers/Styles";
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
+const useStyle = makeStyles({
+  img: {
+    aspectRatio: "1",
+    ...Cover,
+    ...shorthands.borderRadius(tokens.borderRadiusMedium)
+  }
+})
 
 /**
  * @author Aloento
@@ -8,13 +22,14 @@ import { DismissRegular } from "@fluentui/react-icons";
  * @version 0.1.0
  */
 export function AdminProductEdit({ Open, Toggle }: { Open: boolean; Toggle: () => void }) {
+  const style = useStyle();
 
   return (
     <Drawer
       open={Open}
       onOpenChange={Toggle}
       position="right"
-      size="medium"
+      size="large"
       modalType="alert"
     >
       <DrawerHeader>
@@ -29,7 +44,19 @@ export function AdminProductEdit({ Open, Toggle }: { Open: boolean; Toggle: () =
         </DrawerHeaderTitle>
       </DrawerHeader>
 
-      <DrawerBody>
+      <DrawerBody style={{
+        ...ColFlex,
+        rowGap: tokens.spacingVerticalXL
+      }}>
+        <Input
+          size="large"
+          appearance="underline"
+          defaultValue="OTC SHIRT - GREY"
+          contentBefore={<Subtitle2>Name</Subtitle2>}
+          contentAfter={<Button appearance="subtle" icon={<EditRegular />} />}
+        />
+
+        <Subtitle1>Photos</Subtitle1>
 
       </DrawerBody>
     </Drawer>
