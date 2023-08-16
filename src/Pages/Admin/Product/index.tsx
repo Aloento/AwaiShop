@@ -1,15 +1,22 @@
-import { Body1, Body1Strong, Button, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, Field, Image, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
-import { DeleteRegular } from "@fluentui/react-icons";
-import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
+import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { OpenRegular } from "@fluentui/react-icons";
+import { CoverCol } from "~/Helpers/CoverCol";
+import { DelegateDataGrid } from "../../../Components/DelegateDataGrid";
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.1.0
+ */
 interface IProductItem {
   Id: number;
   Image: string;
   Name: string;
-  Category: string,
+  Category: string;
+  Variant: number;
+  Type: number;
   Stock: number;
 }
-
 
 /**
  * @author Aloento
@@ -17,65 +24,78 @@ interface IProductItem {
  * @version 0.1.0
  */
 const columns: TableColumnDefinition<IProductItem>[] = [
-  createTableColumn<IProductItem>({
-    columnId: "Cover",
-    renderHeaderCell: () => {
-      return <div style={{ width: "44px" }} />;
-    },
-    renderCell(item) {
-      return <Image shape="square" style={{
-        ...Cover,
-        aspectRatio: "1",
-        height: "44px"
-      }} src={item.Image} />
-    },
-  }),
+  CoverCol,
   createTableColumn<IProductItem>({
     columnId: "Product",
     renderHeaderCell: () => {
-      return "Product";
+      return <DataGridHeaderCell>Product</DataGridHeaderCell>
     },
     renderCell(item) {
       return (
-        <div style={ColFlex}>
+        <DataGridCell>
           <Body1Strong>{item.Name}</Body1Strong>
-        </div>
+        </DataGridCell>
       )
     }
   }),
   createTableColumn<IProductItem>({
     columnId: "Category",
     renderHeaderCell: () => {
-      return "Category";
+      return <DataGridHeaderCell>Category</DataGridHeaderCell>
     },
     renderCell(item) {
       return (
-        <Field defaultValue={item.Category}>
-          <Body1>{item.Category}</Body1>
-        </Field>
+        <DataGridCell>
+          <Body1Strong>{item.Category}</Body1Strong>
+        </DataGridCell>
       )
+    }
+  }),
+  createTableColumn<IProductItem>({
+    columnId: "Variant",
+    renderHeaderCell: () => {
+      return <DataGridHeaderCell>Variant</DataGridHeaderCell>
+    },
+    renderCell(item) {
+      return <DataGridCell>{item.Variant}</DataGridCell>
+    }
+  }),
+  createTableColumn<IProductItem>({
+    columnId: "Type",
+    renderHeaderCell: () => {
+      return <DataGridHeaderCell>Type</DataGridHeaderCell>
+    },
+    renderCell(item) {
+      return <DataGridCell>{item.Type}</DataGridCell>
     }
   }),
   createTableColumn<IProductItem>({
     columnId: "Stock",
     renderHeaderCell: () => {
-      return "Stock";
+      return <DataGridHeaderCell>Stock</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <Field defaultValue={item.Stock}>
-          <Body1>{item.Stock}</Body1>
-        </Field>
-      )
+      return <DataGridCell>{item.Stock}</DataGridCell>
     }
   }),
   createTableColumn<IProductItem>({
     columnId: "Action",
     renderHeaderCell: () => {
-      return "Delete";
+      return (
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
+          Action
+        </DataGridHeaderCell>
+      )
     },
     renderCell(item) {
-      return <Button appearance="subtle" icon={<DeleteRegular />} />
+      return (
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+          <Button
+            appearance="subtle"
+            icon={<OpenRegular />}
+          />
+        </DataGridCell>
+      )
     },
   })
 ]
@@ -85,16 +105,19 @@ const items: IProductItem[] = [
     Id: 1,
     Image: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
-    Category:"Test",
+    Category: "Clothes",
+    Variant: 2,
+    Type: 4,
     Stock: 10,
-
   },
   {
     Id: 2,
     Image: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
-    Category: "Test",
-    Stock: 10,
+    Category: "Hat",
+    Variant: 2,
+    Type: 4,
+    Stock: 20,
   }
 ]
 
@@ -105,51 +128,6 @@ const items: IProductItem[] = [
  */
 export function AdminProduct() {
   return (
-    <div style={{
-      ...ColFlex,
-      rowGap: tokens.spacingVerticalS
-    }}>
-      <div style={{
-        ...Flex,
-        justifyContent: "right"
-      }}>
-        <Button>Add New Product</Button>
-      </div>
-      <DataGrid
-        items={items}
-        columns={columns}
-        getRowId={(item: IProductItem) => item.Id}
-      >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ columnId, renderHeaderCell }) => (
-              <DataGridHeaderCell style={{
-                flexBasis: "unset",
-                flexGrow: columnId === "Product" ? 1 : 0
-              }}>
-                {renderHeaderCell()}
-              </DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-
-        <DataGridBody<IProductItem>>
-          {({ item, rowId }) => (
-            <DataGridRow<IProductItem> key={rowId}>
-              {({ columnId, renderCell }) => (
-                <DataGridCell style={{
-                  flexBasis: "unset",
-                  flexGrow: columnId === "Product" ? 1 : 0
-                }}>
-                  {renderCell(item)}
-                </DataGridCell>
-              )}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-
-    </div>
+    <DelegateDataGrid Items={items} Columns={columns} />
   )
 }
-

@@ -1,4 +1,4 @@
-import { Avatar, Menu, MenuGroupHeader, MenuItem, MenuList, MenuPopover, MenuTrigger } from "@fluentui/react-components";
+import { Avatar, Link, Menu, MenuGroupHeader, MenuItem, MenuList, MenuPopover, MenuTrigger } from "@fluentui/react-components";
 import { useBoolean } from "ahooks";
 import { Setting } from "./Setting";
 
@@ -20,6 +20,15 @@ export function AvatarMenu() {
       <MenuPopover>
         <MenuList>
           <MenuGroupHeader>Hi Aloento</MenuGroupHeader>
+
+          <Link appearance="subtle" href="/History">
+            <MenuItem>History</MenuItem>
+          </Link>
+
+          <Link appearance="subtle" href="/Admin">
+            <MenuItem>Admin</MenuItem>
+          </Link>
+
           <MenuItem onClick={toggleModal}>Setting</MenuItem>
           <MenuItem>Logout</MenuItem>
         </MenuList>
