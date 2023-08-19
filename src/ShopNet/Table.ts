@@ -5,7 +5,7 @@ import Dexie from "dexie";
  * 缓存实体
  *
  * @author Aloento
- * @since 0.3.1
+ * @since 0.3.1 MusiLand
  * @version 0.2.0
  */
 interface ITable<T = unknown> {
@@ -18,7 +18,7 @@ interface ITable<T = unknown> {
  * 数据表操作工具
  *
  * @author Aloento
- * @since 0.3.1
+ * @since 0.3.1 MusiLand
  * @version 0.2.0
  */
 export class Table {
@@ -33,7 +33,7 @@ export class Table {
    * 按完整 key 获取
    *
    * @author Aloento
-   * @since 0.1.0
+   * @since 0.1.0 MusiLand
    * @version 0.2.0
    * @param cancel 对象失效规则
    */
@@ -56,7 +56,7 @@ export class Table {
    * 获取或者创建
    *
    * @author Aloento
-   * @since 0.1.0
+   * @since 0.1.0 MusiLand
    * @version 0.2.0
    * @param fac 内容生成工厂
    * @param exp 过期时间
@@ -74,7 +74,7 @@ export class Table {
    * 高并发时不能保证 key 唯一
    *
    * @author Aloento
-   * @since 0.1.0
+   * @since 0.1.0 MusiLand
    * @version 0.2.0
    * @param exp 过期Token
    * @returns val
@@ -94,7 +94,7 @@ export class Table {
 
     const time = (exp ?? dayjs().add(0.5, "y")).unix();
     if (exp && time < dayjs().unix())
-      throw "过期时间不能小于当前时间";
+      throw "The expiration time cannot be less than the current time";
 
     await this.Sto.put({
       Id: id, Exp: time,
@@ -108,7 +108,7 @@ export class Table {
    * 清理过期的缓存
    *
    * @author Aloento
-   * @since 0.3.0
+   * @since 0.3.0 MusiLand
    * @version 0.2.0
    */
   public Trim() {

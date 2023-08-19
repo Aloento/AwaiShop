@@ -24,7 +24,7 @@ export const ColFlex: GriffelStyle = { ...Flex, ...Col };
 
 /**
  * @author Aloento
- * @since 0.1.0
+ * @since 0.1.0 MusiLand
  * @version 0.1.0
  */
 export const BaseCard: GriffelStyle = {

@@ -6,7 +6,7 @@ import { Table } from "./Table";
  * @since 0.5.0
  * @version 0.1.0
  */
-export const DB = new Dexie("EShop", { autoOpen: false });
+const DB = new Dexie("EShop", { autoOpen: false });
 
 /**
  * @author Aloento
@@ -24,4 +24,4 @@ DB.open();
  * @since 0.5.0
  * @version 0.1.0
  */
-export const TB = new Table(DB, "Shared");
+export const Shared = new Table(DB, "Shared");
