@@ -1,5 +1,5 @@
 import { shorthands, tokens } from "@fluentui/react-components";
-import { GriffelStyle } from "@griffel/core";
+import { GriffelStyle } from "@griffel/react";
 
 /**
  * @author Aloento
