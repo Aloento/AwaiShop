@@ -4,7 +4,7 @@ import { useBoolean } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Flex } from "~/Helpers/Styles";
-import { AdminProductPhotoEdit } from "./Add";
+import { AdminProductPhotoEdit } from "./PhotoEdit";
 
 /**
  * @author Aloento

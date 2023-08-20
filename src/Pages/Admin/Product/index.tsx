@@ -3,7 +3,7 @@ import { OpenRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { CoverCol } from "~/Helpers/CoverCol";
 import { DelegateDataGrid } from "../../../Components/DelegateDataGrid";
-import { AdminProductEdit } from "./Edit";
+import { AdminProductEdit } from "./ProductEdit";
 
 /**
  * @author Aloento
