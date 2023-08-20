@@ -2,7 +2,7 @@ import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinit
 import { AddRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { Flex } from "~/Helpers/Styles";
-import { AdminProductVariantEdit } from "./VariantEdit";
+import { AdminProductVariantEdit } from "./Edit";
 
 interface IVariantItem {
   Id: number;

@@ -3,7 +3,7 @@ import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-ic
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Flex } from "~/Helpers/Styles";
-import { AdminProductPhotoEdit } from "./PhotoEdit";
+import { AdminProductPhotoEdit } from "./Edit";
 
 /**
  * @author Aloento
