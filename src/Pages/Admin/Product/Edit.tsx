@@ -2,6 +2,7 @@ import { Button, Input, Subtitle2, makeStyles, shorthands, tokens } from "@fluen
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { ColFlex, Cover } from "~/Helpers/Styles";
+import { AdminProductCombo } from "./Combo";
 import { AdminProductPhoto } from "./Photo";
 import { AdminProductVariant } from "./Variant";
 
@@ -60,7 +61,7 @@ export function AdminProductEdit({ Open, Toggle }: { Open: boolean; Toggle: () =
 
         <AdminProductPhoto />
         <AdminProductVariant />
-
+        <AdminProductCombo />
       </DrawerBody>
     </Drawer>
   )

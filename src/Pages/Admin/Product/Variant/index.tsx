@@ -1,12 +1,11 @@
 import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { AddRegular } from "@fluentui/react-icons";
+import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { Flex } from "~/Helpers/Styles";
 import { AdminProductVariantEdit } from "./Edit";
 
 interface IVariantItem {
-  Id: number;
-  Name: string;
+  Id: string;
   Types: string[];
 }
 
@@ -28,7 +27,7 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell style={{ flexBasis: "12%", flexGrow: "unset" }}>
-          {item.Name}
+          {item.Id}
         </DataGridCell>
       )
     }
@@ -51,18 +50,23 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     }
   }),
   createTableColumn<IVariantItem>({
-    columnId: "Edit",
+    columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "4%", flexGrow: "unset" }}>
-          Edit
+        <DataGridHeaderCell style={{ flexBasis: "7%", flexGrow: "unset" }}>
+          Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "4%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "7%", flexGrow: "unset" }}>
           <AdminProductVariantEdit />
+
+          <Button
+            appearance="subtle"
+            icon={<DeleteRegular />}
+          />
         </DataGridCell>
       )
     }
@@ -71,9 +75,12 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
 
 const items: IVariantItem[] = [
   {
-    Id: 0,
-    Name: "Color",
+    Id: "Color",
     Types: ["White", "Red"]
+  },
+  {
+    Id: "Size",
+    Types: ["Big", "Small"]
   }
 ]
 
