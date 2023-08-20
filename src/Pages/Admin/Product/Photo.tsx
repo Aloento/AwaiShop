@@ -1,6 +1,5 @@
 import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-icons";
-import { useBoolean } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Flex } from "~/Helpers/Styles";
@@ -43,8 +42,6 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
       )
     },
     renderCell(item) {
-      const [open, { toggle }] = useBoolean();
-
       return (
         <DataGridCell style={{ flexBasis: "11%", flexGrow: "unset" }}>
           <Button

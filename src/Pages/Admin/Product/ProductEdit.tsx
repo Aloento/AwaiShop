@@ -3,6 +3,7 @@ import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/r
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { ColFlex, Cover } from "~/Helpers/Styles";
 import { AdminProductPhoto } from "./Photo";
+import { AdminProductVariant } from "./Variant";
 
 /**
  * @author Aloento
@@ -58,6 +59,7 @@ export function AdminProductEdit({ Open, Toggle }: { Open: boolean; Toggle: () =
         />
 
         <AdminProductPhoto />
+        <AdminProductVariant />
 
       </DrawerBody>
     </Drawer>
