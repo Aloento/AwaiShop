@@ -20,7 +20,7 @@ interface IComboItem {
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IType {
+export interface IType {
   Variant: string;
   Type: string;
 }

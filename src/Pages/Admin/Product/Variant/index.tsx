@@ -4,6 +4,11 @@ import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { Flex } from "~/Helpers/Styles";
 import { AdminProductVariantEdit } from "./Edit";
 
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
 interface IVariantItem {
   Id: string;
   Types: string[];

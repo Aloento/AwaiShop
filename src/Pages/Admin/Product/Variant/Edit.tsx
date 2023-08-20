@@ -2,6 +2,11 @@ import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogActions, Dialog
 import { AddRegular, DeleteRegular, DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
 interface ITypeItem {
   Id: number;
   Name: string;
@@ -16,18 +21,10 @@ const columns: TableColumnDefinition<ITypeItem>[] = [
   createTableColumn<ITypeItem>({
     columnId: "Name",
     renderHeaderCell: () => {
-      return (
-        <DataGridHeaderCell>
-          Name
-        </DataGridHeaderCell>
-      )
+      return <DataGridHeaderCell>Name</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <DataGridCell>
-          {item.Name}
-        </DataGridCell>
-      )
+      return <DataGridCell>{item.Name}</DataGridCell>
     }
   }),
   createTableColumn<ITypeItem>({

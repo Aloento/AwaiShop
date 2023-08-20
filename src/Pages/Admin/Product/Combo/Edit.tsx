@@ -1,10 +1,16 @@
-import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, SpinButton, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
 import { AddRegular, DeleteRegular, DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
+import { Flex } from "~/Helpers/Styles";
+import { IType } from ".";
 
-interface ITypeItem {
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+interface IComboItem extends IType {
   Id: number;
-  Name: string;
 }
 
 /**
@@ -12,25 +18,26 @@ interface ITypeItem {
  * @since 0.5.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<ITypeItem>[] = [
-  createTableColumn<ITypeItem>({
-    columnId: "Name",
+const columns: TableColumnDefinition<IComboItem>[] = [
+  createTableColumn<IComboItem>({
+    columnId: "Variant",
     renderHeaderCell: () => {
-      return (
-        <DataGridHeaderCell>
-          Name
-        </DataGridHeaderCell>
-      )
+      return <DataGridHeaderCell>Variant</DataGridHeaderCell>
     },
     renderCell(item) {
-      return (
-        <DataGridCell>
-          {item.Name}
-        </DataGridCell>
-      )
+      return <DataGridCell>{item.Variant}</DataGridCell>
     }
   }),
-  createTableColumn<ITypeItem>({
+  createTableColumn<IComboItem>({
+    columnId: "Type",
+    renderHeaderCell: () => {
+      return <DataGridHeaderCell>Type</DataGridHeaderCell>
+    },
+    renderCell(item) {
+      return <DataGridCell>{item.Type}</DataGridCell>
+    }
+  }),
+  createTableColumn<IComboItem>({
     columnId: "Action",
     renderHeaderCell: () => {
       return (
@@ -57,14 +64,16 @@ const columns: TableColumnDefinition<ITypeItem>[] = [
   })
 ]
 
-const items: ITypeItem[] = [
+const items: IComboItem[] = [
   {
     Id: 0,
-    Name: "White",
+    Variant: "Color",
+    Type: "White",
   },
   {
     Id: 1,
-    Name: "Red",
+    Variant: "Size",
+    Type: "Big",
   }
 ]
 
@@ -90,16 +99,26 @@ export function AdminProductComboEdit() {
               <Button appearance="subtle" icon={<DismissRegular />} />
             </DialogTrigger>
           }>
-            Variant Detail
+            Combo Detail
           </DialogTitle>
 
           <DialogContent>
             <DelegateDataGrid Items={items} Columns={columns} />
-          </DialogContent>
 
-          <DialogActions>
-            <Button icon={<AddRegular />} appearance="primary">New Type</Button>
-          </DialogActions>
+            <div style={{
+              ...Flex,
+              justifyContent: "flex-end",
+              alignItems: "center",
+              columnGap: tokens.spacingVerticalM,
+              marginTop: tokens.spacingHorizontalM
+            }}>
+              <Label>Stock</Label>
+
+              <SpinButton />
+
+              <Button icon={<AddRegular />}>Add Type</Button>
+            </div>
+          </DialogContent>
         </DialogBody>
       </DialogSurface>
     </Dialog>
