@@ -46,7 +46,6 @@ export function MakeCoverCol(Size: number) {
       return (
         <DataGridCell className={style.unset}>
           <Image
-            shape="square"
             className={style.img}
             style={w}
             src={item.Image}
