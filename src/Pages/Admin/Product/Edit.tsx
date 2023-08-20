@@ -1,7 +1,8 @@
-import { Button, Input, Subtitle1, Subtitle2, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Button, Input, Subtitle2, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { ColFlex, Cover } from "~/Helpers/Styles";
+import { AdminProductPhoto } from "./Photo";
 
 /**
  * @author Aloento
@@ -56,7 +57,7 @@ export function AdminProductEdit({ Open, Toggle }: { Open: boolean; Toggle: () =
           contentAfter={<Button appearance="subtle" icon={<EditRegular />} />}
         />
 
-        <Subtitle1>Photos</Subtitle1>
+        <AdminProductPhoto />
 
       </DrawerBody>
     </Drawer>
