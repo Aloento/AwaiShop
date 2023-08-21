@@ -59,7 +59,10 @@ const columns: TableColumnDefinition<IOrderItem>[] = [
 ]
 
 const items: IOrderItem[] = [
-
+  {
+    Id: 0,
+    Name: "OTC Cap - Cap and Cap"
+  }
 ]
 
 /**
