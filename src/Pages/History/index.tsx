@@ -37,14 +37,14 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "OrderId",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "5%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "5%", flexGrow: 0 }}>
           Order Id
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "5%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "5%", flexGrow: 0 }}>
           {item.Id}
         </DataGridCell>
       )
@@ -67,14 +67,14 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "Quantity",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "4%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "4%", flexGrow: 0 }}>
           Quantity
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "4%", flexGrow: "unset" }}>
+        <DataGridCell style={{ flexBasis: "4%", flexGrow: 0 }}>
           {item.Orders.map(val => val.Quantity).reduce((prev, curr) => prev + curr, 0)}
         </DataGridCell>
       )
@@ -111,14 +111,14 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "Cancel",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
           Cancel
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<BoxArrowLeftRegular />}

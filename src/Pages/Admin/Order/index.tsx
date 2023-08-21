@@ -16,7 +16,7 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: "unset" }}>
+        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
           Action
         </DataGridHeaderCell>
       )
@@ -25,7 +25,7 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       const [open, { toggle }] = useBoolean();
 
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<OpenRegular />}
