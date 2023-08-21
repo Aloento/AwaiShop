@@ -42,7 +42,7 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
     }
   }),
   createTableColumn<ICartItem>({
-    columnId: "Num",
+    columnId: "Quantity",
     renderCell(item) {
       return (
         <DataGridCell style={{ flexBasis: "10%", flexGrow: 0 }}>
