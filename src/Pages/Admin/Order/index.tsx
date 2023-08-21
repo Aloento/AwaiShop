@@ -42,24 +42,62 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
 const items: IHistoryItem[] = [
   {
     Id: 1,
-    Image: "https://picsum.photos/550",
-    Name: "OTC SHIRT - GREY",
-    Type: "Short Sleeve, S",
-    Quantity: 1,
+    Orders: [
+      {
+        Name: "OTC SHIRT - GREY",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "S"
+          }
+        ],
+        Quantity: 1
+      },
+      {
+        Name: "OTC Cap - Cap and Cap",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "Long and Long"
+          }
+        ],
+        Quantity: 1
+      }
+    ],
     OrderDate: new Date(),
     TrackNumber: "Number123456789",
     Status: "Finished"
   },
   {
     Id: 2,
-    Image: "https://picsum.photos/600",
-    Name: "OTC Cap - Cap and Cap",
-    Type: "Red, Long and Long",
-    Quantity: 1,
+    Orders: [
+      {
+        Name: "OTC Cap - Cap and Cap",
+        Type: [
+          {
+            Variant: "Color",
+            Type: "Red"
+          },
+          {
+            Variant: "Size",
+            Type: "Long and Long"
+          }
+        ],
+        Quantity: 1
+      }
+    ],
     OrderDate: new Date(),
     TrackNumber: "Number123456789",
     Status: "Finished"
-  }
+  },
 ]
 
 /**

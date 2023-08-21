@@ -1,6 +1,7 @@
-import { Button } from "@fluentui/react-components";
+import { Button, Subtitle1, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
+import { ColFlex } from "~/Helpers/Styles";
 
 /**
  * @author Aloento
@@ -28,7 +29,11 @@ export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => 
         </DrawerHeaderTitle>
       </DrawerHeader>
 
-      <DrawerBody>
+      <DrawerBody style={{
+        ...ColFlex,
+        rowGap: tokens.spacingVerticalXL
+      }}>
+        <Subtitle1>Required Products</Subtitle1>
 
       </DrawerBody>
     </Drawer>
