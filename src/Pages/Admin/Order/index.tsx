@@ -1,7 +1,9 @@
 import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { OpenRegular } from "@fluentui/react-icons";
+import { useBoolean } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DelegateDataGrid";
 import { HistoryColumns, IHistoryItem } from "~/Pages/History";
+import { AdminOrderEdit } from "./Edit";
 
 /**
  * @author Aloento
@@ -20,12 +22,17 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       )
     },
     renderCell(item) {
+      const [open, { toggle }] = useBoolean();
+
       return (
         <DataGridCell style={{ flexBasis: "2.5%", flexGrow: "unset", justifyContent: "center" }}>
           <Button
             appearance="subtle"
             icon={<OpenRegular />}
+            onClick={toggle}
           />
+
+          <AdminOrderEdit Open={open} Toggle={toggle} />
         </DataGridCell>
       )
     },
