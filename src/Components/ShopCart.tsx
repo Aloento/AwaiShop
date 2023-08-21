@@ -24,7 +24,7 @@ export interface ICartItem {
  * @since 0.1.0
  * @version 0.2.0
  */
-const columns: TableColumnDefinition<ICartItem>[] = [
+export const CartColumns: TableColumnDefinition<ICartItem>[] = [
   MakeCoverCol(44),
   createTableColumn<ICartItem>({
     columnId: "Product",
@@ -97,7 +97,7 @@ export function ShopCart() {
       </PopoverTrigger>
 
       <PopoverSurface style={ColFlex}>
-        <DelegateDataGrid Items={items} Columns={columns} NoHeader />
+        <DelegateDataGrid Items={items} Columns={CartColumns} NoHeader />
         <Confirm />
       </PopoverSurface>
     </Popover>
