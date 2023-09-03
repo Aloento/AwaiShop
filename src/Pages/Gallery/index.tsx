@@ -88,7 +88,7 @@ function GalleryCategory({ Category }: { Category: string }) {
  */
 function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
-  const info = useAsyncMemo(Hub.Gallery.Get.Basic(Id), [Id])
+  const info = useAsyncMemo(Hub.Product.Get.Basic(Id), [Id])
 
   return (
     <Card className={style.card}>
