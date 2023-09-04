@@ -36,11 +36,11 @@ const useStyle = makeStyles({
  */
 export function Product() {
   const style = useStyle();
-  const { Paths } = useRouter();
+  const { Nav, Paths } = useRouter();
   let id = Paths.at(1);
 
   if (!id) {
-
+    throw Nav("/");
   }
 
   return (
