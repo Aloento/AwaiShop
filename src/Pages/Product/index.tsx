@@ -1,8 +1,11 @@
 import { Button, Divider, Field, LargeTitle, SpinButton, Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useRouter } from "~/Components/Router";
+import { useAsyncMemo } from "~/Helpers/AsyncMemo";
 import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Lexical } from "~/Lexical";
+import { Hub } from "~/ShopNet";
 import demo from "./demo.json";
 
 /**
@@ -11,10 +14,18 @@ import demo from "./demo.json";
  * @version 0.1.0
  */
 const useStyle = makeStyles({
+  main: ColFlex,
   img: {
     aspectRatio: "1",
     ...Cover,
     ...shorthands.borderRadius(tokens.borderRadiusMedium)
+  },
+  fore: {
+    color: tokens.colorBrandForeground1
+  },
+  info: {
+    ...Flex,
+    columnGap: tokens.spacingHorizontalXXXL
   }
 })
 
@@ -25,21 +36,17 @@ const useStyle = makeStyles({
  */
 export function Product() {
   const style = useStyle();
+  const { Paths } = useRouter();
+  let id = Paths.at(1);
+
+  if (!id) {
+
+  }
 
   return (
-    <div style={ColFlex}>
-      <div style={{
-        ...Flex,
-        columnGap: tokens.spacingHorizontalXXXL
-      }}>
-        <Carousel showArrows>
-          <img className={style.img} src="https://picsum.photos/550" />
-          <img className={style.img} src="https://picsum.photos/650" />
-          <img className={style.img} src="https://picsum.photos/500" />
-          <img className={style.img} src="https://picsum.photos/600" />
-          <img className={style.img} src="https://picsum.photos/700" />
-          <img className={style.img} src="https://source.unsplash.com/random" />
-        </Carousel>
+    <div className={style.main}>
+      <div className={style.info}>
+        <Gallery Id={id} />
 
         <div style={{
           ...BaseCard,
@@ -53,9 +60,7 @@ export function Product() {
           paddingRight: tokens.spacingHorizontalXXL,
           paddingBottom: tokens.spacingHorizontalXXL
         }}>
-          <LargeTitle style={{
-            color: tokens.colorBrandForeground1
-          }}>
+          <LargeTitle className={style.fore}>
             OTC SHIRT - GREY
           </LargeTitle>
 
@@ -65,9 +70,7 @@ export function Product() {
             ...ColFlex,
             rowGap: tokens.spacingVerticalM,
           }}>
-            <Title3 style={{
-              color: tokens.colorBrandForeground1
-            }}>
+            <Title3 className={style.fore}>
               SELECT SLEEVE: SHORT SLEEVE
             </Title3>
 
@@ -86,9 +89,7 @@ export function Product() {
             ...ColFlex,
             rowGap: tokens.spacingVerticalS,
           }}>
-            <Title3 style={{
-              color: tokens.colorBrandForeground1
-            }}>
+            <Title3 className={style.fore}>
               SELECT SIZE: SMALL
             </Title3>
 
@@ -113,9 +114,7 @@ export function Product() {
             ...ColFlex,
             rowGap: tokens.spacingVerticalS,
           }}>
-            <Title3 style={{
-              color: tokens.colorBrandForeground1
-            }}>
+            <Title3 className={style.fore}>
               QUANTITY
             </Title3>
 
@@ -143,4 +142,25 @@ export function Product() {
       </div>
     </div>
   )
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+function Gallery({ Id }: { Id: number }) {
+  const style = useStyle();
+  const list = useAsyncMemo(Hub.Product.Get.Carousel(), []);
+
+  return (
+    <Carousel showArrows>
+      <img className={style.img} src="https://picsum.photos/550" />
+      <img className={style.img} src="https://picsum.photos/650" />
+      <img className={style.img} src="https://picsum.photos/500" />
+      <img className={style.img} src="https://picsum.photos/600" />
+      <img className={style.img} src="https://picsum.photos/700" />
+      <img className={style.img} src="https://source.unsplash.com/random" />
+    </Carousel>
+  );
 }
