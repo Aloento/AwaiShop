@@ -38,7 +38,7 @@ const useStyles = makeStyles({
  * @version 0.1.0
  */
 export interface ProductInfo {
-  Image: string;
+  Cover: string;
   Name: string;
 }
 
@@ -93,7 +93,7 @@ function GalleryCard({ Id }: { Id: number }) {
   return (
     <Card className={style.card}>
       <CardPreview>
-        <Image className={style.img} src={info?.Image} />
+        <Image className={style.img} src={info?.Cover} />
       </CardPreview>
 
       <CardFooter>

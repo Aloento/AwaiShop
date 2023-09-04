@@ -6,6 +6,7 @@ import { useAsyncMemo } from "~/Helpers/AsyncMemo";
 import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Lexical } from "~/Lexical";
 import { Hub } from "~/ShopNet";
+import { IComboItem } from "../Admin/Product/Combo";
 import demo from "./demo.json";
 
 /**
@@ -26,8 +27,31 @@ const useStyle = makeStyles({
   info: {
     ...Flex,
     columnGap: tokens.spacingHorizontalXXXL
+  },
+  detail: {
+    ...BaseCard,
+    ...Col,
+    height: "fit-content",
+    flexBasis: "50%",
+    flexShrink: 0,
+    rowGap: tokens.spacingVerticalXL,
+    paddingTop: tokens.spacingVerticalM,
+    paddingLeft: tokens.spacingHorizontalXXL,
+    paddingRight: tokens.spacingHorizontalXXL,
+    paddingBottom: tokens.spacingHorizontalXXL
   }
 })
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+export interface IProduct {
+  Name: string;
+  Limit?: number;
+  Combos: Omit<IComboItem, "Id">[];
+}
 
 /**
  * @author Aloento
@@ -37,9 +61,9 @@ const useStyle = makeStyles({
 export function Product() {
   const style = useStyle();
   const { Nav, Paths } = useRouter();
-  let id = Paths.at(1);
+  const id = parseInt(Paths.at(1)!);
 
-  if (!id) {
+  if (isNaN(id)) {
     throw Nav("/");
   }
 
@@ -48,18 +72,7 @@ export function Product() {
       <div className={style.info}>
         <Gallery Id={id} />
 
-        <div style={{
-          ...BaseCard,
-          ...Col,
-          height: "fit-content",
-          flexBasis: "50%",
-          flexShrink: 0,
-          rowGap: tokens.spacingVerticalXL,
-          paddingTop: tokens.spacingVerticalM,
-          paddingLeft: tokens.spacingHorizontalXXL,
-          paddingRight: tokens.spacingHorizontalXXL,
-          paddingBottom: tokens.spacingHorizontalXXL
-        }}>
+        <div className={style.detail}>
           <LargeTitle className={style.fore}>
             OTC SHIRT - GREY
           </LargeTitle>
