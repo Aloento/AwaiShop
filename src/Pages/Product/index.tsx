@@ -39,6 +39,16 @@ const useStyle = makeStyles({
     paddingLeft: tokens.spacingHorizontalXXL,
     paddingRight: tokens.spacingHorizontalXXL,
     paddingBottom: tokens.spacingHorizontalXXL
+  },
+  vari: {
+    ...ColFlex,
+    rowGap: tokens.spacingVerticalS,
+  },
+  radio: {
+    ...Flex,
+    flexWrap: "wrap",
+    rowGap: tokens.spacingHorizontalS,
+    columnGap: tokens.spacingHorizontalM
   }
 })
 
@@ -79,47 +89,7 @@ export function Product() {
 
           <Divider />
 
-          <div style={{
-            ...ColFlex,
-            rowGap: tokens.spacingVerticalM,
-          }}>
-            <Title3 className={style.fore}>
-              SELECT SLEEVE: SHORT SLEEVE
-            </Title3>
-
-            <div style={{
-              ...Flex,
-              flexWrap: "wrap",
-              rowGap: tokens.spacingHorizontalS,
-              columnGap: tokens.spacingHorizontalM
-            }}>
-              <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
-              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>Long Sleeve</ToggleButton>
-            </div>
-          </div>
-
-          <div style={{
-            ...ColFlex,
-            rowGap: tokens.spacingVerticalS,
-          }}>
-            <Title3 className={style.fore}>
-              SELECT SIZE: SMALL
-            </Title3>
-
-            <div style={{
-              ...Flex,
-              flexWrap: "wrap",
-              rowGap: tokens.spacingHorizontalS,
-              columnGap: tokens.spacingHorizontalM
-            }}>
-              <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>S</ToggleButton>
-              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>M</ToggleButton>
-              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>L</ToggleButton>
-              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>XL</ToggleButton>
-              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>XXL</ToggleButton>
-              <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>XXXL</ToggleButton>
-            </div>
-          </div>
+          <Radio />
 
           <Divider />
 
@@ -162,9 +132,31 @@ export function Product() {
  * @since 0.5.0
  * @version 0.1.0
  */
+function Radio() {
+  const style = useStyle();
+
+  return (
+    <div className={style.vari}>
+      <Title3 className={style.fore}>
+        SELECT SLEEVE: SHORT SLEEVE
+      </Title3>
+
+      <div className={style.radio}>
+        <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
+        <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>Long Sleeve</ToggleButton>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
 function Gallery({ Id }: { Id: number }) {
   const style = useStyle();
-  const list = useAsyncMemo(Hub.Product.Get.Carousel(), []);
+  const list = useAsyncMemo(Hub.Product.Get.Carousel(Id), []);
 
   return (
     <Carousel showArrows>
