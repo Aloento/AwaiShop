@@ -137,12 +137,9 @@ function Gallery({ Id }: { Id: number }) {
 
   return (
     <Carousel showArrows>
-      <img className={style.img} src="https://picsum.photos/550" />
-      <img className={style.img} src="https://picsum.photos/650" />
-      <img className={style.img} src="https://picsum.photos/500" />
-      <img className={style.img} src="https://picsum.photos/600" />
-      <img className={style.img} src="https://picsum.photos/700" />
-      <img className={style.img} src="https://source.unsplash.com/random" />
+      {
+        data?.map(val => <img className={style.img} src={val} />)
+      }
     </Carousel>
   );
 }
