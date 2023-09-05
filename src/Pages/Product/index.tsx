@@ -1,6 +1,5 @@
-import { Button, Divider, Field, LargeTitle, SpinButton, Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Button, Divider, Field, LargeTitle, SpinButton, Title3, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
@@ -8,6 +7,7 @@ import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Lexical } from "~/Lexical";
 import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
+import { ProductRadioGroup } from "./RadioGroup";
 import demo from "./demo.json";
 
 /**
@@ -21,9 +21,6 @@ const useStyle = makeStyles({
     aspectRatio: "1",
     ...Cover,
     ...shorthands.borderRadius(tokens.borderRadiusMedium)
-  },
-  fore: {
-    color: tokens.colorBrandForeground1
   },
   info: {
     ...Flex,
@@ -41,16 +38,9 @@ const useStyle = makeStyles({
     paddingRight: tokens.spacingHorizontalXXL,
     paddingBottom: tokens.spacingHorizontalXXL
   },
-  vari: {
-    ...ColFlex,
-    rowGap: tokens.spacingVerticalS,
+  fore: {
+    color: tokens.colorBrandForeground1
   },
-  radio: {
-    ...Flex,
-    flexWrap: "wrap",
-    rowGap: tokens.spacingHorizontalS,
-    columnGap: tokens.spacingHorizontalM
-  }
 })
 
 /**
@@ -74,24 +64,11 @@ export function Product() {
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 
-  const { data, loading } = useRequest<[IProduct, Record<string, Set<string>>], never>(async () => {
-    if (isNaN(id))
-      throw null;
-
-    const raw = await Hub.Product.Get.Detail(id);
-    const variant: Record<string, Set<string>> = {};
-
-    for (const i of raw.Combos) {
-      for (const c of i.Combo) {
-        if (variant.hasOwnProperty(c.Variant))
-          variant[c.Variant].add(c.Type);
-        else
-          variant[c.Variant] = new Set([c.Type]);
-      }
-    }
-
-    return [raw, variant];
-  }, {
+  const { data } = useRequest(Hub.Product.Get.Detail, {
+    defaultParams: [id],
+    onBefore() {
+      isNaN(id) && Nav("/");
+    },
     onError() {
       throw Nav("/");
     }
@@ -109,7 +86,7 @@ export function Product() {
 
           <Divider />
 
-          <Radio />
+          <ProductRadioGroup Combos={data?.Combos} />
 
           <Divider />
 
@@ -152,32 +129,11 @@ export function Product() {
  * @since 0.5.0
  * @version 0.1.0
  */
-function Radio() {
-  const style = useStyle();
-  const [curr, setCurr] = useState<number>();
-
-  return (
-    <div className={style.vari}>
-      <Title3 className={style.fore}>
-        SELECT SLEEVE: SHORT SLEEVE
-      </Title3>
-
-      <div className={style.radio}>
-        <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
-        <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>Long Sleeve</ToggleButton>
-      </div>
-    </div>
-  );
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
 function Gallery({ Id }: { Id: number }) {
   const style = useStyle();
-  const { data, loading } = useRequest(() => Hub.Product.Get.Carousel(Id));
+  const { data } = useRequest(Hub.Product.Get.Carousel, {
+    defaultParams: [Id]
+  });
 
   return (
     <Carousel showArrows>
