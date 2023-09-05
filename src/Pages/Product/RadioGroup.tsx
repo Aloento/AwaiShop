@@ -1,4 +1,4 @@
-import { Title3, ToggleButton, makeStyles, tokens } from "@fluentui/react-components";
+import { Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useMemo, useState } from "react";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { IComboItem } from "../Admin/Product/Combo";
@@ -10,8 +10,10 @@ import { IComboItem } from "../Admin/Product/Combo";
  */
 const useStyle = makeStyles({
   fore: {
-    color: tokens.colorBrandForeground1
+    color: tokens.colorBrandForeground1,
+    textTransform: "uppercase"
   },
+  btn: shorthands.borderColor(tokens.colorBrandForeground1),
   vari: {
     ...ColFlex,
     rowGap: tokens.spacingVerticalS,
@@ -55,23 +57,38 @@ export function ProductRadioGroup({ Combos }: IRadioGroup) {
     return variant;
   }, [Combos]);
 
-  return (
-    <VariRadio />
-  );
+  return Object.keys(variants).map(val => <VariRadio Variant={val} Types={variants[val]} />);
 }
 
-function VariRadio() {
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+interface IVariRadio {
+  Variant: string;
+  Types: Set<string>;
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+function VariRadio({ Variant, Types }: IVariRadio) {
   const style = useStyle();
   const [curr, setCurr] = useState<number>();
 
-  return <div className={style.vari}>
-    <Title3 className={style.fore}>
-      SELECT SLEEVE: SHORT SLEEVE
-    </Title3>
+  return (
+    <div className={style.vari}>
+      <Title3 className={style.fore}>
+        SELECT {Variant}: SHORT SLEEVE
+      </Title3>
 
-    <div className={style.radio}>
-      <ToggleButton appearance="outline" checked style={{ borderColor: tokens.colorBrandForeground1 }}>Short Sleeve</ToggleButton>
-      <ToggleButton appearance="outline" style={{ borderColor: tokens.colorBrandForeground1 }}>Long Sleeve</ToggleButton>
+      <div className={style.radio}>
+        <ToggleButton appearance="outline" checked className={style.btn}>Short Sleeve</ToggleButton>
+        <ToggleButton appearance="outline" className={style.btn}>Long Sleeve</ToggleButton>
+      </div>
     </div>
-  </div>;
+  );
 }
