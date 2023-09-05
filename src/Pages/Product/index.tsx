@@ -1,12 +1,12 @@
-import { Button, Divider, Field, LargeTitle, SpinButton, Title3, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Button, Divider, Field, LargeTitle, SpinButton, Title3, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
-import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
+import { BaseCard, Col, ColFlex, Flex } from "~/Helpers/Styles";
 import { Lexical } from "~/Lexical";
 import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
+import { ProductCarousel } from "./Carousel";
 import { ProductRadioGroup } from "./RadioGroup";
 import demo from "./demo.json";
 
@@ -17,11 +17,6 @@ import demo from "./demo.json";
  */
 const useStyle = makeStyles({
   main: ColFlex,
-  img: {
-    aspectRatio: "1",
-    ...Cover,
-    ...shorthands.borderRadius(tokens.borderRadiusMedium)
-  },
   info: {
     ...Flex,
     columnGap: tokens.spacingHorizontalXXXL
@@ -77,11 +72,11 @@ export function Product() {
   return (
     <div className={style.main}>
       <div className={style.info}>
-        <Gallery Id={id} />
+        <ProductCarousel Id={id} />
 
         <div className={style.detail}>
           <LargeTitle className={style.fore}>
-            OTC SHIRT - GREY
+            {data?.Name}
           </LargeTitle>
 
           <Divider />
@@ -104,7 +99,7 @@ export function Product() {
               columnGap: tokens.spacingHorizontalM
             }}>
               <Field>
-                <SpinButton appearance="underline" defaultValue={1} />
+                <SpinButton appearance="underline" defaultValue={1} min={1} max={data?.Limit} />
               </Field>
 
               <Button appearance="primary">ADD TO CART</Button>
@@ -122,24 +117,4 @@ export function Product() {
       </div>
     </div>
   )
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
-function Gallery({ Id }: { Id: number }) {
-  const style = useStyle();
-  const { data } = useRequest(Hub.Product.Get.Carousel, {
-    defaultParams: [Id]
-  });
-
-  return (
-    <Carousel showArrows>
-      {
-        data?.map(val => <img className={style.img} src={val} />)
-      }
-    </Carousel>
-  );
 }
