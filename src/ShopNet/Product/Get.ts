@@ -25,7 +25,9 @@ export class ProductGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Detail(): Promise<IProduct> {
+  public static async Detail(id: number): Promise<IProduct> {
+    if (id > 100) throw null;
+
     return {
       Name: "OTC SHIRT - GREY",
       Limit: 3,

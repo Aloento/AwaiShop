@@ -1,4 +1,5 @@
 import { Button, Divider, Field, LargeTitle, SpinButton, Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
@@ -77,6 +78,8 @@ export function Product() {
     throw Nav("/");
   }
 
+  const detail = useAsyncMemo(Hub.Product.Get.Detail(id), [id]);
+
   return (
     <div className={style.main}>
       <div className={style.info}>
@@ -134,6 +137,7 @@ export function Product() {
  */
 function Radio() {
   const style = useStyle();
+  const [curr, setCurr] = useState<number>();
 
   return (
     <div className={style.vari}>
