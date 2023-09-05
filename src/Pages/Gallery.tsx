@@ -1,5 +1,5 @@
 import { Body1, Card, CardFooter, CardPreview, Image, Link, Title3, makeStyles, tokens } from "@fluentui/react-components";
-import { useAsyncMemo } from "~/Helpers/AsyncMemo";
+import { useRequest } from "ahooks";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 
@@ -49,12 +49,12 @@ export interface ProductInfo {
  */
 export function Gallery() {
   const style = useStyles();
-  const cates = useAsyncMemo(Hub.Gallery.Get.Categories(), [], []);
+  const { data } = useRequest(() => Hub.Gallery.Get.Categories());
 
   return (
     <div className={style.main}>
       {
-        cates.map(x => <GalleryCategory Category={x} />)
+        data?.map(x => <GalleryCategory Category={x} />)
       }
     </div>
   )
@@ -67,7 +67,10 @@ export function Gallery() {
  */
 function GalleryCategory({ Category }: { Category: string }) {
   const style = useStyles();
-  const list = useAsyncMemo(Hub.Gallery.Get.Products(Category), [Category], [[], 0]);
+  const { data } = useRequest(Hub.Gallery.Get.Products, {
+    defaultParams: [Category]
+  });
+  const list = data || [[], 0];
 
   return <>
     <Title3>{Category}</Title3>
@@ -88,17 +91,19 @@ function GalleryCategory({ Category }: { Category: string }) {
  */
 function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
-  const info = useAsyncMemo(Hub.Product.Get.Basic(Id), [Id])
+  const { data } = useRequest(Hub.Product.Get.Basic, {
+    defaultParams: [Id]
+  })
 
   return (
     <Card className={style.card}>
       <CardPreview>
-        <Image className={style.img} src={info?.Cover} />
+        <Image className={style.img} src={data?.Cover} />
       </CardPreview>
 
       <CardFooter>
         <Body1>
-          <Link href={`/Product/${Id}`}>{info?.Name}</Link>
+          <Link href={`/Product/${Id}`}>{data?.Name}</Link>
         </Body1>
       </CardFooter>
     </Card>

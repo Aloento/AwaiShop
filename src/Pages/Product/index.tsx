@@ -1,9 +1,9 @@
 import { Button, Divider, Field, LargeTitle, SpinButton, Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
-import { useAsyncMemo } from "~/Helpers/AsyncMemo";
 import { BaseCard, Col, ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { Lexical } from "~/Lexical";
 import { Hub } from "~/ShopNet";
@@ -74,11 +74,28 @@ export function Product() {
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 
-  if (isNaN(id)) {
-    throw Nav("/");
-  }
+  const { data, loading } = useRequest<[IProduct, Record<string, Set<string>>], never>(async () => {
+    if (isNaN(id))
+      throw null;
 
-  const detail = useAsyncMemo(Hub.Product.Get.Detail(id), [id]);
+    const raw = await Hub.Product.Get.Detail(id);
+    const variant: Record<string, Set<string>> = {};
+
+    for (const i of raw.Combos) {
+      for (const c of i.Combo) {
+        if (variant.hasOwnProperty(c.Variant))
+          variant[c.Variant].add(c.Type);
+        else
+          variant[c.Variant] = new Set([c.Type]);
+      }
+    }
+
+    return [raw, variant];
+  }, {
+    onError() {
+      throw Nav("/");
+    }
+  });
 
   return (
     <div className={style.main}>
@@ -160,7 +177,7 @@ function Radio() {
  */
 function Gallery({ Id }: { Id: number }) {
   const style = useStyle();
-  const list = useAsyncMemo(Hub.Product.Get.Carousel(Id), []);
+  const { data, loading } = useRequest(() => Hub.Product.Get.Carousel(Id));
 
   return (
     <Carousel showArrows>
