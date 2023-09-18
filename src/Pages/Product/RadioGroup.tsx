@@ -40,7 +40,7 @@ interface IRadioGroup {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function ProductRadioGroup({ Combos }: IRadioGroup) {
+export function ProductRadioList({ Combos }: IRadioGroup) {
   if (!Combos)
     return null;
 
@@ -57,7 +57,7 @@ export function ProductRadioGroup({ Combos }: IRadioGroup) {
     return variant;
   }, [Combos]);
 
-  return Object.keys(variants).map(val => <VariRadio Variant={val} Types={variants[val]} />);
+  return Object.keys(variants).map(val => <VariRadioGroup Variant={val} Types={variants[val]} />);
 }
 
 /**
@@ -65,7 +65,7 @@ export function ProductRadioGroup({ Combos }: IRadioGroup) {
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IVariRadio {
+interface IVariRadioGroup {
   Variant: string;
   Types: Set<string>;
 }
@@ -75,7 +75,7 @@ interface IVariRadio {
  * @since 0.5.0
  * @version 0.1.0
  */
-function VariRadio({ Variant, Types }: IVariRadio) {
+function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
   const style = useStyle();
   const [curr, setCurr] = useState<number>();
 

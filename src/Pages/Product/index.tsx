@@ -7,7 +7,7 @@ import { Lexical } from "~/Lexical";
 import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
 import { ProductCarousel } from "./Carousel";
-import { ProductRadioGroup } from "./RadioGroup";
+import { ProductRadioList } from "./RadioGroup";
 import demo from "./demo.json";
 
 /**
@@ -81,7 +81,7 @@ export function Product() {
 
           <Divider />
 
-          <ProductRadioGroup Combos={data?.Combos} />
+          <ProductRadioList Combos={data?.Combos} />
 
           <Divider />
 
