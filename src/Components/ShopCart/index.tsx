@@ -3,8 +3,8 @@ import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
-import { Confirm } from "./Confirm";
-import { DelegateDataGrid } from "./DelegateDataGrid";
+import { Confirm } from "../Confirm";
+import { DelegateDataGrid } from "../DelegateDataGrid";
 
 /**
  * @author Aloento
