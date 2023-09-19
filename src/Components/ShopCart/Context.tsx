@@ -1,4 +1,5 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
+import { ICartItem } from ".";
 
 /**
  * @author Aloento
@@ -6,7 +7,8 @@ import { createContext, useContext } from "react";
  * @version 0.1.0
  */
 interface Context {
-
+  List: ICartItem[];
+  Update: (val: ICartItem[]) => void;
 }
 
 /**
@@ -30,6 +32,17 @@ export function useShopCart() {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function ShopCartContext({ children, ...props }: Context & { children: JSX.Element }) {
+export function ShopCartContext({ List, children }: Omit<Context, "Update"> & { children: JSX.Element }) {
+  const [list, setList] = useState(List);
 
+  return (
+    <ShopCart.Provider value={{
+      List: list,
+      Update(val) {
+        setList([...val]);
+      },
+    }}>
+      {children}
+    </ShopCart.Provider>
+  );
 }
