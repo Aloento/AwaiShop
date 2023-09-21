@@ -1,4 +1,4 @@
-import { Body1, Body1Strong, Button, Caption1, DataGridCell, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1, Body1Strong, Button, Caption1, DataGridCell, Link, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
@@ -42,6 +42,7 @@ const useStyles = makeStyles({
  */
 export interface ICartItem {
   Id: number;
+  ProdId: number;
   Image: string;
   Name: string;
   Type: string[];
@@ -51,7 +52,7 @@ export interface ICartItem {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.1
+ * @version 0.3.0
  */
 export const CartColumns: TableColumnDefinition<ICartItem>[] = [
   MakeCoverCol(44),
@@ -60,7 +61,10 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().prod}>
-          <Body1Strong>{item.Name}</Body1Strong>
+          <Link href={`/Product/${item.Id}`} appearance="subtle">
+            <Body1Strong>{item.Name}</Body1Strong>
+          </Link>
+
           <Caption1>{item.Type.reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
         </DataGridCell>
       )
@@ -69,9 +73,27 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
   createTableColumn<ICartItem>({
     columnId: "Quantity",
     renderCell(item) {
+      const { List, Update } = useShopCart();
+
       return (
         <DataGridCell className={useStyles().qua}>
-          <SpinButton defaultValue={item.Quantity} min={1} max={3} />
+          <SpinButton
+            defaultValue={item.Quantity}
+            min={1}
+            max={3}
+            onChange={(_, v) => {
+              const i = List.findIndex(x => x.Id === item.Id);
+              if (List[i].Quantity === v.value)
+                return;
+
+              List[i] = {
+                ...item,
+                Quantity: v.value!
+              }
+
+              Update(List);
+            }}
+          />
         </DataGridCell>
       )
     }

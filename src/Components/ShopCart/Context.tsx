@@ -1,9 +1,11 @@
+import { random } from "lodash-es";
 import { createContext, useContext, useState } from "react";
 import { ICartItem } from ".";
 
 const items: ICartItem[] = [
   {
     Id: 1,
+    ProdId: random(1, 10),
     Image: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
     Type: ["Short Sleeve", "S"],
@@ -11,6 +13,7 @@ const items: ICartItem[] = [
   },
   {
     Id: 2,
+    ProdId: random(1, 10),
     Image: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
     Type: ["Red", "Long and Long"],
