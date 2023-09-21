@@ -31,7 +31,8 @@ const useStyles = makeStyles({
     width: "100%",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: tokens.spacingVerticalS
+    marginTop: tokens.spacingVerticalS,
+    columnGap: tokens.spacingHorizontalL
   }
 });
 
@@ -83,9 +84,6 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
             max={3}
             onChange={(_, v) => {
               const i = List.findIndex(x => x.Id === item.Id);
-              if (List[i].Quantity === v.value)
-                return;
-
               List[i] = {
                 ...item,
                 Quantity: v.value!
@@ -101,9 +99,17 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
   createTableColumn<ICartItem>({
     columnId: "Action",
     renderCell(item) {
+      const { List, Update } = useShopCart();
+
       return (
         <DataGridCell className={useStyles().act}>
-          <Button appearance="subtle" icon={<DeleteRegular />} />
+          <Button
+            appearance="subtle"
+            icon={<DeleteRegular />}
+            onClick={() => {
+              Update(List.filter(x => x.Id !== item.Id));
+            }}
+          />
         </DataGridCell>
       )
     },
