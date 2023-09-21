@@ -1,10 +1,31 @@
-import { Body1Strong, Button, Caption1, DataGridCell, Field, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGridCell, Field, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 import { Confirm } from "../Confirm";
 import { DelegateDataGrid } from "../DelegateDataGrid";
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+const useStyles = makeStyles({
+  prod: {
+    ...ColFlex,
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  qua: {
+    flexBasis: "10%",
+    flexGrow: 0
+  },
+  act: {
+    flexBasis: "7%",
+    flexGrow: 0
+  }
+});
 
 /**
  * @author Aloento
@@ -30,11 +51,7 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
     columnId: "Product",
     renderCell(item) {
       return (
-        <DataGridCell style={{
-          ...ColFlex,
-          alignItems: "flex-start",
-          justifyContent: "center",
-        }}>
+        <DataGridCell className={useStyles().prod}>
           <Body1Strong>{item.Name}</Body1Strong>
           <Caption1>{item.Type.reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
         </DataGridCell>
@@ -45,7 +62,7 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
     columnId: "Quantity",
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "10%", flexGrow: 0 }}>
+        <DataGridCell className={useStyles().qua}>
           <Field defaultValue={item.Quantity}>
             <SpinButton />
           </Field>
@@ -57,7 +74,7 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
     columnId: "Action",
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "7%", flexGrow: 0 }}>
+        <DataGridCell className={useStyles().act}>
           <Button appearance="subtle" icon={<DeleteRegular />} />
         </DataGridCell>
       )
