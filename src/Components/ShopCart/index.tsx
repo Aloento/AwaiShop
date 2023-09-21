@@ -1,4 +1,4 @@
-import { Body1, Body1Strong, Button, Caption1, DataGridCell, Field, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1, Body1Strong, Button, Caption1, DataGridCell, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
@@ -17,7 +17,6 @@ const useStyles = makeStyles({
     ...ColFlex,
     alignItems: "flex-start",
     justifyContent: "center",
-    paddingBottom: tokens.spacingVerticalM
   },
   qua: {
     flexBasis: "10%",
@@ -72,9 +71,7 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().qua}>
-          <Field defaultValue={item.Quantity}>
-            <SpinButton />
-          </Field>
+          <SpinButton defaultValue={item.Quantity} min={1} max={3} />
         </DataGridCell>
       )
     }
