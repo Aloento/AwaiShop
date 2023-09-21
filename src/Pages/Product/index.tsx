@@ -7,6 +7,7 @@ import { Lexical } from "~/Lexical";
 import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
 import { ProductCarousel } from "./Carousel";
+import { RadioGroupContext } from "./Context";
 import { ProductRadioList } from "./RadioGroup";
 import demo from "./demo.json";
 
@@ -70,51 +71,53 @@ export function Product() {
   });
 
   return (
-    <div className={style.main}>
-      <div className={style.info}>
-        <ProductCarousel Id={id} />
+    <RadioGroupContext>
+      <div className={style.main}>
+        <div className={style.info}>
+          <ProductCarousel Id={id} />
 
-        <div className={style.detail}>
-          <LargeTitle className={style.fore}>
-            {data?.Name}
-          </LargeTitle>
+          <div className={style.detail}>
+            <LargeTitle className={style.fore}>
+              {data?.Name}
+            </LargeTitle>
 
-          <Divider />
+            <Divider />
 
-          <ProductRadioList Combos={data?.Combos} />
+            <ProductRadioList Combos={data?.Combos} />
 
-          <Divider />
-
-          <div style={{
-            ...ColFlex,
-            rowGap: tokens.spacingVerticalS,
-          }}>
-            <Title3 className={style.fore}>
-              QUANTITY
-            </Title3>
+            <Divider />
 
             <div style={{
-              ...Flex,
-              justifyContent: "space-between",
-              columnGap: tokens.spacingHorizontalM
+              ...ColFlex,
+              rowGap: tokens.spacingVerticalS,
             }}>
-              <Field>
-                <SpinButton appearance="underline" defaultValue={1} min={1} max={data?.Limit} />
-              </Field>
+              <Title3 className={style.fore}>
+                QUANTITY
+              </Title3>
 
-              <Button appearance="primary">ADD TO CART</Button>
+              <div style={{
+                ...Flex,
+                justifyContent: "space-between",
+                columnGap: tokens.spacingHorizontalM
+              }}>
+                <Field>
+                  <SpinButton appearance="underline" defaultValue={1} min={1} max={data?.Limit} />
+                </Field>
+
+                <Button appearance="primary">ADD TO CART</Button>
+              </div>
             </div>
-          </div>
 
+          </div>
+        </div>
+
+        <div style={{
+          ...BaseCard,
+          padding: tokens.spacingHorizontalXL
+        }}>
+          <Lexical Display State={JSON.stringify(demo.editorState)} />
         </div>
       </div>
-
-      <div style={{
-        ...BaseCard,
-        padding: tokens.spacingHorizontalXL
-      }}>
-        <Lexical Display State={JSON.stringify(demo.editorState)} />
-      </div>
-    </div>
+    </RadioGroupContext>
   )
 }
