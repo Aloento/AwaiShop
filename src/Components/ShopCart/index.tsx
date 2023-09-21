@@ -1,9 +1,9 @@
-import { Body1, Body1Strong, Button, Caption1, DataGridCell, Link, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
-import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
+import { Body1, Popover, PopoverSurface, PopoverTrigger, ToggleButton, makeStyles, tokens } from "@fluentui/react-components";
+import { CartRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
-import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../DelegateDataGrid";
+import { CartColumns } from "./Columns";
 import { Confirm } from "./Confirm";
 import { useShopCart } from "./Context";
 
@@ -12,7 +12,7 @@ import { useShopCart } from "./Context";
  * @since 0.5.0
  * @version 0.1.0
  */
-const useStyles = makeStyles({
+export const useStyles = makeStyles({
   prod: {
     ...ColFlex,
     alignItems: "flex-start",
@@ -53,78 +53,12 @@ export interface ICartItem {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
- */
-export const CartColumns: TableColumnDefinition<ICartItem>[] = [
-  MakeCoverCol(44),
-  createTableColumn<ICartItem>({
-    columnId: "Product",
-    renderCell(item) {
-      return (
-        <DataGridCell className={useStyles().prod}>
-          <Link href={`/Product/${item.Id}`} appearance="subtle">
-            <Body1Strong>{item.Name}</Body1Strong>
-          </Link>
-
-          <Caption1>{item.Type.reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
-        </DataGridCell>
-      )
-    }
-  }),
-  createTableColumn<ICartItem>({
-    columnId: "Quantity",
-    renderCell(item) {
-      const { List, Update } = useShopCart();
-
-      return (
-        <DataGridCell className={useStyles().qua}>
-          <SpinButton
-            defaultValue={item.Quantity}
-            min={1}
-            max={3}
-            onChange={(_, v) => {
-              const i = List.findIndex(x => x.Id === item.Id);
-              List[i] = {
-                ...item,
-                Quantity: v.value!
-              }
-
-              Update(List);
-            }}
-          />
-        </DataGridCell>
-      )
-    }
-  }),
-  createTableColumn<ICartItem>({
-    columnId: "Action",
-    renderCell(item) {
-      const { List, Update } = useShopCart();
-
-      return (
-        <DataGridCell className={useStyles().act}>
-          <Button
-            appearance="subtle"
-            icon={<DeleteRegular />}
-            onClick={() => {
-              Update(List.filter(x => x.Id !== item.Id));
-            }}
-          />
-        </DataGridCell>
-      )
-    },
-  })
-]
-
-/**
- * @author Aloento
- * @since 0.1.0
  * @version 0.2.1
  */
 export function ShopCart() {
   const [open, { toggle }] = useBoolean();
   const style = useStyles();
-  const cart = useShopCart();
+  const { List } = useShopCart();
 
   return (
     <Popover withArrow open={open} onOpenChange={toggle}>
@@ -133,10 +67,10 @@ export function ShopCart() {
       </PopoverTrigger>
 
       <PopoverSurface className={style.prod}>
-        <DelegateDataGrid Items={cart.List} Columns={CartColumns} NoHeader />
+        <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
 
         <div className={style.conf}>
-          <Body1>{cart.List.map(x => x.Quantity).reduce((prev, curr) => prev + curr, 0)} items in shopping cart</Body1>
+          <Body1>{List.map(x => x.Quantity).reduce((prev, curr) => prev + curr, 0)} items in shopping cart</Body1>
 
           <Confirm />
         </div>

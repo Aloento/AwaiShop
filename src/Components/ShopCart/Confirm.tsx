@@ -2,29 +2,10 @@ import { Button, Field, Label, Textarea, tokens } from "@fluentui/react-componen
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
-import { random } from "lodash-es";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { CartColumns, ICartItem } from ".";
 import { DelegateDataGrid } from "../DelegateDataGrid";
-
-const items: ICartItem[] = [
-  {
-    Id: 1,
-    ProdId: random(1, 10),
-    Image: "https://picsum.photos/550",
-    Name: "OTC SHIRT - GREY",
-    Type: ["Short Sleeve", "S"],
-    Quantity: 1
-  },
-  {
-    Id: 2,
-    ProdId: random(1, 10),
-    Image: "https://picsum.photos/600",
-    Name: "OTC Cap - Cap and Cap",
-    Type: ["Red", "Long and Long"],
-    Quantity: 1
-  }
-]
+import { CartColumns } from "./Columns";
+import { useShopCart } from "./Context";
 
 /**
  * @author Aloento
@@ -33,6 +14,7 @@ const items: ICartItem[] = [
  */
 export function Confirm() {
   const [open, { toggle }] = useBoolean();
+  const { List } = useShopCart();
 
   return <>
     <Button appearance="primary" onClick={toggle}>Checkout</Button>
@@ -89,7 +71,7 @@ export function Confirm() {
             <Label>Some Address Address Address Address Address Address Address</Label>
           </Field>
 
-          <DelegateDataGrid Items={items} Columns={CartColumns} NoHeader />
+          <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
 
           <Field label="Comment" size="large">
             <Textarea />
