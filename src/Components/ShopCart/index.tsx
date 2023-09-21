@@ -2,7 +2,7 @@ import { Body1, Popover, PopoverSurface, PopoverTrigger, ToggleButton, makeStyle
 import { CartRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { DelegateDataGrid } from "../DelegateDataGrid";
+import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
 import { Confirm } from "./Confirm";
 import { useShopCart } from "./Context";
