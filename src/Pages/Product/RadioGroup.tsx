@@ -57,7 +57,7 @@ export function ProductRadioList({ Combos }: IRadioGroup) {
     return variant;
   }, [Combos]);
 
-  return Object.keys(variants).map(val => <VariRadioGroup Variant={val} Types={variants[val]} />);
+  return Object.keys(variants).map((val, i) => <VariRadioGroup key={i} Variant={val} Types={variants[val]} />);
 }
 
 /**
