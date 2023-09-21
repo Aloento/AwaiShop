@@ -3,8 +3,8 @@ import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/r
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { DelegateDataGrid } from "./DelegateDataGrid";
-import { CartColumns, ICartItem } from "./ShopCart";
+import { CartColumns, ICartItem } from ".";
+import { DelegateDataGrid } from "../DelegateDataGrid";
 
 const items: ICartItem[] = [
   {
@@ -32,7 +32,7 @@ export function Confirm() {
   const [open, { toggle }] = useBoolean();
 
   return <>
-    <Button appearance="primary" onClick={toggle} style={{ marginTop: tokens.spacingVerticalM }}>Checkout</Button>
+    <Button appearance="primary" onClick={toggle}>Checkout</Button>
 
     <Drawer
       open={open}

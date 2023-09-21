@@ -1,10 +1,10 @@
-import { Body1Strong, Button, Caption1, DataGridCell, Field, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { Body1, Body1Strong, Button, Caption1, DataGridCell, Field, Popover, PopoverSurface, PopoverTrigger, SpinButton, TableColumnDefinition, ToggleButton, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { CartRegular, DeleteRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
-import { ColFlex } from "~/Helpers/Styles";
-import { Confirm } from "../Confirm";
+import { ColFlex, Flex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../DelegateDataGrid";
+import { Confirm } from "./Confirm";
 import { useShopCart } from "./Context";
 
 /**
@@ -17,6 +17,7 @@ const useStyles = makeStyles({
     ...ColFlex,
     alignItems: "flex-start",
     justifyContent: "center",
+    paddingBottom: tokens.spacingVerticalM
   },
   qua: {
     flexBasis: "10%",
@@ -26,7 +27,13 @@ const useStyles = makeStyles({
     flexBasis: "7%",
     flexGrow: 0
   },
-  conf: ColFlex
+  conf: {
+    ...Flex,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: tokens.spacingVerticalS
+  }
 });
 
 /**
@@ -87,10 +94,11 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function ShopCart() {
   const [open, { toggle }] = useBoolean();
+  const style = useStyles();
   const cart = useShopCart();
 
   return (
@@ -99,9 +107,14 @@ export function ShopCart() {
         <ToggleButton icon={<CartRegular />} appearance="subtle" size="large" checked={open} />
       </PopoverTrigger>
 
-      <PopoverSurface className={useStyles().prod}>
+      <PopoverSurface className={style.prod}>
         <DelegateDataGrid Items={cart.List} Columns={CartColumns} NoHeader />
-        <Confirm />
+
+        <div className={style.conf}>
+          <Body1>{cart.List.map(x => x.Quantity).reduce((prev, curr) => prev + curr, 0)} items in shopping cart</Body1>
+
+          <Confirm />
+        </div>
       </PopoverSurface>
     </Popover>
   )

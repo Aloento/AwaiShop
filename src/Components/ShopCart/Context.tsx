@@ -49,8 +49,8 @@ export function useShopCart() {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function ShopCartContext({ List, children }: Omit<Context, "Update"> & { children: JSX.Element }) {
-  const [list, setList] = useState(List || items);
+export function ShopCartContext({ children }: { children: JSX.Element }) {
+  const [list, setList] = useState(items);
 
   return (
     <ShopCart.Provider value={{
