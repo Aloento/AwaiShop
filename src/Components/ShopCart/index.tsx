@@ -5,6 +5,7 @@ import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 import { Confirm } from "../Confirm";
 import { DelegateDataGrid } from "../DelegateDataGrid";
+import { useShopCart } from "./Context";
 
 /**
  * @author Aloento
@@ -24,7 +25,8 @@ const useStyles = makeStyles({
   act: {
     flexBasis: "7%",
     flexGrow: 0
-  }
+  },
+  conf: ColFlex
 });
 
 /**
@@ -43,7 +45,7 @@ export interface ICartItem {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export const CartColumns: TableColumnDefinition<ICartItem>[] = [
   MakeCoverCol(44),
@@ -82,30 +84,14 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
   })
 ]
 
-const items: ICartItem[] = [
-  {
-    Id: 1,
-    Image: "https://picsum.photos/550",
-    Name: "OTC SHIRT - GREY",
-    Type: ["Short Sleeve", "S"],
-    Quantity: 1
-  },
-  {
-    Id: 2,
-    Image: "https://picsum.photos/600",
-    Name: "OTC Cap - Cap and Cap",
-    Type: ["Red", "Long and Long"],
-    Quantity: 1
-  }
-]
-
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function ShopCart() {
   const [open, { toggle }] = useBoolean();
+  const cart = useShopCart();
 
   return (
     <Popover withArrow open={open} onOpenChange={toggle}>
@@ -113,8 +99,8 @@ export function ShopCart() {
         <ToggleButton icon={<CartRegular />} appearance="subtle" size="large" checked={open} />
       </PopoverTrigger>
 
-      <PopoverSurface style={ColFlex}>
-        <DelegateDataGrid Items={items} Columns={CartColumns} NoHeader />
+      <PopoverSurface className={useStyles().prod}>
+        <DelegateDataGrid Items={cart.List} Columns={CartColumns} NoHeader />
         <Confirm />
       </PopoverSurface>
     </Popover>

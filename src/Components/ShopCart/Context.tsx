@@ -1,6 +1,23 @@
 import { createContext, useContext, useState } from "react";
 import { ICartItem } from ".";
 
+const items: ICartItem[] = [
+  {
+    Id: 1,
+    Image: "https://picsum.photos/550",
+    Name: "OTC SHIRT - GREY",
+    Type: ["Short Sleeve", "S"],
+    Quantity: 1
+  },
+  {
+    Id: 2,
+    Image: "https://picsum.photos/600",
+    Name: "OTC Cap - Cap and Cap",
+    Type: ["Red", "Long and Long"],
+    Quantity: 1
+  }
+]
+
 /**
  * @author Aloento
  * @since 0.5.0
@@ -33,7 +50,7 @@ export function useShopCart() {
  * @version 0.1.0
  */
 export function ShopCartContext({ List, children }: Omit<Context, "Update"> & { children: JSX.Element }) {
-  const [list, setList] = useState(List);
+  const [list, setList] = useState(List || items);
 
   return (
     <ShopCart.Provider value={{
