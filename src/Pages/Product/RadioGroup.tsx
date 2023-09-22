@@ -73,7 +73,7 @@ interface IVariRadioGroup {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
   const style = useStyle();
@@ -86,8 +86,7 @@ function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
       </Title3>
 
       <div className={style.radio}>
-        <ToggleButton appearance="outline" checked className={style.btn}>Short Sleeve</ToggleButton>
-        <ToggleButton appearance="outline" className={style.btn}>Long Sleeve</ToggleButton>
+        {Array.from(Types).map((val, i) => <ToggleButton key={i} appearance="outline" className={style.btn}>{val}</ToggleButton>)}
       </div>
     </div>
   );

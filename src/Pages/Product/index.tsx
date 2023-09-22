@@ -1,4 +1,4 @@
-import { Button, Divider, Field, LargeTitle, SpinButton, Title3, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Divider, LargeTitle, SpinButton, Title3, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
@@ -100,9 +100,7 @@ export function Product() {
                 justifyContent: "space-between",
                 columnGap: tokens.spacingHorizontalM
               }}>
-                <Field>
-                  <SpinButton appearance="underline" defaultValue={1} min={1} max={data?.Limit} />
-                </Field>
+                <SpinButton appearance="underline" defaultValue={1} min={1} max={data?.Limit} />
 
                 <Button appearance="primary">ADD TO CART</Button>
               </div>
