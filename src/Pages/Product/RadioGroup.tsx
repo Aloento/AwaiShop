@@ -84,7 +84,7 @@ interface IVariRadioGroup {
  */
 function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
   const style = useStyle();
-  const { Current } = useRadioGroup();
+  const { Current, Update } = useRadioGroup();
 
   return (
     <div className={style.vari}>
@@ -98,6 +98,11 @@ function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
             key={i}
             appearance="outline"
             className={style.btn}
+            checked={Current[Variant] === val}
+            onClick={() => Update({
+              ...Current,
+              [Variant]: val
+            })}
           >
             {val}
           </ToggleButton>)}
