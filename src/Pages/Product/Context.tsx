@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
 /**
  * @author Aloento
@@ -6,7 +6,8 @@ import { createContext, useContext } from "react";
  * @version 0.1.0
  */
 interface Context {
-
+  Current: Record<string, string>;
+  Update: (val: Record<string, string>) => void;
 }
 
 /**
@@ -30,10 +31,16 @@ export function useRadioGroup() {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function RadioGroupContext({ children }: { children: JSX.Element }) {
+export function RadioGroupContext({ Current, children }: Pick<Context, "Current"> & { children: JSX.Element }) {
+  const [curr, setCurr] = useState(Current);
 
   return (
-    <RadioGroup.Provider value={{}}>
+    <RadioGroup.Provider value={{
+      Current: curr,
+      Update(val) {
+        setCurr(val);
+      },
+    }}>
       {children}
     </RadioGroup.Provider>
   )

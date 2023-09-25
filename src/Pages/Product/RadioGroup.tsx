@@ -2,6 +2,7 @@ import { Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/
 import { useMemo, useState } from "react";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { IComboItem } from "../Admin/Product/Combo";
+import { useRadioGroup } from "./Context";
 
 /**
  * @author Aloento
@@ -43,6 +44,8 @@ interface IRadioGroup {
 export function ProductRadioList({ Combos }: IRadioGroup) {
   if (!Combos)
     return null;
+
+  const group = useRadioGroup();
 
   const variants = useMemo(() => {
     const variant: Record<string, Set<string>> = {};
@@ -86,7 +89,14 @@ function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
       </Title3>
 
       <div className={style.radio}>
-        {Array.from(Types).map((val, i) => <ToggleButton key={i} appearance="outline" className={style.btn}>{val}</ToggleButton>)}
+        {Array.from(Types).map((val, i) =>
+          <ToggleButton
+            key={i}
+            appearance="outline"
+            className={style.btn}
+          >
+            {val}
+          </ToggleButton>)}
       </div>
     </div>
   );
