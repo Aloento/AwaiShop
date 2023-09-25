@@ -31,8 +31,8 @@ export function useRadioGroup() {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function RadioGroupContext({ Current, children }: Pick<Context, "Current"> & { children: JSX.Element }) {
-  const [curr, setCurr] = useState(Current);
+export function RadioGroupContext({ children }: { children: JSX.Element }) {
+  const [curr, setCurr] = useState({});
 
   return (
     <RadioGroup.Provider value={{
