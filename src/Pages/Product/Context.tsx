@@ -37,9 +37,7 @@ export function RadioGroupContext({ children }: { children: JSX.Element }) {
   return (
     <RadioGroup.Provider value={{
       Current: curr,
-      Update(val) {
-        setCurr(val);
-      },
+      Update: setCurr,
     }}>
       {children}
     </RadioGroup.Provider>
