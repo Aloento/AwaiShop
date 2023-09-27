@@ -17,7 +17,7 @@ const DB = new Dexie("EShop", { autoOpen: false });
 DB.version(1).stores({
   /** {@link ITable} */
   Shared: "Id, Exp",
-  /** {@link ITable<ICartItem>} */
+  /** {@link ICartItem} */
   ShopCart: "Id",
 });
 
@@ -35,4 +35,4 @@ export const Shared = new Table(DB, "Shared");
  * @since 0.5.0
  * @version 0.1.0
  */
-export const CartTable = new Table<ICartItem>(DB, "ShopCart");
+export const CartTable = DB.table<ICartItem, number>("ShopCart");

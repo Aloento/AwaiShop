@@ -9,9 +9,9 @@ import Dexie from "dexie";
  * @version 0.2.1
  */
 interface ITable<T> {
-  Id: string,
-  Exp: number | string | null,
-  Val: NonNullable<T>
+  Id: string;
+  Exp: number | string | null;
+  Val: NonNullable<T>;
 }
 
 /**
@@ -22,7 +22,7 @@ interface ITable<T> {
  * @version 0.2.1
  */
 export class Table<TPre = any> {
-  public Sto: Dexie.Table<ITable<TPre>, string>;
+  public readonly Sto: Dexie.Table<ITable<TPre>, string>;
 
   public constructor(public readonly DB: Dexie, public readonly Name: string) {
     this.Sto = this.DB.table(this.Name);
@@ -64,7 +64,8 @@ export class Table<TPre = any> {
    */
   public async GetOrSet<T extends TPre = TPre>(
     key: string,
-    fac: () => Promise<T>, exp?: Dayjs | null,
+    fac: () => Promise<T>,
+    exp?: Dayjs | null,
     cancel?: (x?: ITable<T>) => Promise<boolean>
   ): Promise<T> {
     const res = await this.Get<T>(key, cancel);

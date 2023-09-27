@@ -1,5 +1,7 @@
+import { useRequest } from "ahooks";
 import { random } from "lodash-es";
 import { createContext, useContext, useState } from "react";
+import { CartTable } from "~/ShopNet/Database";
 import { ICartItem } from ".";
 
 const items: ICartItem[] = [
@@ -56,16 +58,26 @@ export function useShopCart() {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function ShopCartContext({ children }: { children: JSX.Element }) {
-  const [list, setList] = useState(items);
+  const [list, setList] = useState<ICartItem[]>([]);
+
+  useRequest(async () => {
+    const arr = await CartTable.toArray();
+    setList(arr);
+  });
 
   return (
     <ShopCart.Provider value={{
       List: list,
-      Update(val) {
+      async Update(val) {
+        for (let i = 0; i < val.length; i++)
+          val[i].Id = i;
+
         setList([...val]);
+        await CartTable.clear();
+        await CartTable.bulkAdd(val);
       },
     }}>
       {children}
