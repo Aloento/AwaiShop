@@ -61,7 +61,7 @@ const useStyle = makeStyles({
  */
 export interface IProduct {
   Name: string;
-  Limit?: number;
+  Limit: number;
   Combos: Omit<IComboItem, "Id">[];
 }
 
@@ -118,7 +118,11 @@ export function Product() {
                   onChange={(_, val) => setQuantity(val.value!)}
                 />
 
-                <ProductAddCart Quantity={quantity} />
+                <ProductAddCart
+                  ProdId={id}
+                  Limit={data?.Limit!}
+                  Quantity={quantity}
+                />
               </div>
             </div>
 
