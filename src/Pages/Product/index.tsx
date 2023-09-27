@@ -4,6 +4,7 @@ import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
 import { BaseCard, Col, ColFlex, Flex } from "~/Helpers/Styles";
+import { useLimit } from "~/Helpers/useLimit";
 import { Lexical } from "~/Lexical";
 import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
@@ -84,6 +85,7 @@ export function Product() {
     }
   });
 
+  const [dis, max] = useLimit(id);
   const [quantity, setQuantity] = useState(1);
 
   return (
@@ -113,13 +115,12 @@ export function Product() {
                   appearance="underline"
                   value={quantity}
                   min={1}
-                  max={data?.Limit}
+                  max={max}
                   onChange={(_, val) => setQuantity(val.value!)}
                 />
 
                 <ProductAddCart
                   ProdId={id}
-                  Limit={data?.Limit!}
                   Quantity={quantity}
                 />
               </div>

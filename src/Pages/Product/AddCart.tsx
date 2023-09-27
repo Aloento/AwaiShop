@@ -10,7 +10,6 @@ import { useRadioGroup } from "./Context";
  */
 interface IProductAddCart {
   ProdId: number;
-  Limit: number;
   Quantity: number;
 }
 
@@ -19,10 +18,10 @@ interface IProductAddCart {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function ProductAddCart({ ProdId, Limit, Quantity }: IProductAddCart) {
+export function ProductAddCart({ ProdId, Quantity }: IProductAddCart) {
   const { List, Add, Update } = useShopCart();
   const { Current } = useRadioGroup();
-  const dis = useLimit(ProdId);
+  const [dis] = useLimit(ProdId);
 
   return (
     <Button
