@@ -1,6 +1,6 @@
 import { useRequest } from "ahooks";
 import { random } from "lodash-es";
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { CartTable } from "~/ShopNet/Database";
 import { ICartItem } from ".";
 
@@ -71,14 +71,14 @@ export function ShopCartContext({ children }: { children: JSX.Element }) {
   return (
     <ShopCart.Provider value={{
       List: list,
-      async Update(val) {
+      Update: useCallback(async (val) => {
         for (let i = 0; i < val.length; i++)
           val[i].Id = i;
 
         setList([...val]);
         await CartTable.clear();
         await CartTable.bulkAdd(val);
-      },
+      }, []),
     }}>
       {children}
     </ShopCart.Provider>
