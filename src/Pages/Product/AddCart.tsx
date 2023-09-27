@@ -1,5 +1,5 @@
 import { Button } from "@fluentui/react-components";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useShopCart } from "~/Components/ShopCart/Context";
 import { useRadioGroup } from "./Context";
 
@@ -28,7 +28,7 @@ export function ProductAddCart({ ProdId, Limit, Quantity }: IProductAddCart) {
 
     for (const i of List) {
       if (i.ProdId === ProdId)
-        count++;
+        count += i.Quantity;
 
       if (count >= Quantity)
         return true;
@@ -37,5 +37,24 @@ export function ProductAddCart({ ProdId, Limit, Quantity }: IProductAddCart) {
     return false;
   }, [List, Limit, Quantity]);
 
-  return <Button appearance="primary" disabled={dis}>ADD TO CART</Button>;
+  const click = useCallback(() => {
+    for (const i of List) {
+      if (i.ProdId === ProdId) {
+        for (const variant in i.Type) {
+          if (Current.hasOwnProperty(variant)) {
+            if (Current[variant] === i.Type[variant]) {
+              i.Quantity++;
+              break;
+            }
+
+
+          }
+        }
+
+      }
+    }
+
+  }, []);
+
+  return <Button appearance="primary" disabled={dis} onClick={click}>ADD TO CART</Button>;
 }

@@ -2,7 +2,6 @@ import { Body1, Popover, PopoverSurface, PopoverTrigger, ToggleButton, makeStyle
 import { CartRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { IType } from "~/Pages/Admin/Product/Combo";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
 import { Confirm } from "./Confirm";
@@ -47,7 +46,7 @@ export interface ICartItem {
   ProdId: number;
   Image: string;
   Name: string;
-  Type: IType[];
+  Type: Record<string, string>;
   Quantity: number;
 }
 
