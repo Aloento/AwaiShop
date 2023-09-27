@@ -61,7 +61,6 @@ const useStyle = makeStyles({
  */
 export interface IProduct {
   Name: string;
-  Limit: number;
   Combos: Omit<IComboItem, "Id">[];
 }
 

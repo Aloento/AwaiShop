@@ -2,6 +2,7 @@ import { Body1Strong, Button, Caption1, DataGridCell, Link, SpinButton, TableCol
 import { DeleteRegular } from "@fluentui/react-icons";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
+import { useLimit } from "~/Helpers/useLimit";
 import { ICartItem } from ".";
 import { useShopCart } from "./Context";
 
@@ -51,20 +52,20 @@ export const CartColumns: TableColumnDefinition<ICartItem>[] = [
     columnId: "Quantity",
     renderCell(item) {
       const { List, Update } = useShopCart();
+      const [dis, max] = useLimit(item.ProdId);
 
       return (
         <DataGridCell className={useStyles().qua}>
           <SpinButton
             defaultValue={item.Quantity}
             min={1}
-            max={3}
+            max={max}
+            value={List.find(x => x.Id === item.Id)!.Quantity}
             onChange={(_, v) => {
-              const i = List.findIndex(x => x.Id === item.Id);
-              List[i] = {
-                ...item,
-                Quantity: v.value!
-              };
+              const i = List.find(x => x.Id === item.Id)!;
+              if (dis && v.value! >= i.Quantity) return;
 
+              i.Quantity = v.value!;
               Update(List);
             }} />
         </DataGridCell>

@@ -1,6 +1,6 @@
 import { Button } from "@fluentui/react-components";
-import { useMemo } from "react";
 import { useShopCart } from "~/Components/ShopCart/Context";
+import { useLimit } from "~/Helpers/useLimit";
 import { useRadioGroup } from "./Context";
 
 /**
@@ -22,20 +22,7 @@ interface IProductAddCart {
 export function ProductAddCart({ ProdId, Limit, Quantity }: IProductAddCart) {
   const { List, Add, Update } = useShopCart();
   const { Current } = useRadioGroup();
-
-  const dis = useMemo(() => {
-    let count = 0;
-
-    for (const i of List) {
-      if (i.ProdId === ProdId)
-        count += i.Quantity;
-
-      if (count >= Limit)
-        return true;
-    }
-
-    return false;
-  }, [List, Limit, Quantity]);
+  const dis = useLimit(ProdId);
 
   return (
     <Button
