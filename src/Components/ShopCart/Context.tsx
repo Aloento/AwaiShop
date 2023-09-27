@@ -85,8 +85,14 @@ export function ShopCartContext({ children }: { children: JSX.Element }) {
       val[i].Id = i;
 
     setList([...val]);
+
     await CartTable.clear();
-    await CartTable.bulkPut(val);
+    await CartTable.bulkPut(val.map(v => ({
+      Id: v.Id,
+      ProdId: v.ProdId,
+      Type: v.Type,
+      Quantity: v.Quantity,
+    })));
   }
 
   async function Add(prodId: number, type: Record<string, string>, quantity: number) {

@@ -30,7 +30,7 @@ export function ProductAddCart({ ProdId, Limit, Quantity }: IProductAddCart) {
       if (i.ProdId === ProdId)
         count += i.Quantity;
 
-      if (count >= Quantity)
+      if (count >= Limit)
         return true;
     }
 
