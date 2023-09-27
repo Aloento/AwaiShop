@@ -1,6 +1,7 @@
 import { useRequest } from "ahooks";
 import { random } from "lodash-es";
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
+import { Hub } from "~/ShopNet";
 import { CartTable } from "~/ShopNet/Database";
 import { ICartItem } from ".";
 
@@ -8,7 +9,7 @@ const items: ICartItem[] = [
   {
     Id: 1,
     ProdId: random(1, 10),
-    Image: "https://picsum.photos/550",
+    Cover: "https://picsum.photos/550",
     Name: "OTC SHIRT - GREY",
     Type: {
       Color: "White",
@@ -19,7 +20,7 @@ const items: ICartItem[] = [
   {
     Id: 2,
     ProdId: random(1, 10),
-    Image: "https://picsum.photos/600",
+    Cover: "https://picsum.photos/600",
     Name: "OTC Cap - Cap and Cap",
     Type: {
       Color: "Red",
@@ -37,6 +38,7 @@ const items: ICartItem[] = [
 interface Context {
   List: ICartItem[];
   Update: (val: ICartItem[]) => void;
+  Add: (prodId: number, type: Record<string, string>, quantity: number) => void;
 }
 
 /**
@@ -58,27 +60,53 @@ export function useShopCart() {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function ShopCartContext({ children }: { children: JSX.Element }) {
   const [list, setList] = useState<ICartItem[]>([]);
 
   useRequest(async () => {
     const arr = await CartTable.toArray();
-    setList(arr);
+    const res: ICartItem[] = [];
+
+    for (const i of arr) {
+      const b = await Hub.Product.Get.Basic(i.ProdId);
+      res.push({
+        ...i,
+        ...b
+      });
+    }
+
+    setList(res);
   });
+
+  async function Update(val: ICartItem[]) {
+    for (let i = 0; i < val.length; i++)
+      val[i].Id = i;
+
+    setList([...val]);
+    await CartTable.clear();
+    await CartTable.bulkPut(val);
+  }
+
+  async function Add(prodId: number, type: Record<string, string>, quantity: number) {
+    const res = await Hub.Product.Get.Basic(prodId);
+    list.push({
+      ...res,
+      Id: list.length,
+      ProdId: prodId,
+      Type: type,
+      Quantity: quantity,
+    });
+
+    Update(list);
+  }
 
   return (
     <ShopCart.Provider value={{
       List: list,
-      Update: useCallback(async (val) => {
-        for (let i = 0; i < val.length; i++)
-          val[i].Id = i;
-
-        setList([...val]);
-        await CartTable.clear();
-        await CartTable.bulkAdd(val);
-      }, []),
+      Add,
+      Update,
     }}>
       {children}
     </ShopCart.Provider>

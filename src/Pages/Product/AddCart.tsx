@@ -1,5 +1,5 @@
 import { Button } from "@fluentui/react-components";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { useShopCart } from "~/Components/ShopCart/Context";
 import { useRadioGroup } from "./Context";
 
@@ -20,7 +20,7 @@ interface IProductAddCart {
  * @version 0.1.0
  */
 export function ProductAddCart({ ProdId, Limit, Quantity }: IProductAddCart) {
-  const { List, Update } = useShopCart();
+  const { List, Add, Update } = useShopCart();
   const { Current } = useRadioGroup();
 
   const dis = useMemo(() => {
@@ -37,24 +37,40 @@ export function ProductAddCart({ ProdId, Limit, Quantity }: IProductAddCart) {
     return false;
   }, [List, Limit, Quantity]);
 
-  const click = useCallback(() => {
-    for (const i of List) {
-      if (i.ProdId === ProdId) {
-        for (const variant in i.Type) {
-          if (Current.hasOwnProperty(variant)) {
-            if (Current[variant] === i.Type[variant]) {
-              i.Quantity++;
-              break;
+  return (
+    <Button
+      appearance="primary"
+      disabled={dis}
+      onClick={() => {
+        const i = List.find(v => {
+          if (v.ProdId === ProdId) {
+            const source = Object.keys(Current).sort();
+            const target = Object.keys(v.Type).sort();
+
+            for (let i = 0; i < target.length; i++) {
+              const s = Current[source[i]];
+              const t = v.Type[target[i]];
+
+              if (s !== t)
+                return false;
             }
 
-
+            return true;
           }
+
+          return false;
+        });
+
+        if (!i) {
+          Add(ProdId, Current, Quantity);
+          return;
         }
 
-      }
-    }
-
-  }, []);
-
-  return <Button appearance="primary" disabled={dis} onClick={click}>ADD TO CART</Button>;
+        i.Quantity++;
+        Update(List);
+      }}
+    >
+      ADD TO CART
+    </Button>
+  );
 }

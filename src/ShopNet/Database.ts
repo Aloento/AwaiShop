@@ -18,7 +18,7 @@ DB.version(1).stores({
   /** {@link ITable} */
   Shared: "Id, Exp",
   /** {@link ICartItem} */
-  ShopCart: "Id",
+  ShopCart: "Id, ProdId",
 });
 
 DB.open();
@@ -35,4 +35,4 @@ export const Shared = new Table(DB, "Shared");
  * @since 0.5.0
  * @version 0.1.0
  */
-export const CartTable = DB.table<ICartItem, number>("ShopCart");
+export const CartTable = DB.table<Omit<ICartItem, never>, number>("ShopCart");

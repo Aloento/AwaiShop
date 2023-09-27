@@ -1,8 +1,30 @@
-import { Body1Strong, Button, Caption1, DataGridCell, Link, SpinButton, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGridCell, Link, SpinButton, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
-import { ICartItem, useStyles } from ".";
+import { ColFlex } from "~/Helpers/Styles";
+import { ICartItem } from ".";
 import { useShopCart } from "./Context";
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+const useStyles = makeStyles({
+  prod: {
+    ...ColFlex,
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+  qua: {
+    flexBasis: "12%",
+    flexGrow: 0
+  },
+  act: {
+    flexBasis: "7%",
+    flexGrow: 0
+  },
+});
 
 /**
  * @author Aloento
