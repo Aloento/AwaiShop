@@ -75,7 +75,7 @@ interface IVariRadioGroup {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
   const style = useStyle();
@@ -84,7 +84,7 @@ function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
   return (
     <div className={style.vari}>
       <Title3 className={style.fore}>
-        SELECT {Variant}: SHORT SLEEVE
+        SELECT {Variant}: {Current[Variant]}
       </Title3>
 
       <div className={style.radio}>
