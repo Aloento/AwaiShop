@@ -70,7 +70,7 @@ export function Product() {
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 
-  const { data } = useRequest(Hub.Product.Get.Detail, {
+  const { data } = useRequest(Hub.Product.Get.Basic, {
     defaultParams: [id],
     onBefore() {
       isNaN(id) && Nav("/");
