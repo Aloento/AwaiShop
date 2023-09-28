@@ -96,7 +96,7 @@ export function Product() {
 
             <Divider />
 
-            <ProductRadioList Combos={data?.Combos} />
+            <ProductRadioList ProdId={id} />
 
             <Divider />
 
