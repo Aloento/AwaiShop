@@ -2,6 +2,7 @@ import { Button, Field, Textarea, makeStyles, tokens } from "@fluentui/react-com
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
+import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
@@ -31,8 +32,9 @@ export const useStyles = makeStyles({
  */
 export function Confirm() {
   const [open, { toggle }] = useBoolean();
-  const style = useStyles();
+  const [cmt, setCmt] = useState<string>();
   const { List } = useShopCart();
+  const style = useStyles();
 
   return <>
     <Button appearance="primary" onClick={toggle} disabled={!List.length}>Checkout</Button>
@@ -65,7 +67,7 @@ export function Confirm() {
           <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
 
           <Field label="Comment" size="large">
-            <Textarea />
+            <Textarea value={cmt} onChange={(_, v) => setCmt(v.value)} maxLength={1000} />
           </Field>
 
           <Button appearance="primary" className={style.sub} disabled={!List.length}>
