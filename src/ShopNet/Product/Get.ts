@@ -1,6 +1,7 @@
 import { random } from "lodash-es";
-import { ProductInfo } from "~/Pages/Gallery";
+import { IProductInfo } from "~/Pages/Gallery";
 import { IProduct } from "~/Pages/Product";
+import demo from "./demo.json";
 
 /**
  * @author Aloento
@@ -13,7 +14,7 @@ export class ProductGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Basic(id: number): Promise<ProductInfo> {
+  public static async Basic(id: number): Promise<IProductInfo> {
     return {
       Cover: `https://picsum.photos/${random(500, 1000)}`,
       Name: `Product ${id}`
@@ -104,5 +105,14 @@ export class ProductGet {
   public static async Carousel(id: number): Promise<string[]> {
     return Array(random(3, 8)).fill(0)
       .map(() => `https://picsum.photos/${random(500, 1000)}`)
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Lexical(id: number): Promise<string> {
+    return JSON.stringify(demo.editorState);
   }
 }
