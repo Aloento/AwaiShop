@@ -24,13 +24,13 @@ const useStyle = makeStyles({
 export function ProductLexicalRender({ ProdId }: { ProdId: number }) {
   const style = useStyle();
 
-  const { data } = useRequest(Hub.Product.Get.Lexical, {
+  const { data, loading } = useRequest(Hub.Product.Get.Lexical, {
     defaultParams: [ProdId]
   });
 
   return (
     <div className={style.lex}>
-      <Lexical Display Placeholder="Loading..." State={data} />
+      {loading ? "Loading..." : <Lexical Display State={data} />}
     </div>
   )
 }
