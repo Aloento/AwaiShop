@@ -1,4 +1,4 @@
-import { BrandVariants, FluentProvider, createLightTheme } from "@fluentui/react-components";
+import { BrandVariants, FluentProvider, Toaster, createLightTheme } from "@fluentui/react-components";
 import ReactDOM from "react-dom/client";
 import { Layout } from "./Components/Layout";
 import { BrowserRouter } from "./Components/Router";
@@ -35,6 +35,7 @@ ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
       <ShopCartContext>
         <Layout>
           <EShopContent />
+          <Toaster />
         </Layout>
       </ShopCartContext>
     </FluentProvider>
