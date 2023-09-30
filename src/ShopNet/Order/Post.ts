@@ -1,3 +1,4 @@
+import { ICartItem } from "~/Components/ShopCart";
 import { StatusCode } from "~/Helpers/StatusCode";
 
 /**
@@ -6,7 +7,8 @@ import { StatusCode } from "~/Helpers/StatusCode";
  * @version 0.1.0
  */
 interface INew {
-
+  ShopCart: ICartItem[];
+  Comment?: string;
 }
 
 /**

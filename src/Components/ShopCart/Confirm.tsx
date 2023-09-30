@@ -1,4 +1,4 @@
-import { Button, Field, Textarea, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Field, Textarea, makeStyles, tokens, useToastController } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
@@ -29,18 +29,18 @@ export const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.1
+ * @version 0.3.2
  */
 export function Confirm() {
-  const [open, { toggle }] = useBoolean();
   const [cmt, setCmt] = useState<string>();
+  const [open, { toggle }] = useBoolean();
+
   const { List } = useShopCart();
   const style = useStyles();
 
-  const { run } = useRequest(Hub.Order.Post.New, {
-    defaultParams: [{
+  const { dispatchToast } = useToastController();
 
-    }],
+  const { run } = useRequest(Hub.Order.Post.New, {
     onBefore([req]) {
 
     },
@@ -88,7 +88,10 @@ export function Confirm() {
             appearance="primary"
             className={style.sub}
             disabled={!List.length}
-            onClick={run}
+            onClick={() => run({
+              ShopCart: List,
+              Comment: cmt
+            })}
           >
             Submit
           </Button>

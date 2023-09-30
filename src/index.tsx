@@ -31,7 +31,7 @@ const Magenta: BrandVariants = {
 
 ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
   <BrowserRouter>
-    <FluentProvider applyStylesToPortals theme={createLightTheme(Magenta)}>
+    <FluentProvider theme={createLightTheme(Magenta)}>
       <ShopCartContext>
         <Layout>
           <EShopContent />
