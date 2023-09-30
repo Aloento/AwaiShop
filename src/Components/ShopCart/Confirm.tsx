@@ -37,7 +37,7 @@ export function Confirm() {
   const [cmt, setCmt] = useState<string>();
   const [open, { toggle }] = useBoolean();
 
-  const { List } = useShopCart();
+  const { List, Update } = useShopCart();
   const { Nav } = useRouter();
   const style = useStyles();
 
@@ -62,6 +62,8 @@ export function Confirm() {
         { intent: "success" }
       );
 
+      Update([]);
+      toggle();
       Nav("History", `${data}`);
     },
     manual: true,
