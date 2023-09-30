@@ -23,6 +23,6 @@ export class OrderPost {
    * @version 0.1.0
    */
   public static async New(req: INew): Promise<StatusCode> {
-    return StatusCode.Created;
+    throw StatusCode.Created;
   }
 }

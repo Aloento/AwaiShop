@@ -35,7 +35,7 @@ ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
       <ShopCartContext>
         <Layout>
           <EShopContent />
-          <Toaster />
+          <Toaster pauseOnHover />
         </Layout>
       </ShopCartContext>
     </FluentProvider>

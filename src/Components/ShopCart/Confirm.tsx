@@ -1,9 +1,10 @@
-import { Button, Field, Textarea, makeStyles, tokens, useToastController } from "@fluentui/react-components";
+import { Button, Field, Textarea, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
+import { use500Toast } from "~/Helpers/Toast";
 import { Hub } from "~/ShopNet";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
@@ -38,14 +39,11 @@ export function Confirm() {
   const { List } = useShopCart();
   const style = useStyles();
 
-  const { dispatchToast } = useToastController();
+  const dispatchError = use500Toast();
 
   const { run } = useRequest(Hub.Order.Post.New, {
-    onBefore([req]) {
-
-    },
     onFinally([req], data, e) {
-
+      if (e) return dispatchError(e);
     },
     manual: true,
   })
