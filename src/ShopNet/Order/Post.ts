@@ -1,5 +1,5 @@
+import { random } from "lodash-es";
 import { ICartItem } from "~/Components/ShopCart";
-import { StatusCode } from "~/Helpers/StatusCode";
 
 /**
  * @author Aloento
@@ -22,7 +22,7 @@ export class OrderPost {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async New(req: INew): Promise<StatusCode> {
-    throw StatusCode.Created;
+  public static async New(req: INew): Promise<number> {
+    return random(1, 100);
   }
 }

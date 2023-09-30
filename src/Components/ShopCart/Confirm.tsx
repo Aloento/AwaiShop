@@ -1,4 +1,4 @@
-import { Button, Field, Textarea, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Field, Textarea, Toast, ToastBody, ToastTitle, makeStyles, tokens, useToastController } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
@@ -7,6 +7,7 @@ import { ColFlex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/Toast";
 import { Hub } from "~/ShopNet";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
+import { useRouter } from "../Router";
 import { CartColumns } from "./Columns";
 import { useShopCart } from "./Context";
 import { ConfirmPersona } from "./Persona";
@@ -30,20 +31,38 @@ export const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.2
+ * @version 0.4.0
  */
 export function Confirm() {
   const [cmt, setCmt] = useState<string>();
   const [open, { toggle }] = useBoolean();
 
   const { List } = useShopCart();
+  const { Nav } = useRouter();
   const style = useStyles();
 
+  const { dispatchToast } = useToastController();
   const dispatchError = use500Toast();
 
   const { run } = useRequest(Hub.Order.Post.New, {
     onFinally([req], data, e) {
-      if (e) return dispatchError(e);
+      if (e)
+        dispatchError(new Error("Cannot Create Order", {
+          cause: {
+            Request: req,
+            Error: e
+          }
+        }));
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Order Placed</ToastTitle>
+          <ToastBody>Order Id: {data}</ToastBody>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Nav("History", `${data}`);
     },
     manual: true,
   })

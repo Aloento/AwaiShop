@@ -8,11 +8,16 @@ import { Toast, ToastBody, ToastTitle, useToastController } from "@fluentui/reac
 export function use500Toast() {
   const { dispatchToast } = useToastController();
 
-  return (e: Error) => dispatchToast(
-    <Toast>
-      <ToastTitle>SPA Internal Error</ToastTitle>
-      <ToastBody subtitle="More Info, See Console">{e.message || `${e}`}</ToastBody>
-    </Toast>,
-    { intent: "error" }
-  );
+  return (e: Error) => {
+    dispatchToast(
+      <Toast>
+        <ToastTitle>Internal Error</ToastTitle>
+        <ToastBody subtitle="More Info, See Console">{e.message || `${e}`}</ToastBody>
+      </Toast>,
+      { intent: "error" }
+    );
+
+    console.error(e.cause);
+    throw e;
+  };
 }
