@@ -1,7 +1,7 @@
-import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { BoxArrowLeftRegular } from "@fluentui/react-icons";
+import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { IType } from "../Admin/Product/Combo";
+import { OrderDetail } from "./Detail";
 
 /**
  * @author Aloento
@@ -108,21 +108,18 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
     }
   }),
   createTableColumn<IHistoryItem>({
-    columnId: "Cancel",
+    columnId: "Detail",
     renderHeaderCell: () => {
       return (
         <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
-          Cancel
+          Detail
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
         <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
-          <Button
-            appearance="subtle"
-            icon={<BoxArrowLeftRegular />}
-          />
+          <OrderDetail />
         </DataGridCell>
       )
     },
