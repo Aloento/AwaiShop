@@ -1,6 +1,5 @@
 import { Body1Strong, Caption1, DataGridCell, DataGridHeaderCell, Link, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { ICartItem } from "~/Components/ShopCart";
-import { useShopCart } from "~/Components/ShopCart/Context";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 
@@ -52,11 +51,9 @@ export const DetailColumns: TableColumnDefinition<ICartItem>[] = [
       return <DataGridHeaderCell className={useStyles().qua}>Quantity</DataGridHeaderCell>;
     },
     renderCell(item) {
-      const { List } = useShopCart();
-
       return (
         <DataGridCell className={useStyles().qua}>
-          {List.find(x => x.Id === item.Id)?.Quantity}
+          {item.Quantity}
         </DataGridCell>
       );
     }
