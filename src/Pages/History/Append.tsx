@@ -1,4 +1,4 @@
-import { Button, Field, Textarea, Toast, ToastBody, ToastTitle } from "@fluentui/react-components";
+import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
@@ -10,7 +10,20 @@ import { Hub } from "~/ShopNet";
  * @since 0.5.0
  * @version 0.1.0
  */
-export function OrderAppend({ OrderId }: { OrderId: number; }) {
+export const useStyles = makeStyles({
+  body: {
+    ...Flex,
+    justifyContent: "space-between"
+  },
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.0
+ */
+export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
+  const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
   const { dispatchError, dispatchToast } = use500Toast();
@@ -27,11 +40,12 @@ export function OrderAppend({ OrderId }: { OrderId: number; }) {
 
       dispatchToast(
         <Toast>
-          <ToastTitle>Order Placed</ToastTitle>
-          <ToastBody>Order Id: {data}</ToastBody>
+          <ToastTitle>Comment Appended</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
+
+      Refresh();
     },
   });
 
@@ -40,10 +54,7 @@ export function OrderAppend({ OrderId }: { OrderId: number; }) {
       <Textarea value={cmt} onChange={(_, v) => setCmt(v.value)} maxLength={1000} />
     </Field>
 
-    <div style={{
-      ...Flex,
-      justifyContent: "space-between"
-    }}>
+    <div className={style.body}>
       <Button>
         Cancel Order with Reason
       </Button>
