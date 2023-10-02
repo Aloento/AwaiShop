@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     justifyContent: "center",
   },
   qua: {
-    flexBasis: "12%",
+    flexBasis: "10%",
     flexGrow: 0,
     justifyContent: "center"
   },

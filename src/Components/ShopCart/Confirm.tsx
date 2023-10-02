@@ -10,7 +10,7 @@ import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { useRouter } from "../Router";
 import { CartColumns } from "./Columns";
 import { useShopCart } from "./Context";
-import { ConfirmPersona } from "./Persona";
+import { PersonaInfo } from "./Persona";
 
 /**
  * @author Aloento
@@ -95,7 +95,7 @@ export function Confirm() {
 
       <DrawerBody>
         <div className={style.body}>
-          <ConfirmPersona />
+          <PersonaInfo />
 
           <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
 

@@ -33,7 +33,7 @@ export interface IPersona {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function ConfirmPersona() {
+export function PersonaInfo() {
   const style = useStyles();
   const { data } = useRequest(Hub.User.Get.Me);
 
