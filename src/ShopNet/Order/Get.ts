@@ -1,4 +1,3 @@
-import { createUID } from "~/Lexical/Utils/createUID";
 import { INetOrder } from "./Post";
 
 /**
@@ -14,9 +13,7 @@ export class OrderGet {
    */
   public static async Detail(id: number): Promise<INetOrder> {
     return {
-      Name: "Aloento",
-      Phone: "+36 300000000",
-      Address: Array(10).fill(0).map(() => createUID()).reduce((prev, curr) => prev + curr, ""),
+
     }
   }
 }

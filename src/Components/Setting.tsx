@@ -1,7 +1,9 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens, useToastController } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
+import { WarpError } from "~/Helpers/Error";
 import { ColFlex, Flex } from "~/Helpers/Styles";
+import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 
 /**
@@ -52,6 +54,35 @@ export function Setting({ Open, Toggle }: ISetting) {
     }
   });
 
+  const { dispatchToast } = useToastController();
+  const dispatchError = use500Toast();
+
+  const { run } = useRequest(Hub.User.Post.Update, {
+    manual: true,
+    onFinally([req], _, e) {
+      if (e)
+        dispatchError(new WarpError({
+          Message: "Failed Update Info",
+          Error: e,
+          Request: req
+        }));
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Info Updated</ToastTitle>
+          <ToastBody>
+            {req.Phone}
+            <br />
+            {req.Address}
+          </ToastBody>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Toggle();
+    },
+  });
+
   return (
     <Dialog open={Open} onOpenChange={Toggle}>
       <DialogSurface>
@@ -70,13 +101,13 @@ export function Setting({ Open, Toggle }: ISetting) {
                 </Field>
               </div>
 
-              <Field label="Phone" size="large" className={style.col}>
-                <Input size="medium" value={phone} onChange={(_, v) => setPhone(v.value)} />
+              <Field label="Phone" size="large" required className={style.col}>
+                <Input size="medium" value={phone} maxLength={20} onChange={(_, v) => setPhone(v.value)} />
               </Field>
             </div>
 
-            <Field label="Address" size="large">
-              <Input size="medium" value={address} onChange={(_, v) => setAddress(v.value)} />
+            <Field label="Address" size="large" required>
+              <Input size="medium" value={address} maxLength={100} onChange={(_, v) => setAddress(v.value)} />
             </Field>
           </DialogContent>
 
@@ -84,7 +115,12 @@ export function Setting({ Open, Toggle }: ISetting) {
             <DialogTrigger disableButtonEnhancement>
               <Button appearance="secondary">Cancel</Button>
             </DialogTrigger>
-            <Button appearance="primary">Submit</Button>
+            <Button appearance="primary" onClick={() => run({
+              Address: address,
+              Phone: phone
+            })}>
+              Submit
+            </Button>
           </DialogActions>
 
         </DialogBody>

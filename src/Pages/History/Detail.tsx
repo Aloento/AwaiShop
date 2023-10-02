@@ -6,8 +6,9 @@ import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { useRouter } from "~/Components/Router";
 import { useShopCart } from "~/Components/ShopCart/Context";
 import { PersonaInfo } from "~/Components/ShopCart/Persona";
+import { WarpError } from "~/Helpers/Error";
 import { ColFlex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/Toast";
+import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { OrderAppend } from "./Append";
 import { DetailColumns } from "./Columns";
@@ -42,11 +43,10 @@ export function OrderDetail() {
   const { run } = useRequest(Hub.Order.Post.New, {
     onFinally([req], data, e) {
       if (e)
-        dispatchError(new Error("Cannot Create Order", {
-          cause: {
-            Request: req,
-            Error: e
-          }
+        dispatchError(new WarpError({
+          Message: "Cannot Create Order",
+          Request: req,
+          Error: e
         }));
 
       dispatchToast(
