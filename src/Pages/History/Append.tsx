@@ -22,7 +22,7 @@ export const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.2.0
  */
-export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
+export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
@@ -45,7 +45,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: ()
         { intent: "success" }
       );
 
-      Refresh();
+      Refresh(OrderId);
     },
   });
 
