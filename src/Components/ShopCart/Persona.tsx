@@ -25,6 +25,7 @@ export const useStyles = makeStyles({
 export interface IPersona {
   Name: string;
   Phone: string;
+  EMail: string;
   Address: string;
 }
 
@@ -51,6 +52,10 @@ export function PersonaInfo() {
         </Field>
       </div>
     </div>
+
+    <Field label="E-Mail" size="large">
+      <Label>{data?.EMail}</Label>
+    </Field>
 
     <Field label="Address" size="large">
       <Label>{data?.Address}</Label>
