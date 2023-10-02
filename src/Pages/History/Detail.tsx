@@ -1,11 +1,10 @@
 import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Field, Label, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useBoolean, useMount, useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { useRouter } from "~/Components/Router";
 import { ICartItem } from "~/Components/ShopCart";
-import { useShopCart } from "~/Components/ShopCart/Context";
 import { PersonaInfo } from "~/Components/ShopCart/Persona";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
@@ -76,31 +75,32 @@ const columns: TableColumnDefinition<ICartItem>[] = [
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
-export function OrderDetail() {
-  const [open, { toggle }] = useBoolean();
-
-  const { Nav, Paths } = useRouter();
-  const id = parseInt(Paths.at(2)!);
-
-  const { List, Update } = useShopCart();
+export function OrderDetail({ OrderId }: { OrderId: number }) {
   const style = useStyles();
+  const { Nav, Paths } = useRouter();
+  const [open, { toggle, setTrue }] = useBoolean();
 
   const { data, run } = useRequest(Hub.Order.Get.Detail, {
-    onBefore() {
-      isNaN(id) && Nav("/History");
-    },
     onError() {
       throw Nav("/History");
     },
     manual: true
   })
 
+  useMount(() => {
+    if (parseInt(Paths.at(1)!) === OrderId) {
+      run(OrderId);
+      setTrue();
+    }
+  });
+
   return <>
     <Button appearance="subtle" icon={<OpenRegular />} onClick={() => {
-      run(id);
-      toggle();
+      Nav(`/History/${OrderId}`);
+      run(OrderId);
+      setTrue();
     }} />
 
     <Drawer
@@ -116,7 +116,10 @@ export function OrderDetail() {
             <Button
               appearance="subtle"
               icon={<DismissRegular />}
-              onClick={toggle}
+              onClick={() => {
+                Nav("/History");
+                toggle();
+              }}
             />
           }
         >
@@ -128,13 +131,13 @@ export function OrderDetail() {
         <div className={style.body}>
           <PersonaInfo />
 
-          <DelegateDataGrid Items={List} Columns={columns} />
+          <DelegateDataGrid Items={data?.ShopCart || []} Columns={columns} />
 
           <Field label="Comment" size="large">
-            <Label>{""}</Label>
+            <Label>{data?.Comment}</Label>
           </Field>
 
-          <OrderAppend OrderId={id} Refresh={run} />
+          <OrderAppend OrderId={OrderId} Refresh={run} />
         </div>
       </DrawerBody>
     </Drawer>

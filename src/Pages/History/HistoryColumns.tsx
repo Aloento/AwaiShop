@@ -5,7 +5,7 @@ import { OrderDetail } from "./Detail";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.1
+ * @version 0.3.0
  */
 export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
   createTableColumn<IHistoryItem>({
@@ -39,23 +39,6 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
     }
   }),
   createTableColumn<IHistoryItem>({
-    columnId: "Quantity",
-    renderHeaderCell: () => {
-      return (
-        <DataGridHeaderCell style={{ flexBasis: "4%", flexGrow: 0 }}>
-          Quantity
-        </DataGridHeaderCell>
-      );
-    },
-    renderCell(item) {
-      return (
-        <DataGridCell style={{ flexBasis: "4%", flexGrow: 0 }}>
-          {item.Quantity}
-        </DataGridCell>
-      );
-    }
-  }),
-  createTableColumn<IHistoryItem>({
     columnId: "OrderDate",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Order Date</DataGridHeaderCell>;
@@ -74,12 +57,29 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
     }
   }),
   createTableColumn<IHistoryItem>({
-    columnId: "Status",
+    columnId: "Quantity",
     renderHeaderCell: () => {
-      return <DataGridHeaderCell>Order State</DataGridHeaderCell>;
+      return (
+        <DataGridHeaderCell style={{ flexBasis: "10%", flexGrow: 0 }}>
+          Quantity
+        </DataGridHeaderCell>
+      );
     },
     renderCell(item) {
-      return <DataGridCell>{item.Status}</DataGridCell>;
+      return (
+        <DataGridCell style={{ flexBasis: "10%", flexGrow: 0 }}>
+          {item.Quantity}
+        </DataGridCell>
+      );
+    }
+  }),
+  createTableColumn<IHistoryItem>({
+    columnId: "Status",
+    renderHeaderCell: () => {
+      return <DataGridHeaderCell style={{ flexBasis: "10%", flexGrow: 0 }}>Order State</DataGridHeaderCell>;
+    },
+    renderCell(item) {
+      return <DataGridCell style={{ flexBasis: "10%", flexGrow: 0 }}>{item.Status}</DataGridCell>;
     }
   }),
   createTableColumn<IHistoryItem>({
@@ -93,8 +93,8 @@ export const HistoryColumns: TableColumnDefinition<IHistoryItem>[] = [
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
-          <OrderDetail />
+        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
+          <OrderDetail OrderId={item.Id} />
         </DataGridCell>
       );
     },
