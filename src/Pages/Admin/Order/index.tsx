@@ -57,24 +57,6 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
   })
 ]
 
-const items: IHistoryItem[] = [
-  {
-    Id: 1,
-    Orders: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
-    Quantity: 2,
-    OrderDate: new Date(),
-    TrackNumber: "Number123456789",
-    Status: "Finished"
-  },
-  {
-    Id: 2,
-    Orders: ["OTC Cap - Cap and Cap"],
-    Quantity: 1,
-    OrderDate: new Date(),
-    TrackNumber: "Number123456789",
-    Status: "Finished"
-  },
-]
 
 /**
  * @author Aloento
