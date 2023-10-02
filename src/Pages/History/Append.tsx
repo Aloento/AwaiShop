@@ -20,7 +20,7 @@ export const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
   const style = useStyles();
@@ -49,13 +49,34 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
     },
   });
 
+  const { run: cancel } = useRequest(Hub.Order.Post.Cancel, {
+    manual: true,
+    onFinally([req], _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Cancel",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Order Canceled</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh(OrderId);
+    },
+  });
+
   return <>
     <Field label="Append" size="large">
       <Textarea value={cmt} onChange={(_, v) => setCmt(v.value)} maxLength={1000} />
     </Field>
 
     <div className={style.body}>
-      <Button>
+      <Button onClick={() => cancel(OrderId, cmt!)}>
         Cancel Order with Reason
       </Button>
 
