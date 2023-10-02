@@ -30,7 +30,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: ()
 
   const { run: append } = useRequest(Hub.Order.Post.Append, {
     manual: true,
-    onFinally([req], data, e) {
+    onFinally([req], _, e) {
       if (e)
         dispatchError({
           Message: "Failed Append Comment",
