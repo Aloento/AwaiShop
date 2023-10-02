@@ -1,10 +1,27 @@
-import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { OpenRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { IHistoryItem } from "~/Pages/History";
 import { HistoryColumns } from "~/Pages/History/HistoryColumns";
 import { AdminOrderEdit } from "./Edit";
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+export const useStyles = makeStyles({
+  two: {
+    flexBasis: "2.5%",
+    flexGrow: 0
+  },
+  twoc: {
+    flexBasis: "2.5%",
+    flexGrow: 0,
+    justifyContent: "center"
+  }
+});
 
 /**
  * @author Aloento
@@ -17,7 +34,7 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().two}>
           Action
         </DataGridHeaderCell>
       )
@@ -26,7 +43,7 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       const [open, { toggle }] = useBoolean();
 
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
+        <DataGridCell className={useStyles().twoc}>
           <Button
             appearance="subtle"
             icon={<OpenRegular />}
@@ -43,58 +60,16 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
 const items: IHistoryItem[] = [
   {
     Id: 1,
-    Orders: [
-      {
-        Name: "OTC SHIRT - GREY",
-        Type: [
-          {
-            Variant: "Color",
-            Type: "Red"
-          },
-          {
-            Variant: "Size",
-            Type: "S"
-          }
-        ],
-        Quantity: 1
-      },
-      {
-        Name: "OTC Cap - Cap and Cap",
-        Type: [
-          {
-            Variant: "Color",
-            Type: "Red"
-          },
-          {
-            Variant: "Size",
-            Type: "Long and Long"
-          }
-        ],
-        Quantity: 1
-      }
-    ],
+    Orders: ["OTC SHIRT - GREY", "OTC Cap - Cap and Cap"],
+    Quantity: 2,
     OrderDate: new Date(),
     TrackNumber: "Number123456789",
     Status: "Finished"
   },
   {
     Id: 2,
-    Orders: [
-      {
-        Name: "OTC Cap - Cap and Cap",
-        Type: [
-          {
-            Variant: "Color",
-            Type: "Red"
-          },
-          {
-            Variant: "Size",
-            Type: "Long and Long"
-          }
-        ],
-        Quantity: 1
-      }
-    ],
+    Orders: ["OTC Cap - Cap and Cap"],
+    Quantity: 1,
     OrderDate: new Date(),
     TrackNumber: "Number123456789",
     Status: "Finished"
