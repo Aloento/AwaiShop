@@ -42,7 +42,7 @@ export function use500Toast() {
       { intent: "error", timeout: 5000 }
     );
 
-    console.error(e.cause);
-    throw e;
+    console.error(e.Error);
+    throw e.Request;
   };
 }
