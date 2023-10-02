@@ -30,29 +30,32 @@ export function use500Toast<T>() {
   const style = useStyles();
   const { dispatchToast } = useToastController();
 
-  return (e: Cause<T>) => {
-    dispatchToast(
-      <Toast>
-        <ToastTitle>Internal Error</ToastTitle>
+  return {
+    dispatchError: (e: Cause<T>) => {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Internal Error</ToastTitle>
 
-        <ToastBody subtitle={
-          <Text className={style.pre}>
-            {e.Error.message}
-            <br />
-            More Info, See Console
-          </Text>
-        }>
+          <ToastBody subtitle={
+            <Text className={style.pre}>
+              {e.Error.message}
+              <br />
+              More Info, See Console
+            </Text>
+          }>
 
-          <Text className={style.pre}>
-            {e.Message}
-          </Text>
+            <Text className={style.pre}>
+              {e.Message}
+            </Text>
 
-        </ToastBody>
-      </Toast>,
-      { intent: "error", timeout: 5000 }
-    );
+          </ToastBody>
+        </Toast>,
+        { intent: "error", timeout: 5000 }
+      );
 
-    console.error(e.Error);
-    throw e.Request;
+      console.error(e.Error);
+      throw e.Request;
+    },
+    dispatchToast
   };
 }

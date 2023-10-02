@@ -1,4 +1,4 @@
-import { Button, Field, Textarea } from "@fluentui/react-components";
+import { Button, Field, Textarea, Toast, ToastBody, ToastTitle } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
@@ -13,7 +13,7 @@ import { Hub } from "~/ShopNet";
 export function OrderAppend({ OrderId }: { OrderId: number; }) {
   const [cmt, setCmt] = useState<string>();
 
-  const dispatchError = use500Toast();
+  const { dispatchError, dispatchToast } = use500Toast();
 
   const { run: append } = useRequest(Hub.Order.Post.Append, {
     manual: true,
@@ -24,6 +24,14 @@ export function OrderAppend({ OrderId }: { OrderId: number; }) {
           Request: req,
           Error: e
         });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Order Placed</ToastTitle>
+          <ToastBody>Order Id: {data}</ToastBody>
+        </Toast>,
+        { intent: "success" }
+      );
     },
   });
 

@@ -1,4 +1,4 @@
-import { Button, Field, Textarea, Toast, ToastBody, ToastTitle, makeStyles, tokens, useToastController } from "@fluentui/react-components";
+import { Button, Field, Textarea, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
@@ -41,8 +41,7 @@ export function Confirm() {
   const { Nav } = useRouter();
   const style = useStyles();
 
-  const { dispatchToast } = useToastController();
-  const dispatchError = use500Toast();
+  const { dispatchError, dispatchToast } = use500Toast();
 
   const { run } = useRequest(Hub.Order.Post.New, {
     onFinally([req], data, e) {
