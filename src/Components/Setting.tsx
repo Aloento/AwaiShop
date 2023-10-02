@@ -1,7 +1,6 @@
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens, useToastController } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
-import { WarpError } from "~/Helpers/Error";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -61,11 +60,11 @@ export function Setting({ Open, Toggle }: ISetting) {
     manual: true,
     onFinally([req], _, e) {
       if (e)
-        dispatchError(new WarpError({
+        dispatchError({
           Message: "Failed Update Info",
           Error: e,
           Request: req
-        }));
+        });
 
       dispatchToast(
         <Toast>

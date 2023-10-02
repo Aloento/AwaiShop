@@ -1,5 +1,4 @@
 import { Text, Toast, ToastBody, ToastTitle, makeStyles, useToastController } from "@fluentui/react-components";
-import { WarpError } from "./Error";
 import { PreLine } from "./Styles";
 
 /**
@@ -14,13 +13,24 @@ export const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
+ * @version 0.1.0
+ */
+interface Cause<T = any> {
+  Message: string
+  Request: T;
+  Error: Error;
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
  * @version 0.2.0
  */
-export function use500Toast() {
+export function use500Toast<T>() {
   const style = useStyles();
   const { dispatchToast } = useToastController();
 
-  return (e: WarpError) => {
+  return (e: Cause<T>) => {
     dispatchToast(
       <Toast>
         <ToastTitle>Internal Error</ToastTitle>
@@ -34,7 +44,7 @@ export function use500Toast() {
         }>
 
           <Text className={style.pre}>
-            {e.message}
+            {e.Message}
           </Text>
 
         </ToastBody>

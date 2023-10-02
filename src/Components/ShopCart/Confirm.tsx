@@ -3,7 +3,6 @@ import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/r
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
-import { WarpError } from "~/Helpers/Error";
 import { ColFlex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -48,11 +47,11 @@ export function Confirm() {
   const { run } = useRequest(Hub.Order.Post.New, {
     onFinally([req], data, e) {
       if (e)
-        dispatchError(new WarpError({
+        dispatchError({
           Message: "Failed Create Order",
           Request: req,
           Error: e
-        }));
+        });
 
       dispatchToast(
         <Toast>

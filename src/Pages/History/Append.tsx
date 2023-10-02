@@ -1,6 +1,9 @@
 import { Button, Field, Textarea } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
+import { use500Toast } from "~/Helpers/useToast";
+import { Hub } from "~/ShopNet";
 
 /**
  * @author Aloento
@@ -8,11 +11,25 @@ import { Flex } from "~/Helpers/Styles";
  * @version 0.1.0
  */
 export function OrderAppend({ OrderId }: { OrderId: number; }) {
-  const [append, setAppend] = useState<string>();
+  const [cmt, setCmt] = useState<string>();
+
+  const dispatchError = use500Toast();
+
+  const { run: append } = useRequest(Hub.Order.Post.Append, {
+    manual: true,
+    onFinally([req], data, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Append Comment",
+          Request: req,
+          Error: e
+        });
+    },
+  });
 
   return <>
     <Field label="Append" size="large">
-      <Textarea value={append} onChange={(_, v) => setAppend(v.value)} maxLength={1000} />
+      <Textarea value={cmt} onChange={(_, v) => setCmt(v.value)} maxLength={1000} />
     </Field>
 
     <div style={{
@@ -23,7 +40,7 @@ export function OrderAppend({ OrderId }: { OrderId: number; }) {
         Cancel Order with Reason
       </Button>
 
-      <Button>
+      <Button appearance="primary" onClick={() => append(OrderId, cmt!)}>
         Add Comment
       </Button>
     </div>
