@@ -3,7 +3,7 @@ import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/r
 import { DismissRegular, EditRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useMount, useRequest } from "ahooks";
 import { useRouter } from "~/Components/Router";
-import { ColFlex, Flex } from "~/Helpers/Styles";
+import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
@@ -18,17 +18,13 @@ const useStyles = makeStyles({
   body: {
     ...ColFlex,
     rowGap: tokens.spacingVerticalXL
-  },
-  close: {
-    ...Flex,
-    columnGap: tokens.spacingVerticalM
   }
 });
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
@@ -72,7 +68,10 @@ export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
           <Button
             appearance="subtle"
             icon={<DismissRegular />}
-            onClick={toggle}
+            onClick={() => {
+              Nav("/Admin/Order");
+              toggle();
+            }}
           />}
         >
           Order Detail
@@ -97,10 +96,6 @@ export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
         <Field label="Comment" size="large">
           <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Label>
         </Field>
-
-        <div className={style.close}>
-          <Button appearance="primary">Force Close</Button>
-        </div>
 
         <AdminOrderAppend OrderId={OrderId} Refresh={run} />
       </DrawerBody>
