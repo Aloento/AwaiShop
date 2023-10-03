@@ -20,11 +20,15 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function OrderPersona({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
   const { data } = useRequest(AdminHub.User.Get.OrderUser, {
+    defaultParams: [OrderId]
+  });
+
+  const { data: status } = useRequest(AdminHub.Order.Get.Status, {
     defaultParams: [OrderId]
   });
 
@@ -52,7 +56,7 @@ export function OrderPersona({ OrderId }: { OrderId: number; }) {
 
       <div className={style.box}>
         <Field label="Status" size="large">
-          <Label>Shipped</Label>
+          <Label>{status}</Label>
         </Field>
       </div>
     </div>
