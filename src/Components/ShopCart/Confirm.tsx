@@ -20,7 +20,7 @@ import { PersonaInfo } from "./Persona";
 export const useStyles = makeStyles({
   body: {
     ...ColFlex,
-    rowGap: tokens.spacingVerticalL
+    rowGap: tokens.spacingVerticalXL
   },
   sub: {
     width: "fit-content",

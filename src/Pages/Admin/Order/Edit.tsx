@@ -1,4 +1,4 @@
-import { Button, Field, Input, Label, tokens } from "@fluentui/react-components";
+import { Button, Field, Input, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { ColFlex, Flex } from "~/Helpers/Styles";
@@ -9,7 +9,31 @@ import { AdminOrderList } from "./List";
  * @since 0.5.0
  * @version 0.1.0
  */
+export const useStyles = makeStyles({
+  body: {
+    ...ColFlex,
+    rowGap: tokens.spacingVerticalXL
+  },
+  flex: Flex,
+  box: {
+    ...ColFlex,
+    flexBasis: "50%",
+    rowGap: tokens.spacingVerticalM
+  },
+  close: {
+    ...Flex,
+    columnGap: tokens.spacingVerticalM
+  }
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
 export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => void }) {
+  const style = useStyles();
+
   return (
     <Drawer
       open={Open}
@@ -30,48 +54,29 @@ export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => 
         </DrawerHeaderTitle>
       </DrawerHeader>
 
-      <DrawerBody style={{
-        ...ColFlex,
-        rowGap: tokens.spacingVerticalXL
-      }}>
-        <div style={Flex}>
-          <div style={{
-            ...ColFlex,
-            flexBasis: "50%",
-            rowGap: tokens.spacingVerticalM
-          }}>
+      <DrawerBody className={style.body}>
+        <div className={style.flex}>
+          <div className={style.box}>
             <Field label="Name" size="large">
               <Label>Aloento</Label>
             </Field>
           </div>
 
-          <div style={{
-            ...ColFlex,
-            flexBasis: "50%",
-            rowGap: tokens.spacingVerticalM
-          }}>
+          <div className={style.box}>
             <Field label="Phone" size="large">
               <Label>Aloento</Label>
             </Field>
           </div>
         </div>
 
-        <div style={Flex}>
-          <div style={{
-            ...ColFlex,
-            flexBasis: "50%",
-            rowGap: tokens.spacingVerticalM
-          }}>
+        <div className={style.flex}>
+          <div className={style.box}>
             <Field label="E-Mail" size="large">
               <Label>Aloento@T-Systems.com</Label>
             </Field>
           </div>
 
-          <div style={{
-            ...ColFlex,
-            flexBasis: "50%",
-            rowGap: tokens.spacingVerticalM
-          }}>
+          <div className={style.box}>
             <Field label="Status" size="large">
               <Label>Shipped</Label>
             </Field>
@@ -98,10 +103,7 @@ export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => 
           />
         </Field>
 
-        <div style={{
-          ...Flex,
-          columnGap: tokens.spacingVerticalM
-        }}>
+        <div className={style.close}>
           <Button appearance="primary">Force Close</Button>
         </div>
       </DrawerBody>
