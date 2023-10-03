@@ -40,4 +40,13 @@ export class AdminOrderGet {
   public static async Status(orderId: number): Promise<string> {
     return "Shipped";
   }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Track(orderId: number): Promise<string> {
+    return "Number123456789";
+  }
 }

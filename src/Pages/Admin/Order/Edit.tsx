@@ -1,6 +1,6 @@
-import { Button, Field, Input, Label, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Field, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
-import { DismissRegular, EditRegular, OpenRegular } from "@fluentui/react-icons";
+import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useMount, useRequest } from "ahooks";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
@@ -8,6 +8,7 @@ import { Hub } from "~/ShopNet";
 import { OrderPersona } from "../../History/Persona";
 import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
+import { Shipment } from "./Ship";
 
 /**
  * @author Aloento
@@ -85,13 +86,7 @@ export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
           <AdminOrderList Items={data?.ShopCart} />
         </Field>
 
-        <Field label="Shipment" size="large">
-          <Input
-            appearance="underline"
-            defaultValue="Number123456789"
-            contentAfter={<Button appearance="subtle" icon={<EditRegular />} />}
-          />
-        </Field>
+        <Shipment OrderId={OrderId} Refresh={run} />
 
         <Field label="Comment" size="large">
           <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Label>
