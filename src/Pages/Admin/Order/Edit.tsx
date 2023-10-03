@@ -89,7 +89,7 @@ export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
         <Shipment OrderId={OrderId} Refresh={run} />
 
         <Field label="Comment" size="large">
-          <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Label>
+          <Label>{data?.Comment}</Label>
         </Field>
 
         <AdminOrderAppend OrderId={OrderId} Refresh={run} />
