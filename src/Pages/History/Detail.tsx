@@ -16,7 +16,7 @@ import { OrderAppend } from "./Append";
  * @since 0.5.0
  * @version 0.1.0
  */
-export const useStyles = makeStyles({
+const useStyles = makeStyles({
   body: {
     ...ColFlex,
     rowGap: tokens.spacingVerticalL

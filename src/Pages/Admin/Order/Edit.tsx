@@ -14,16 +14,10 @@ import { OrderPersona } from "./Persona";
  * @since 0.5.0
  * @version 0.1.0
  */
-export const useStyles = makeStyles({
+const useStyles = makeStyles({
   body: {
     ...ColFlex,
     rowGap: tokens.spacingVerticalXL
-  },
-  flex: Flex,
-  box: {
-    ...ColFlex,
-    flexBasis: "50%",
-    rowGap: tokens.spacingVerticalM
   },
   close: {
     ...Flex,

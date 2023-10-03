@@ -11,7 +11,7 @@ import { AdminOrderEdit } from "./Edit";
  * @since 0.5.0
  * @version 0.1.0
  */
-export const useStyles = makeStyles({
+const useStyles = makeStyles({
   two: {
     flexBasis: "2.5%",
     flexGrow: 0

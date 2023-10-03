@@ -1,7 +1,21 @@
-import { Field, Label } from "@fluentui/react-components";
+import { Field, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
+import { ColFlex, Flex } from "~/Helpers/Styles";
 import { AdminHub } from "~/ShopNet/Admin";
-import { useStyles } from "./Edit";
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+const useStyles = makeStyles({
+  flex: Flex,
+  box: {
+    ...ColFlex,
+    flexBasis: "50%",
+    rowGap: tokens.spacingVerticalM
+  },
+});
 
 /**
  * @author Aloento
