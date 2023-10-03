@@ -1,6 +1,7 @@
 import { Field, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { ColFlex, Flex } from "~/Helpers/Styles";
+import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -22,13 +23,13 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.2.0
  */
-export function OrderPersona({ OrderId }: { OrderId: number; }) {
+export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
   const style = useStyles();
-  const { data } = useRequest(AdminHub.User.Get.OrderUser, {
+  const { data } = useRequest(Admin ? AdminHub.User.Get.OrderUser : Hub.User.Get.Me, {
     defaultParams: [OrderId]
   });
 
-  const { data: status } = useRequest(AdminHub.Order.Get.Status, {
+  const { data: status } = useRequest(Admin ? AdminHub.Order.Get.Status : Hub.Order.Get.Status, {
     defaultParams: [OrderId]
   });
 

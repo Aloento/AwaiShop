@@ -69,4 +69,13 @@ export class OrderGet {
       Comment: Array(10).fill(0).map(() => createUID()).reduce((prev, curr) => prev + curr, "")
     }
   }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Status(orderId: number): Promise<string> {
+    return "Shipped";
+  }
 }

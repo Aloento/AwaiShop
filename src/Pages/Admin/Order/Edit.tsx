@@ -5,9 +5,9 @@ import { useBoolean, useMount, useRequest } from "ahooks";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
+import { OrderPersona } from "../../History/Persona";
 import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
-import { OrderPersona } from "./Persona";
 
 /**
  * @author Aloento
@@ -79,7 +79,7 @@ export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
       </DrawerHeader>
 
       <DrawerBody className={style.body}>
-        <OrderPersona OrderId={OrderId} />
+        <OrderPersona OrderId={OrderId} Admin />
 
         <Field label="Required Products" size="large">
           <AdminOrderList Items={data?.ShopCart} />
