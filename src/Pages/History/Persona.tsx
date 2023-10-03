@@ -35,7 +35,7 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
 
   const { data: track } = useRequest(Hub.Order.Get.Track, {
     defaultParams: [OrderId],
-    manual: !Admin
+    manual: Admin
   });
 
   return <>
