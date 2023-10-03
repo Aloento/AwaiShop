@@ -1,8 +1,11 @@
 import { Button, Field, Input, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
-import { DismissRegular, EditRegular } from "@fluentui/react-icons";
+import { DismissRegular, EditRegular, OpenRegular } from "@fluentui/react-icons";
+import { useBoolean } from "ahooks";
+import { useRouter } from "~/Components/Router";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { AdminOrderList } from "./List";
+import { OrderPersona } from "./Persona";
 
 /**
  * @author Aloento
@@ -31,13 +34,21 @@ export const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => void }) {
+export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
+  const [open, { toggle }] = useBoolean();
+  const { Nav, Paths } = useRouter();
 
-  return (
+  return <>
+    <Button
+      appearance="subtle"
+      icon={<OpenRegular />}
+      onClick={toggle}
+    />
+
     <Drawer
-      open={Open}
-      onOpenChange={Toggle}
+      open={open}
+      onOpenChange={toggle}
       position="end"
       size="medium"
       modalType="alert"
@@ -47,7 +58,7 @@ export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => 
           <Button
             appearance="subtle"
             icon={<DismissRegular />}
-            onClick={Toggle}
+            onClick={toggle}
           />}
         >
           Order Detail
@@ -55,41 +66,7 @@ export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => 
       </DrawerHeader>
 
       <DrawerBody className={style.body}>
-        <div className={style.flex}>
-          <div className={style.box}>
-            <Field label="Name" size="large">
-              <Label>Aloento</Label>
-            </Field>
-          </div>
-
-          <div className={style.box}>
-            <Field label="Phone" size="large">
-              <Label>Aloento</Label>
-            </Field>
-          </div>
-        </div>
-
-        <div className={style.flex}>
-          <div className={style.box}>
-            <Field label="E-Mail" size="large">
-              <Label>Aloento@T-Systems.com</Label>
-            </Field>
-          </div>
-
-          <div className={style.box}>
-            <Field label="Status" size="large">
-              <Label>Shipped</Label>
-            </Field>
-          </div>
-        </div>
-
-        <Field label="Address" size="large">
-          <Label>Some Address Address Address Address Address Address Address</Label>
-        </Field>
-
-        <Field label="Comment" size="large">
-          <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Label>
-        </Field>
+        <OrderPersona OrderId={OrderId} />
 
         <Field label="Required Products" size="large">
           <AdminOrderList />
@@ -103,10 +80,14 @@ export function AdminOrderEdit({ Open, Toggle }: { Open: boolean; Toggle: () => 
           />
         </Field>
 
+        <Field label="Comment" size="large">
+          <Label>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Label>
+        </Field>
+
         <div className={style.close}>
           <Button appearance="primary">Force Close</Button>
         </div>
       </DrawerBody>
     </Drawer>
-  )
+  </>
 }

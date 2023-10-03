@@ -1,4 +1,5 @@
 import { AdminOrder } from "./Order";
+import { AdminUser } from "./User";
 
 /**
  * @author Aloento
@@ -7,4 +8,5 @@ import { AdminOrder } from "./Order";
  */
 export const AdminHub = {
   Order: AdminOrder,
+  User: AdminUser,
 }

@@ -1,6 +1,5 @@
-import { Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { OpenRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { IHistoryItem } from "~/Pages/History";
 import { HistoryColumns } from "~/Pages/History/HistoryColumns";
@@ -27,7 +26,7 @@ export const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 const columns: TableColumnDefinition<IHistoryItem>[] = [
   ...HistoryColumns.slice(0, -1),
@@ -41,17 +40,9 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
       )
     },
     renderCell(item) {
-      const [open, { toggle }] = useBoolean();
-
       return (
         <DataGridCell className={useStyles().twoc}>
-          <Button
-            appearance="subtle"
-            icon={<OpenRegular />}
-            onClick={toggle}
-          />
-
-          <AdminOrderEdit Open={open} Toggle={toggle} />
+          <AdminOrderEdit OrderId={item.Id} />
         </DataGridCell>
       )
     },
