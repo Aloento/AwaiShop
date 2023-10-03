@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
   const style = useStyles();
@@ -29,8 +29,13 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
     defaultParams: [OrderId]
   });
 
-  const { data: status } = useRequest(Admin ? AdminHub.Order.Get.Status : Hub.Order.Get.Status, {
+  const { data: status } = useRequest(Hub.Order.Get.Status, {
     defaultParams: [OrderId]
+  });
+
+  const { data: track } = useRequest(Hub.Order.Get.Track, {
+    defaultParams: [OrderId],
+    manual: !Admin
   });
 
   return <>
@@ -65,5 +70,12 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
     <Field label="Address" size="large">
       <Label>{data?.Address}</Label>
     </Field>
+
+    {
+      !Admin &&
+      <Field label="Tracking Number" size="large">
+        <Label>{track}</Label>
+      </Field>
+    }
   </>;
 }

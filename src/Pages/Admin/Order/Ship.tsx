@@ -3,6 +3,7 @@ import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 import { use500Toast } from "~/Helpers/useToast";
+import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -16,7 +17,7 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  useRequest(AdminHub.Order.Get.Track, {
+  useRequest(Hub.Order.Get.Track, {
     defaultParams: [OrderId],
     onSuccess(data) {
       setTrack(data);
