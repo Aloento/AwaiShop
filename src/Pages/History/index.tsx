@@ -1,7 +1,7 @@
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Hub } from "~/ShopNet";
-import { HistoryColumns } from "./HistoryColumns";
+import { HistoryColumns } from "./Columns";
 
 /**
  * @author Aloento

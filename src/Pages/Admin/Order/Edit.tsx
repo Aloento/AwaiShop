@@ -1,9 +1,11 @@
 import { Button, Field, Input, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, EditRegular, OpenRegular } from "@fluentui/react-icons";
-import { useBoolean } from "ahooks";
+import { useBoolean, useMount, useRequest } from "ahooks";
 import { useRouter } from "~/Components/Router";
 import { ColFlex, Flex } from "~/Helpers/Styles";
+import { Hub } from "~/ShopNet";
+import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
 import { OrderPersona } from "./Persona";
 
@@ -36,14 +38,32 @@ export const useStyles = makeStyles({
  */
 export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
-  const [open, { toggle }] = useBoolean();
+  const [open, { toggle, setTrue }] = useBoolean();
   const { Nav, Paths } = useRouter();
+
+  const { data, run } = useRequest(Hub.Order.Get.Detail, {
+    onError() {
+      throw Nav("/Admin/Order");
+    },
+    manual: true
+  })
+
+  useMount(() => {
+    if (parseInt(Paths.at(2)!) === OrderId) {
+      run(OrderId);
+      setTrue();
+    }
+  });
 
   return <>
     <Button
       appearance="subtle"
       icon={<OpenRegular />}
-      onClick={toggle}
+      onClick={() => {
+        Nav(`/Admin/Order/${OrderId}`);
+        run(OrderId);
+        setTrue();
+      }}
     />
 
     <Drawer
@@ -69,7 +89,7 @@ export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
         <OrderPersona OrderId={OrderId} />
 
         <Field label="Required Products" size="large">
-          <AdminOrderList />
+          <AdminOrderList Items={data?.ShopCart} />
         </Field>
 
         <Field label="Shipment" size="large">
@@ -87,6 +107,8 @@ export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
         <div className={style.close}>
           <Button appearance="primary">Force Close</Button>
         </div>
+
+        <AdminOrderAppend OrderId={OrderId} Refresh={run} />
       </DrawerBody>
     </Drawer>
   </>

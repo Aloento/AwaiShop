@@ -1,5 +1,5 @@
-import { createUID } from "lexical/LexicalUtils";
 import { IPersona } from "~/Components/ShopCart/Persona";
+import { createUID } from "~/Lexical/Utils/createUID";
 
 /**
  * @author Aloento

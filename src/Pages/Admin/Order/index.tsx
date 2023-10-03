@@ -2,7 +2,7 @@ import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableCol
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { IHistoryItem } from "~/Pages/History";
-import { HistoryColumns } from "~/Pages/History/HistoryColumns";
+import { HistoryColumns } from "~/Pages/History/Columns";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminOrderEdit } from "./Edit";
 
