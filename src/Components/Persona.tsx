@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.3
+ * @version 0.3.0
  */
 export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
   const style = useStyles();
@@ -50,8 +50,8 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
 
     <div className={style.flex}>
       <div className={style.box}>
-        <Field label="E-Mail" size="large">
-          <Label>{data?.EMail}</Label>
+        <Field label="Order Date" size="large">
+          <Label>{ext?.OrderDate.toLocaleDateString()}</Label>
         </Field>
       </div>
 
@@ -62,19 +62,25 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
       </div>
     </div>
 
+    <div className={style.flex}>
+      <div className={style.box}>
+        <Field label="E-Mail" size="large">
+          <Label>{data?.EMail}</Label>
+        </Field>
+      </div>
+
+      {
+        !Admin &&
+        <div className={style.box}>
+          <Field label="Tracking Number" size="large">
+            <Label>{ext?.TrackNumber}</Label>
+          </Field>
+        </div>
+      }
+    </div>
+
     <Field label="Address" size="large">
       <Label>{data?.Address}</Label>
     </Field>
-
-    {
-      Admin ?
-        <Field label="Order Date" size="large">
-          <Label>{ext?.OrderDate.toLocaleDateString()}</Label>
-        </Field>
-        :
-        <Field label="Tracking Number" size="large">
-          <Label>{ext?.TrackNumber}</Label>
-        </Field>
-    }
   </>;
 }
