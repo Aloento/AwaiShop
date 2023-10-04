@@ -1,4 +1,5 @@
 import { AdminProductGet } from "./Get";
+import { AdminProductPost } from "./Post";
 
 /**
  * @author Aloento
@@ -6,5 +7,6 @@ import { AdminProductGet } from "./Get";
  * @version 0.1.0
  */
 export const AdminProduct = {
-  Get: AdminProductGet
+  Get: AdminProductGet,
+  Post: AdminProductPost,
 }

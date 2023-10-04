@@ -13,7 +13,7 @@ import { AdminHub } from "~/ShopNet/Admin";
  */
 export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
   const [edit, { setTrue, setFalse }] = useBoolean();
-  const [track, setTrack] = useState<string>("");
+  const [track, setTrack] = useState("");
 
   const { dispatchError, dispatchToast } = use500Toast();
 
