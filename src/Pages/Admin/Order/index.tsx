@@ -4,7 +4,7 @@ import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { IHistoryItem } from "~/Pages/History";
 import { HistoryColumns } from "~/Pages/History/Columns";
 import { AdminHub } from "~/ShopNet/Admin";
-import { AdminOrderEdit } from "./Edit";
+import { AdminOrderDetail } from "./Detail";
 
 /**
  * @author Aloento
@@ -42,7 +42,7 @@ const columns: TableColumnDefinition<IHistoryItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().twoc}>
-          <AdminOrderEdit OrderId={item.Id} />
+          <AdminOrderDetail OrderId={item.Id} />
         </DataGridCell>
       )
     },

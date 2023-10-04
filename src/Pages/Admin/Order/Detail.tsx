@@ -27,7 +27,7 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.2.0
  */
-export function AdminOrderEdit({ OrderId }: { OrderId: number; }) {
+export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
   const [open, { toggle, setTrue }] = useBoolean();
   const { Nav, Paths } = useRouter();
