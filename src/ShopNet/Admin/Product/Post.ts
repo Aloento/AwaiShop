@@ -19,7 +19,6 @@ export class AdminProductPost {
    * @version 0.1.0
    */
   public static async Create(name: string): Promise<number> {
-    return 1;
     throw new Error("TODO");
   }
 }
