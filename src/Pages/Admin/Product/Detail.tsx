@@ -1,10 +1,11 @@
 import { Button, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
-import { useBoolean } from "ahooks";
+import { useBoolean, useMount } from "ahooks";
+import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { AdminProductCombo } from "./Combo";
-import { ProductName } from "./Name";
+import { AdminProductName } from "./Name";
 import { AdminProductPhoto } from "./Photo";
 import { AdminProductVariant } from "./Variant";
 
@@ -27,13 +28,22 @@ const useStyles = makeStyles({
  */
 export function AdminProductDetail({ ProdId }: { ProdId: number }) {
   const style = useStyles();
-  const [open, { toggle }] = useBoolean();
+  const [open, { toggle, setTrue }] = useBoolean();
+  const { Nav, Paths } = useRouter();
+
+  useMount(() => {
+    if (parseInt(Paths.at(1)!) === ProdId)
+      setTrue();
+  });
 
   return <>
     <Button
       appearance="subtle"
       icon={<OpenRegular />}
-      onClick={toggle}
+      onClick={() => {
+        Nav(`/Admin/${ProdId}`);
+        setTrue();
+      }}
     />
 
     <Drawer
@@ -48,7 +58,10 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
           <Button
             appearance="subtle"
             icon={<DismissRegular />}
-            onClick={toggle}
+            onClick={() => {
+              Nav(`/Admin`);
+              toggle();
+            }}
           />}
         >
           Product Detail
@@ -56,7 +69,7 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
       </DrawerHeader>
 
       <DrawerBody className={style.body}>
-        <ProductName ProdId={ProdId} />
+        <AdminProductName ProdId={ProdId} />
         <AdminProductPhoto ProdId={ProdId} />
         <AdminProductVariant ProdId={ProdId} />
         <AdminProductCombo ProdId={ProdId} />

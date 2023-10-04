@@ -10,7 +10,7 @@ import { AdminHub } from "~/ShopNet/Admin";
  * @since 0.5.0
  * @version 0.1.0
  */
-export function ProductName({ ProdId }: { ProdId: number; }) {
+export function AdminProductName({ ProdId }: { ProdId: number; }) {
   const [name, setName] = useState("");
   const [edit, { setTrue, setFalse }] = useBoolean();
 
@@ -54,6 +54,7 @@ export function ProductName({ ProdId }: { ProdId: number; }) {
       contentBefore={<Subtitle2>Name</Subtitle2>}
       contentAfter={edit
         ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => run(ProdId, name)} />
-        : <Button appearance="subtle" icon={<EditRegular />} onClick={setTrue} />} />
+        : <Button appearance="subtle" icon={<EditRegular />} onClick={setTrue} />}
+    />
   );
 }
