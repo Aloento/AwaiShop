@@ -1,7 +1,8 @@
 import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { OpenRegular } from "@fluentui/react-icons";
-import { useBoolean } from "ahooks";
+import { useBoolean, useRequest } from "ahooks";
 import { CoverCol } from "~/Helpers/CoverCol";
+import { AdminHub } from "~/ShopNet/Admin";
 import { DelegateDataGrid } from "../../../Components/DataGrid/Delegate";
 import { AdminProductEdit } from "./Edit";
 
@@ -10,7 +11,7 @@ import { AdminProductEdit } from "./Edit";
  * @since 0.1.0
  * @version 0.1.0
  */
-interface IProductItem {
+export interface IProductItem {
   Id: number;
   Cover: string;
   Name: string;
@@ -107,34 +108,15 @@ const columns: TableColumnDefinition<IProductItem>[] = [
   })
 ]
 
-const items: IProductItem[] = [
-  {
-    Id: 1,
-    Cover: "https://picsum.photos/550",
-    Name: "OTC SHIRT - GREY",
-    Category: "Clothes",
-    Variant: 2,
-    Type: 4,
-    Stock: 10,
-  },
-  {
-    Id: 2,
-    Cover: "https://picsum.photos/600",
-    Name: "OTC Cap - Cap and Cap",
-    Category: "Hat",
-    Variant: 2,
-    Type: 4,
-    Stock: 20,
-  }
-]
-
 /**
  * @author Aloento
  * @since 0.1.0
  * @version 0.1.0
  */
 export function AdminProduct() {
+  const { data } = useRequest(AdminHub.Product.Get.List);
+
   return (
-    <DelegateDataGrid Items={items} Columns={columns} />
+    <DelegateDataGrid Items={data || []} Columns={columns} />
   )
 }
