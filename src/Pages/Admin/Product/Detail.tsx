@@ -1,7 +1,8 @@
 import { Button, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
-import { useBoolean, useMount } from "ahooks";
+import { useBoolean } from "ahooks";
+import { useEffect } from "react";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { AdminProductCombo } from "./Combo";
@@ -31,10 +32,10 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
   const [open, { toggle, setTrue }] = useBoolean();
   const { Nav, Paths } = useRouter();
 
-  useMount(() => {
+  useEffect(() => {
     if (parseInt(Paths.at(1)!) === ProdId)
       setTrue();
-  });
+  }, [Paths]);
 
   return <>
     <Button

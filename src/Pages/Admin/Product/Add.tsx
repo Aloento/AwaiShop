@@ -1,8 +1,11 @@
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTrigger, Input, Subtitle2, makeStyles } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTrigger, Input, Subtitle2, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { AddRegular } from "@fluentui/react-icons";
+import { useRequest } from "ahooks";
 import { useState } from "react";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
+import { use500Toast } from "~/Helpers/useToast";
+import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
@@ -16,15 +19,38 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function AdminProductAddButton() {
-  const { Paths } = useRouter();
+  const { Nav, Paths } = useRouter();
   const path1 = Paths.at(0);
   const path2 = Paths.at(1);
 
   const style = useStyles();
   const [name, setName] = useState("");
+
+  const { dispatchError, dispatchToast } = use500Toast();
+
+  const { run } = useRequest(AdminHub.Product.Post.Create, {
+    manual: true,
+    onFinally([req], data, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Create",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>New Product Created</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Nav(`/Admin/${data}`);
+    },
+  });
 
   return (
     path1 === "Admin" && !path2 &&
@@ -52,7 +78,7 @@ export function AdminProductAddButton() {
               <Button appearance="secondary">Cancel</Button>
             </DialogTrigger>
 
-            <Button appearance="primary">Create</Button>
+            <Button appearance="primary" onClick={() => run(name)}>Create</Button>
           </DialogActions>
 
         </DialogBody>
