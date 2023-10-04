@@ -2,6 +2,7 @@ import { Button, Input, Subtitle2, Toast, ToastTitle } from "@fluentui/react-com
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
+import { useRouter } from "~/Components/Router";
 import { use500Toast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
@@ -13,11 +14,15 @@ import { AdminHub } from "~/ShopNet/Admin";
 export function AdminProductName({ ProdId }: { ProdId: number; }) {
   const [name, setName] = useState("");
   const [edit, { setTrue, setFalse }] = useBoolean();
+  const { Nav } = useRouter();
 
   useRequest(AdminHub.Product.Get.Name, {
     defaultParams: [ProdId],
     onSuccess(data) {
       setName(data);
+    },
+    onError() {
+      throw Nav("/Admin");
     },
   });
 
