@@ -64,7 +64,7 @@ export const HistoryColumns: TableColumnDefinition<IOrderItem>[] = [
       return <DataGridHeaderCell>Order Date</DataGridHeaderCell>;
     },
     renderCell(item) {
-      return <DataGridHeaderCell>{item.OrderDate.toDateString()}</DataGridHeaderCell>;
+      return <DataGridHeaderCell>{item.OrderDate.toLocaleDateString()}</DataGridHeaderCell>;
     }
   }),
   createTableColumn<IOrderItem>({

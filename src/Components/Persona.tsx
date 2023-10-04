@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.2
+ * @version 0.2.3
  */
 export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
   const style = useStyles();
@@ -67,10 +67,14 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
     </Field>
 
     {
-      !Admin &&
-      <Field label="Tracking Number" size="large">
-        <Label>{ext?.TrackNumber}</Label>
-      </Field>
+      Admin ?
+        <Field label="Order Date" size="large">
+          <Label>{ext?.OrderDate.toLocaleDateString()}</Label>
+        </Field>
+        :
+        <Field label="Tracking Number" size="large">
+          <Label>{ext?.TrackNumber}</Label>
+        </Field>
     }
   </>;
 }
