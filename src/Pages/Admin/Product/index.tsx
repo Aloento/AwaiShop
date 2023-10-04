@@ -1,10 +1,9 @@
-import { Body1Strong, Button, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { OpenRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { Body1Strong, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
+import { useRequest } from "ahooks";
 import { CoverCol } from "~/Helpers/CoverCol";
 import { AdminHub } from "~/ShopNet/Admin";
 import { DelegateDataGrid } from "../../../Components/DataGrid/Delegate";
-import { AdminProductEdit } from "./Edit";
+import { AdminProductDetail } from "./Detail";
 
 /**
  * @author Aloento
@@ -20,6 +19,23 @@ export interface IProductItem {
   Type: number;
   Stock: number;
 }
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+const useStyles = makeStyles({
+  two: {
+    flexBasis: "2.5%",
+    flexGrow: 0
+  },
+  twoc: {
+    flexBasis: "2.5%",
+    flexGrow: 0,
+    justifyContent: "center"
+  }
+});
 
 /**
  * @author Aloento
@@ -85,23 +101,15 @@ const columns: TableColumnDefinition<IProductItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "2.5%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().two}>
           Detail
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
-      const [open, { toggle }] = useBoolean();
-
       return (
-        <DataGridCell style={{ flexBasis: "2.5%", flexGrow: 0, justifyContent: "center" }}>
-          <Button
-            appearance="subtle"
-            icon={<OpenRegular />}
-            onClick={toggle}
-          />
-
-          <AdminProductEdit Open={open} Toggle={toggle} />
+        <DataGridCell className={useStyles().twoc}>
+          <AdminProductDetail ProdId={item.Id} />
         </DataGridCell>
       )
     },
@@ -111,7 +119,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProduct() {
   const { data } = useRequest(AdminHub.Product.Get.List);
