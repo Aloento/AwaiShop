@@ -1,7 +1,7 @@
 import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
-import { IHistoryItem } from "~/Pages/History";
+import { IOrderItem } from "~/Pages/History";
 import { HistoryColumns } from "~/Pages/History/Columns";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminOrderDetail } from "./Detail";
@@ -28,9 +28,9 @@ const useStyles = makeStyles({
  * @since 0.1.0
  * @version 0.1.1
  */
-const columns: TableColumnDefinition<IHistoryItem>[] = [
+const columns: TableColumnDefinition<IOrderItem>[] = [
   ...HistoryColumns.slice(0, -1),
-  createTableColumn<IHistoryItem>({
+  createTableColumn<IOrderItem>({
     columnId: "Action",
     renderHeaderCell: () => {
       return (

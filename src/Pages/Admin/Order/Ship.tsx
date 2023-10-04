@@ -17,10 +17,10 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  useRequest(Hub.Order.Get.Track, {
+  useRequest(Hub.Order.Get.Extension, {
     defaultParams: [OrderId],
     onSuccess(data) {
-      setTrack(data);
+      setTrack(data.TrackNumber);
     },
   });
 
