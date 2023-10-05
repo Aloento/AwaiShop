@@ -1,8 +1,10 @@
-import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-icons";
+import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Flex } from "~/Helpers/Styles";
+import { Hub } from "~/ShopNet";
 import { AdminProductPhotoEdit } from "./Edit";
 
 /**
@@ -10,7 +12,23 @@ import { AdminProductPhotoEdit } from "./Edit";
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IPhotoItem {
+const useStyles = makeStyles({
+  f11: {
+    flexBasis: "11%",
+    flexGrow: 0
+  },
+  box: {
+    ...Flex,
+    justifyContent: "space-between"
+  }
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+export interface IPhotoItem {
   Id: number;
   Cover: string;
   Caption?: string;
@@ -36,14 +54,14 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "11%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().f11}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "11%", flexGrow: 0 }}>
+        <DataGridCell className={useStyles().f11}>
           <Button
             appearance="subtle"
             icon={<ArrowUpRegular />}
@@ -61,34 +79,22 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
   })
 ]
 
-const items: IPhotoItem[] = [
-  {
-    Id: 0,
-    Cover: "https://picsum.photos/550",
-    Caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-  },
-  {
-    Id: 1,
-    Cover: "https://picsum.photos/650",
-    Caption: "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  }
-]
-
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
+  const { data } = useRequest(Hub.Product.Get.Carousel, {
+    defaultParams: [ProdId]
+  })
+
   return <>
-    <div style={{
-      ...Flex,
-      justifyContent: "space-between"
-    }}>
+    <div className={useStyles().box}>
       <Subtitle1>Photos</Subtitle1>
       <Button appearance="primary" icon={<AddRegular />}>New Image</Button>
     </div>
 
-    <DelegateDataGrid Items={items} Columns={columns} />
+    <DelegateDataGrid Items={data || []} Columns={columns} />
   </>
 }
