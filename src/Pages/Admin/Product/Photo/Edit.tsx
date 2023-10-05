@@ -1,6 +1,28 @@
-import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+const useStyles = makeStyles({
+  box: {
+    ...Flex,
+    columnGap: tokens.spacingHorizontalL
+  },
+  img: {
+    ...Cover,
+    aspectRatio: "1",
+    width: "50%"
+  },
+  cap: {
+    ...ColFlex,
+    flexGrow: 1,
+    rowGap: tokens.spacingVerticalL
+  }
+});
 
 /**
  * @author Aloento
@@ -8,6 +30,8 @@ import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
  * @version 0.2.0
  */
 export function AdminProductPhotoEdit({ PhotoId, Refresh }: { PhotoId: number; Refresh: () => void; }) {
+  const style = useStyles();
+
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>
@@ -27,25 +51,14 @@ export function AdminProductPhotoEdit({ PhotoId, Refresh }: { PhotoId: number; R
             Image Detail
           </DialogTitle>
 
-          <DialogContent style={{
-            ...Flex,
-            columnGap: tokens.spacingHorizontalL
-          }}>
+          <DialogContent className={style.box}>
             <Image
               shape="rounded"
-              style={{
-                ...Cover,
-                aspectRatio: "1",
-                width: "50%"
-              }}
+              className={style.img}
               src={"https://picsum.photos/650"}
             />
 
-            <div style={{
-              ...ColFlex,
-              flexGrow: 1,
-              rowGap: tokens.spacingVerticalL
-            }}>
+            <div className={style.cap}>
               <Field label="Caption">
                 <Input />
               </Field>
