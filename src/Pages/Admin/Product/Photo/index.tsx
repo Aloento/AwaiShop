@@ -74,7 +74,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
               Error: e
             });
 
-          update();
+          refreshCarousel();
         },
       });
 
@@ -92,14 +92,19 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
             onClick={() => run(item.Id, false)}
           />
 
-          <AdminProductPhotoEdit />
+          <AdminProductPhotoEdit PhotoId={item.Id} Refresh={refreshCarousel} />
         </DataGridCell>
       )
     },
   })
 ]
 
-let update: () => void;
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+let refreshCarousel: () => void;
 
 /**
  * @author Aloento
@@ -111,7 +116,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
     defaultParams: [ProdId]
   });
 
-  update = () => run(ProdId);
+  refreshCarousel = () => run(ProdId);
 
   return <>
     <div className={useStyles().box}>
