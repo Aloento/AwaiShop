@@ -4,7 +4,9 @@ import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Flex } from "~/Helpers/Styles";
+import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
+import { AdminHub } from "~/ShopNet/Admin";
 import { AdminProductPhotoEdit } from "./Edit";
 
 /**
@@ -60,16 +62,34 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
       )
     },
     renderCell(item) {
+      const { dispatchError } = use500Toast();
+
+      const { run } = useRequest(AdminHub.Product.Post.MovePhoto, {
+        manual: true,
+        onFinally([req], _, e) {
+          if (e)
+            dispatchError({
+              Message: "Failed Update Order",
+              Request: req,
+              Error: e
+            });
+
+          update();
+        },
+      });
+
       return (
         <DataGridCell className={useStyles().f11}>
           <Button
             appearance="subtle"
             icon={<ArrowUpRegular />}
+            onClick={() => run(item.Id, true)}
           />
 
           <Button
             appearance="subtle"
             icon={<ArrowDownRegular />}
+            onClick={() => run(item.Id, false)}
           />
 
           <AdminProductPhotoEdit />
@@ -79,15 +99,19 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
   })
 ]
 
+let update: () => void;
+
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
-  const { data } = useRequest(Hub.Product.Get.Carousel, {
+  const { data, run } = useRequest(Hub.Product.Get.Carousel, {
     defaultParams: [ProdId]
-  })
+  });
+
+  update = () => run(ProdId);
 
   return <>
     <div className={useStyles().box}>

@@ -21,4 +21,13 @@ export class AdminProductPost {
   public static async Create(name: string): Promise<number> {
     throw new Error("TODO");
   }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async MovePhoto(photoId: number, up: boolean): Promise<true> {
+    throw new Error("TODO");
+  }
 }
