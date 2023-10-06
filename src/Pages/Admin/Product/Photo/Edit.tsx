@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: { Photo: IPhotoItem; Refresh: () => void; }) {
   const style = useStyles();
@@ -53,6 +53,48 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
       dispatchToast(
         <Toast>
           <ToastTitle>Caption Updated</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh();
+    },
+  });
+
+  const { run: updateFile } = useRequest(AdminHub.Product.Post.UploadPhoto, {
+    manual: true,
+    onFinally(req, _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Update Caption",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Caption Updated</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh();
+    },
+  });
+
+  const { run: deletePhoto } = useRequest(AdminHub.Product.Delete.Photo, {
+    manual: true,
+    onFinally(req, _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Delete Photo",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Photo Deleted</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
@@ -96,9 +138,23 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
                 Save Caption
               </Button>
 
-              <Button>Replace</Button>
+              <Button onClick={() => {
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = "image/*";
 
-              <Button appearance="primary">Delete</Button>
+                input.onchange = () => {
+                  if (input.files)
+                    updateFile(Id, input.files[0]);
+                };
+                input.click();
+              }}>
+                Replace
+              </Button>
+
+              <Button appearance="primary" onClick={() => deletePhoto(Id)}>
+                Delete
+              </Button>
             </div>
           </DialogContent>
         </DialogBody>
