@@ -1,5 +1,5 @@
 import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
+import { DeleteRegular } from "@fluentui/react-icons";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
@@ -107,7 +107,7 @@ export function AdminProductVariant({ ProdId }: { ProdId: number }) {
   return <>
     <div className={style.body}>
       <Subtitle1>Variant</Subtitle1>
-      <Button appearance="primary" icon={<AddRegular />}>New Variant</Button>
+      <AdminProductVariantEdit New />
     </div>
 
     <DelegateDataGrid Items={data || []} Columns={columns} />

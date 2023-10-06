@@ -70,14 +70,21 @@ const items: ITypeItem[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminProductVariantEdit() {
+export function AdminProductVariantEdit({ New }: { New?: true }) {
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>
-        <Button
-          appearance="subtle"
-          icon={<EditRegular />}
-        />
+        {
+          New ?
+            <Button appearance="primary" icon={<AddRegular />}>
+              New Variant
+            </Button>
+            :
+            <Button
+              appearance="subtle"
+              icon={<EditRegular />}
+            />
+        }
       </DialogTrigger>
 
       <DialogSurface>
