@@ -74,6 +74,8 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
         <AdminProductPhoto ProdId={ProdId} />
         <AdminProductVariant ProdId={ProdId} />
         <AdminProductCombo ProdId={ProdId} />
+
+        Rich Text Editor is temporarily unavailable.
       </DrawerBody>
     </Drawer>
   </>
