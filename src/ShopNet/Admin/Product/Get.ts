@@ -1,4 +1,5 @@
 import { IProductItem } from "~/Pages/Admin/Product";
+import { IVariantItem } from "~/Pages/Admin/Product/Variant";
 
 /**
  * @author Aloento
@@ -41,5 +42,25 @@ export class AdminProductGet {
    */
   public static async Name(prodId: number): Promise<string> {
     return "OTC SHIRT - GREY";
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
+  public static async Variant(prodId: number): Promise<IVariantItem[]> {
+    const items: IVariantItem[] = [
+      {
+        Id: "Color",
+        Types: ["White", "Red"]
+      },
+      {
+        Id: "Size",
+        Types: ["Big", "Small"]
+      }
+    ]
+
+    return items;
   }
 }

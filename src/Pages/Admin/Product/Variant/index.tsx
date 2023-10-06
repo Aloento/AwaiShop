@@ -1,7 +1,9 @@
-import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
+import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
+import { AdminHub } from "~/ShopNet/Admin";
 import { AdminProductVariantEdit } from "./Edit";
 
 /**
@@ -9,7 +11,7 @@ import { AdminProductVariantEdit } from "./Edit";
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IVariantItem {
+export interface IVariantItem {
   Id: string;
   Types: string[];
 }
@@ -78,32 +80,36 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
   })
 ]
 
-const items: IVariantItem[] = [
-  {
-    Id: "Color",
-    Types: ["White", "Red"]
-  },
-  {
-    Id: "Size",
-    Types: ["Big", "Small"]
-  }
-]
-
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
+const useStyles = makeStyles({
+  body: {
+    ...Flex,
+    justifyContent: "space-between"
+  },
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.0
+ */
 export function AdminProductVariant({ ProdId }: { ProdId: number }) {
+  const style = useStyles();
+
+  const { data } = useRequest(AdminHub.Product.Get.Variant, {
+    defaultParams: [ProdId]
+  });
+
   return <>
-    <div style={{
-      ...Flex,
-      justifyContent: "space-between"
-    }}>
+    <div className={style.body}>
       <Subtitle1>Variant</Subtitle1>
       <Button appearance="primary" icon={<AddRegular />}>New Variant</Button>
     </div>
 
-    <DelegateDataGrid Items={items} Columns={columns} />
+    <DelegateDataGrid Items={data || []} Columns={columns} />
   </>
 }
