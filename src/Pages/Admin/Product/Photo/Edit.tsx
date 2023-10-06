@@ -1,6 +1,11 @@
-import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
+import { useRequest } from "ahooks";
+import { useState } from "react";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
+import { use500Toast } from "~/Helpers/useToast";
+import { AdminHub } from "~/ShopNet/Admin";
+import { IPhotoItem } from ".";
 
 /**
  * @author Aloento
@@ -29,8 +34,32 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.2.0
  */
-export function AdminProductPhotoEdit({ PhotoId, Refresh }: { PhotoId: number; Refresh: () => void; }) {
+export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: { Photo: IPhotoItem; Refresh: () => void; }) {
   const style = useStyles();
+  const [cap, setCap] = useState(Caption || "");
+
+  const { dispatchError, dispatchToast } = use500Toast();
+
+  const { run: updateCaption } = useRequest(AdminHub.Product.Post.Caption, {
+    manual: true,
+    onFinally([req], _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Update Caption",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Caption Updated</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh();
+    },
+  });
 
   return (
     <Dialog>
@@ -55,15 +84,17 @@ export function AdminProductPhotoEdit({ PhotoId, Refresh }: { PhotoId: number; R
             <Image
               shape="rounded"
               className={style.img}
-              src={"https://picsum.photos/650"}
+              src={Cover}
             />
 
             <div className={style.cap}>
               <Field label="Caption">
-                <Input />
+                <Input value={cap} onChange={(_, e) => setCap(e.value)} />
               </Field>
 
-              <Button>Save Caption</Button>
+              <Button onClick={() => updateCaption(Id, cap)}>
+                Save Caption
+              </Button>
 
               <Button>Replace</Button>
 
