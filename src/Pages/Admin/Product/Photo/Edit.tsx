@@ -42,7 +42,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
 
   const { run: updateCaption } = useRequest(AdminHub.Product.Post.Caption, {
     manual: true,
-    onFinally([req], _, e) {
+    onFinally(req, _, e) {
       if (e)
         dispatchError({
           Message: "Failed Update Caption",

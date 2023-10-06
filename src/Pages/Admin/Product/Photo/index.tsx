@@ -66,7 +66,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
 
       const { run } = useRequest(AdminHub.Product.Post.MovePhoto, {
         manual: true,
-        onFinally([req], _, e) {
+        onFinally(req, _, e) {
           if (e)
             dispatchError({
               Message: "Failed Update Order",
