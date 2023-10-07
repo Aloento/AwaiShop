@@ -49,6 +49,15 @@ export class AdminProductGet {
    * @since 0.5.0
    * @version 0.1.0
    */
+  public static async Category(prodId: number): Promise<string> {
+    return "Clothes";
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
   public static async Variants(prodId: number): Promise<IVariantItem[]> {
     const items: IVariantItem[] = [
       {
