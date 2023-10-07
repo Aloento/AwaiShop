@@ -52,11 +52,13 @@ export class AdminProductGet {
   public static async Variants(prodId: number): Promise<IVariantItem[]> {
     const items: IVariantItem[] = [
       {
-        Id: "Color",
+        Id: 1,
+        Name: "Color",
         Types: ["White", "Red"]
       },
       {
-        Id: "Size",
+        Id: 2,
+        Name: "Size",
         Types: ["Big", "Small"]
       }
     ]

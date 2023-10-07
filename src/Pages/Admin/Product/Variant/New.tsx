@@ -48,6 +48,7 @@ export function AdminProductAddVariant({ ProdId, Update }: { ProdId: number; Upd
       );
 
       Update(ProdId);
+      setName("");
       toggle();
     },
   });
