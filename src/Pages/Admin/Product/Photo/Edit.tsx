@@ -61,7 +61,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     },
   });
 
-  const { run: updateFile } = useRequest(AdminHub.Product.Post.UploadPhoto, {
+  const { run: updateFile } = useRequest(AdminHub.Product.Patch.Photo, {
     manual: true,
     onFinally(req, _, e) {
       if (e)

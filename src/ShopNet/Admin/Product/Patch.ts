@@ -27,6 +27,18 @@ export class AdminProductPatch {
    * @since 0.5.0
    * @version 0.1.0
    */
+  public static async Photo(photoId: number, file: File): Promise<true> {
+    if (!file.type.startsWith("image/"))
+      throw new TypeError("File is not an image");
+
+    throw new Error("TODO");
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 0.1.0
+   */
   public static async Caption(photoId: number, caption: string): Promise<true> {
     throw new Error("TODO");
   }

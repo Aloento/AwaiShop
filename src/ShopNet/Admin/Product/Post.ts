@@ -27,7 +27,7 @@ export class AdminProductPost {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async UploadPhoto(photoId: number | null, file: File): Promise<true> {
+  public static async Photo(file: File): Promise<true> {
     if (!file.type.startsWith("image/"))
       throw new TypeError("File is not an image");
 
