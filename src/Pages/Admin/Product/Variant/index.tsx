@@ -5,6 +5,7 @@ import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminProductVariantEdit } from "./Edit";
+import { AdminProductAddVariant } from "./New";
 
 /**
  * @author Aloento
@@ -100,14 +101,14 @@ const useStyles = makeStyles({
 export function AdminProductVariant({ ProdId }: { ProdId: number }) {
   const style = useStyles();
 
-  const { data } = useRequest(AdminHub.Product.Get.Variant, {
+  const { data, run } = useRequest(AdminHub.Product.Get.Variants, {
     defaultParams: [ProdId]
   });
 
   return <>
     <div className={style.body}>
       <Subtitle1>Variant</Subtitle1>
-      <AdminProductVariantEdit New />
+      <AdminProductAddVariant ProdId={ProdId} Update={run} />
     </div>
 
     <DelegateDataGrid Items={data || []} Columns={columns} />

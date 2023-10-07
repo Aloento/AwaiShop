@@ -49,7 +49,7 @@ export class AdminProductGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Variant(prodId: number): Promise<IVariantItem[]> {
+  public static async Variants(prodId: number): Promise<IVariantItem[]> {
     const items: IVariantItem[] = [
       {
         Id: "Color",
