@@ -1,9 +1,11 @@
 import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
-import { AddRegular, DeleteRegular, DismissRegular, EditRegular } from "@fluentui/react-icons";
+import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { ColFlex } from "~/Helpers/Styles";
-import { IVariantItem } from ".";
+import { IVariantItem } from "..";
+import { AdminProductTypeDelete } from "./Delete";
 import { AdminProductVariantName } from "./Name";
+import { AdminProductType } from "./Type";
 
 /**
  * @author Aloento
@@ -13,6 +15,8 @@ import { AdminProductVariantName } from "./Name";
 interface ITypeItem {
   Id: number;
   Name: string;
+  VariantId: number;
+  Refresh: () => void;
 }
 
 /**
@@ -58,30 +62,13 @@ const columns: TableColumnDefinition<ITypeItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().twelve}>
-          <Button
-            appearance="subtle"
-            icon={<EditRegular />}
-          />
+          <AdminProductType VariantId={item.VariantId} Type={item.Name} Refresh={item.Refresh} />
 
-          <Button
-            appearance="subtle"
-            icon={<DeleteRegular />}
-          />
+          <AdminProductTypeDelete VariantId={item.VariantId} Type={item.Name} Refresh={item.Refresh} />
         </DataGridCell>
       )
     }
   })
-]
-
-const items: ITypeItem[] = [
-  {
-    Id: 0,
-    Name: "White",
-  },
-  {
-    Id: 1,
-    Name: "Red",
-  }
 ]
 
 /**
@@ -111,11 +98,12 @@ export function AdminProductVariantEdit({ Variant, Refresh }: { Variant: IVarian
 
           <DialogContent className={useStyles().body}>
             <AdminProductVariantName Id={Variant.Id} Name={Variant.Name} />
-            <DelegateDataGrid Items={items} Columns={columns} />
+
+            <DelegateDataGrid Items={Variant.Types.map<ITypeItem>((v, i) => ({ Id: i, Name: v, VariantId: Variant.Id, Refresh }))} Columns={columns} />
           </DialogContent>
 
           <DialogActions>
-            <Button icon={<AddRegular />} appearance="primary">New Type</Button>
+            <AdminProductType VariantId={Variant.Id} Refresh={Refresh} New />
           </DialogActions>
         </DialogBody>
       </DialogSurface>
