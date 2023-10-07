@@ -28,6 +28,10 @@ const useStyles = makeStyles({
     ...Flex,
     justifyContent: "space-between"
   },
+  four: {
+    flexBasis: "4%",
+    flexGrow: 0
+  },
   seven: {
     flexBasis: "7%",
     flexGrow: 0
@@ -44,6 +48,23 @@ const useStyles = makeStyles({
  * @version 0.2.0
  */
 const columns: TableColumnDefinition<IVariantItem>[] = [
+  createTableColumn<IVariantItem>({
+    columnId: "Id",
+    renderHeaderCell: () => {
+      return (
+        <DataGridHeaderCell className={useStyles().four}>
+          Id
+        </DataGridHeaderCell>
+      )
+    },
+    renderCell(item) {
+      return (
+        <DataGridCell className={useStyles().four}>
+          {item.Id}
+        </DataGridCell>
+      )
+    }
+  }),
   createTableColumn<IVariantItem>({
     columnId: "Name",
     renderHeaderCell: () => {
@@ -90,13 +111,20 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().seven}>
-          <AdminProductVariantEdit VariantId={item.Id} />
-          <AdminProductVariantDelete VariantId={item.Id} />
+          <AdminProductVariantEdit VariantId={item.Id} Refresh={refreshVariant} />
+          <AdminProductVariantDelete VariantId={item.Id} Refresh={refreshVariant} />
         </DataGridCell>
       )
     }
   })
 ]
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+let refreshVariant: () => void;
 
 /**
  * @author Aloento
@@ -109,6 +137,8 @@ export function AdminProductVariant({ ProdId }: { ProdId: number }) {
   const { data, run } = useRequest(AdminHub.Product.Get.Variants, {
     defaultParams: [ProdId]
   });
+
+  refreshVariant = () => run(ProdId);
 
   return <>
     <div className={style.body}>

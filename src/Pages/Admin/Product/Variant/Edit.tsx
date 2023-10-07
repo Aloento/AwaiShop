@@ -70,7 +70,7 @@ const items: ITypeItem[] = [
  * @since 0.5.0
  * @version 0.2.0
  */
-export function AdminProductVariantEdit({ VariantId }: { VariantId: number }) {
+export function AdminProductVariantEdit({ VariantId, Refresh }: { VariantId: number; Refresh: () => void }) {
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>
