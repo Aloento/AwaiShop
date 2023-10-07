@@ -30,7 +30,7 @@ export function AdminProductAddVariant({ ProdId, Update }: { ProdId: number; Upd
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Post.NewVariant, {
+  const { run } = useRequest(AdminHub.Product.Post.Variant, {
     manual: true,
     onFinally(req, _, e) {
       if (e)

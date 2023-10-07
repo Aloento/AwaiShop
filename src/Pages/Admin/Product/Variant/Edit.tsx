@@ -1,6 +1,9 @@
-import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { Button, DataGridCell, DataGridHeaderCell, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, DeleteRegular, DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { ColFlex } from "~/Helpers/Styles";
+import { IVariantItem } from ".";
+import { AdminProductVariantName } from "./Name";
 
 /**
  * @author Aloento
@@ -11,6 +14,22 @@ interface ITypeItem {
   Id: number;
   Name: string;
 }
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+const useStyles = makeStyles({
+  body: {
+    ...ColFlex,
+    rowGap: tokens.spacingVerticalM
+  },
+  twelve: {
+    flexBasis: "12%",
+    flexGrow: 0
+  }
+});
 
 /**
  * @author Aloento
@@ -31,14 +50,14 @@ const columns: TableColumnDefinition<ITypeItem>[] = [
     columnId: "Action",
     renderHeaderCell: () => {
       return (
-        <DataGridHeaderCell style={{ flexBasis: "12%", flexGrow: 0 }}>
+        <DataGridHeaderCell className={useStyles().twelve}>
           Action
         </DataGridHeaderCell>
       )
     },
     renderCell(item) {
       return (
-        <DataGridCell style={{ flexBasis: "12%", flexGrow: 0 }}>
+        <DataGridCell className={useStyles().twelve}>
           <Button
             appearance="subtle"
             icon={<EditRegular />}
@@ -70,7 +89,7 @@ const items: ITypeItem[] = [
  * @since 0.5.0
  * @version 0.2.0
  */
-export function AdminProductVariantEdit({ VariantId, Refresh }: { VariantId: number; Refresh: () => void }) {
+export function AdminProductVariantEdit({ Variant, Refresh }: { Variant: IVariantItem; Refresh: () => void }) {
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>
@@ -90,7 +109,8 @@ export function AdminProductVariantEdit({ VariantId, Refresh }: { VariantId: num
             Variant Detail
           </DialogTitle>
 
-          <DialogContent>
+          <DialogContent className={useStyles().body}>
+            <AdminProductVariantName Id={Variant.Id} Name={Variant.Name} />
             <DelegateDataGrid Items={items} Columns={columns} />
           </DialogContent>
 
