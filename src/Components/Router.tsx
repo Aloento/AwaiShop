@@ -42,23 +42,27 @@ let reload = false;
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Element {
   const [router, setRouter] = useState<IRouter>(() => ({
     Paths: location.pathname.split("/").filter(x => x),
     Search: new URLSearchParams(location.search),
-    Put(search) {
-      history.pushState(null, "", `${location.pathname}${search.size ? "?" : ""}${search.toString()}`);
-      setRouter({ ...router, Search: new URLSearchParams(search) });
-    },
+    Put: put,
     Nav: (...p) => nav(Combine(p)),
     Rep: (...p) => rep(Combine(p)),
     Reload: (bool) => reload = bool
   }));
 
+  function put(search: URLSearchParams) {
+    history.replaceState(null, "", `${location.pathname}${search.size ? "?" : ""}${search.toString()}`);
+    router.Search = new URLSearchParams(search);
+    setRouter({ ...router });
+  }
+
   function update(path: string) {
     router.Paths = path.split("/").filter(x => x);
+    router.Search = new URLSearchParams(location.search);
     setRouter({ ...router });
   }
 
@@ -104,7 +108,7 @@ export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Elem
   });
 
   return (
-    <Router.Provider value={{ ...router }}>
+    <Router.Provider value={router}>
       {children}
     </Router.Provider>
   );

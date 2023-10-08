@@ -14,6 +14,7 @@ export function AdminSearch() {
 
   const user = path2 === "User";
   const order = path2 === "Order";
+  const set = user ? "admin" : "pending";
 
   return (
     path1 === "Admin" && (user || order) &&
@@ -32,14 +33,18 @@ export function AdminSearch() {
         }}
       />
 
-      <Switch label="Only Admin" onChange={(_, d) => {
-        if (d.checked)
-          Search.set(user ? "admin" : "pending", "");
-        else
-          Search.delete(user ? "admin" : "pending");
+      <Switch
+        label={`Only ${user ? "Admin" : "Pending"}`}
+        checked={Search.get(set) === ""}
+        onChange={(_, d) => {
+          if (d.checked)
+            Search.set(set, "");
+          else
+            Search.delete(set);
 
-        Put(Search);
-      }} />
+          Put(Search);
+        }}
+      />
     </>
   )
 }
