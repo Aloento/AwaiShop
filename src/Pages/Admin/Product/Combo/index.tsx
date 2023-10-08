@@ -1,10 +1,11 @@
 import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { AddRegular, DeleteRegular } from "@fluentui/react-icons";
+import { DeleteRegular } from "@fluentui/react-icons";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { AdminProductComboDetail } from "./Detail";
+import { AdminProductNewCombo } from "./New";
 
 /**
  * @author Aloento
@@ -130,14 +131,14 @@ const columns: TableColumnDefinition<IComboItem>[] = [
  * @version 0.2.0
  */
 export function AdminProductCombo({ ProdId }: { ProdId: number }) {
-  const { data } = useRequest(Hub.Product.Get.Combo, {
+  const { data, run } = useRequest(Hub.Product.Get.Combo, {
     defaultParams: [ProdId]
   });
 
   return <>
     <div className={useStyles().body}>
       <Subtitle1>Combo</Subtitle1>
-      <Button appearance="primary" icon={<AddRegular />}>New Combo</Button>
+      <AdminProductNewCombo ProdId={ProdId} Refresh={run} />
     </div>
 
     <DelegateDataGrid Items={data?.map((v, i) => ({ Id: i, ...v })) || []} Columns={columns} />
