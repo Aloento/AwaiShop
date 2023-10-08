@@ -5,14 +5,14 @@ import { Combine } from "~/Helpers/Path";
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.2.0
+ * @version 0.2.1
  */
 interface IRouter {
   Paths: readonly string[],
   Search: URLSearchParams,
   readonly Put: (search: URLSearchParams) => void,
-  readonly Nav: (...paths: readonly (string | false | undefined)[]) => void,
-  readonly Rep: (...paths: readonly (string | false | undefined)[]) => void,
+  readonly Nav: (...paths: readonly any[]) => void,
+  readonly Rep: (...paths: readonly any[]) => void,
   readonly Reload: (bool: boolean) => void,
 }
 
