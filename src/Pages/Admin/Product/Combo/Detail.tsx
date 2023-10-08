@@ -99,19 +99,19 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Post.Combo, {
+  const { run } = useRequest(AdminHub.Product.Patch.Combo, {
     manual: true,
     onFinally(req, _, e) {
       if (e)
         dispatchError({
-          Message: "Failed Create Combo",
+          Message: "Failed Update Combo",
           Request: req,
           Error: e
         });
 
       dispatchToast(
         <Toast>
-          <ToastTitle>Combo Created</ToastTitle>
+          <ToastTitle>Combo Updated</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
@@ -166,7 +166,7 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
                 }
               }} />
 
-              <Button appearance="primary" onClick={() => run(ProdId, combo, stock)}>Submit</Button>
+              <Button appearance="primary" onClick={() => run(Id, combo, stock)}>Submit</Button>
             </div>
           </DialogContent>
         </DialogBody>
