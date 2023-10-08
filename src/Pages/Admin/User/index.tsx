@@ -1,7 +1,8 @@
-import { Checkbox, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
+import { TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DefaultDataGrid } from "~/Components/DataGrid";
 import { AdminHub } from "~/ShopNet/Admin";
+import { AdminUserAdmin } from "./Admin";
 import { AdminUserDelete } from "./Delete";
 
 /**
@@ -13,7 +14,7 @@ export interface IUserItem {
   Id: number;
   Name: string;
   Email: string;
-  Admin?: boolean;
+  Admin?: true;
 }
 
 /**
@@ -55,7 +56,7 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "Admin";
     },
     renderCell(item) {
-      return <Checkbox defaultChecked={item.Admin} />
+      return <AdminUserAdmin UserId={item.Id} Admin={item.Admin} Refresh={refreshUser} />
     },
   }),
   createTableColumn<IUserItem>({
