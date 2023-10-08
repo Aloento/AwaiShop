@@ -4,7 +4,7 @@ import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
-import { AdminProductComboEdit } from "./Edit";
+import { AdminProductComboDetail } from "./Detail";
 
 /**
  * @author Aloento
@@ -112,7 +112,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().seven}>
-          <AdminProductComboEdit />
+          <AdminProductComboDetail />
 
           <Button
             appearance="subtle"

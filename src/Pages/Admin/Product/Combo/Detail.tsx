@@ -82,7 +82,7 @@ const items: IComboDetailItem[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
-export function AdminProductComboEdit() {
+export function AdminProductComboDetail() {
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>
