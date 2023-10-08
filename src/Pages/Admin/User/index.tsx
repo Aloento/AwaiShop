@@ -1,13 +1,15 @@
 import { Button, Checkbox, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
+import { useRequest } from "ahooks";
 import { DefaultDataGrid } from "~/Components/DataGrid";
+import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
  * @since 0.1.0
  * @version 0.1.0
  */
-interface IUserItem {
+export interface IUserItem {
   Id: number;
   Name: string;
   Email: string;
@@ -58,27 +60,15 @@ const columns: TableColumnDefinition<IUserItem>[] = [
   })
 ]
 
-const items: IUserItem[] = [
-  {
-    Id: 1,
-    Name: "Aloento",
-    Email: "Aloento@T-Systems.com",
-    Admin: true
-  },
-  {
-    Id: 2,
-    Name: "SomeOne",
-    Email: "SomeOne@T-Systems.com",
-  },
-]
-
 /**
  * @author Aloento
  * @since 0.1.0
  * @version 0.2.0
  */
 export function AdminUser() {
+  const { data } = useRequest(AdminHub.User.Get.List);
+
   return (
-    <DefaultDataGrid Items={items} Columns={columns} />
+    <DefaultDataGrid Items={data || []} Columns={columns} />
   )
 }
