@@ -1,10 +1,11 @@
-import { Button, Combobox, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, Option, SpinButton, TableColumnDefinition, createTableColumn, tokens } from "@fluentui/react-components";
+import { Button, Combobox, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, Option, SpinButton, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, DismissRegular } from "@fluentui/react-icons";
-import { useRequest } from "ahooks";
+import { useBoolean, useRequest } from "ahooks";
 import { isInteger } from "lodash-es";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
+import { use500Toast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 import { IVariantItem } from "../Variant";
 
@@ -56,7 +57,23 @@ const columns: TableColumnDefinition<INewComboItem>[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
+const useStyles = makeStyles({
+  body: {
+    ...Flex,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    columnGap: tokens.spacingVerticalM,
+    marginTop: tokens.spacingHorizontalM
+  },
+});
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.0
+ */
 export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refresh: (prodId: number) => void }) {
+  const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState<Record<string, string>>({});
   const [stock, setStock] = useState(0);
 
@@ -70,8 +87,32 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
     },
   });
 
+  const { dispatchError, dispatchToast } = use500Toast();
+
+  const { run } = useRequest(AdminHub.Product.Post.Combo, {
+    manual: true,
+    onFinally(req, _, e) {
+      if (e)
+        dispatchError({
+          Message: "Failed Create Combo",
+          Request: req,
+          Error: e
+        });
+
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Combo Created</ToastTitle>
+        </Toast>,
+        { intent: "success" }
+      );
+
+      Refresh(ProdId);
+      toggle();
+    },
+  });
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={toggle}>
       <DialogTrigger disableButtonEnhancement>
         <Button appearance="primary" icon={<AddRegular />}>
           New Combo
@@ -101,13 +142,7 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
               Columns={columns}
             />
 
-            <div style={{
-              ...Flex,
-              justifyContent: "flex-end",
-              alignItems: "center",
-              columnGap: tokens.spacingVerticalM,
-              marginTop: tokens.spacingHorizontalM
-            }}>
+            <div className={useStyles().body}>
               <Label>Stock</Label>
 
               <SpinButton value={stock} min={0} onChange={(_, x) => {
@@ -120,7 +155,7 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
                 }
               }} />
 
-              <Button appearance="primary">Submit</Button>
+              <Button appearance="primary" onClick={() => run(ProdId, combo, stock)}>Submit</Button>
             </div>
           </DialogContent>
         </DialogBody>
