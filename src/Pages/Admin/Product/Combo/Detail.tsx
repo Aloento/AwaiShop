@@ -1,5 +1,5 @@
 import { Button, Combobox, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, Option, SpinButton, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
-import { AddRegular, DismissRegular } from "@fluentui/react-icons";
+import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { isInteger } from "lodash-es";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
+import { IComboItem } from ".";
 import { IVariantItem } from "../Variant";
 
 /**
@@ -70,9 +71,19 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
+ * @version 0.1.0
+ */
+export interface IEditIComboItem extends IComboItem {
+  ProdId: number;
+  Refresh: (prodId: number) => void;
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
  * @version 0.2.0
  */
-export function AdminProductComboDetail({ ProdId, Refresh }: { ProdId: number; Refresh: (prodId: number) => void }) {
+export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: IEditIComboItem) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState<Record<string, string>>({});
   const [stock, setStock] = useState(1);
@@ -114,9 +125,10 @@ export function AdminProductComboDetail({ ProdId, Refresh }: { ProdId: number; R
   return (
     <Dialog open={open} onOpenChange={toggle}>
       <DialogTrigger disableButtonEnhancement>
-        <Button appearance="primary" icon={<AddRegular />}>
-          New Combo
-        </Button>
+        <Button
+          appearance="subtle"
+          icon={<EditRegular />}
+        />
       </DialogTrigger>
 
       <DialogSurface>
@@ -126,7 +138,7 @@ export function AdminProductComboDetail({ ProdId, Refresh }: { ProdId: number; R
               <Button appearance="subtle" icon={<DismissRegular />} />
             </DialogTrigger>
           }>
-            New Combo
+            Combo Detail
           </DialogTitle>
 
           <DialogContent>

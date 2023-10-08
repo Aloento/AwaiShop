@@ -4,7 +4,7 @@ import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
-import { AdminProductComboDetail } from "./Detail";
+import { AdminProductComboDetail, IEditIComboItem } from "./Detail";
 import { AdminProductNewCombo } from "./New";
 
 /**
@@ -57,8 +57,8 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<IComboItem>[] = [
-  createTableColumn<IComboItem>({
+const columns: TableColumnDefinition<IEditIComboItem>[] = [
+  createTableColumn<IEditIComboItem>({
     columnId: "Id",
     renderHeaderCell: () => {
       return (
@@ -75,7 +75,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
       )
     }
   }),
-  createTableColumn<IComboItem>({
+  createTableColumn<IEditIComboItem>({
     columnId: "Combo",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Combo</DataGridHeaderCell>
@@ -84,7 +84,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
       return <DataGridCell>{item.Combo.reduce((prev, curr) => `${prev} ${curr.Variant} : ${curr.Type} ;`, "")}</DataGridCell>
     }
   }),
-  createTableColumn<IComboItem>({
+  createTableColumn<IEditIComboItem>({
     columnId: "Stock",
     renderHeaderCell: () => {
       return (
@@ -101,7 +101,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
       )
     }
   }),
-  createTableColumn<IComboItem>({
+  createTableColumn<IEditIComboItem>({
     columnId: "Action",
     renderHeaderCell: () => {
       return (
@@ -113,7 +113,7 @@ const columns: TableColumnDefinition<IComboItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().seven}>
-          <AdminProductComboDetail />
+          <AdminProductComboDetail {...item} />
 
           <Button
             appearance="subtle"
@@ -141,6 +141,6 @@ export function AdminProductCombo({ ProdId }: { ProdId: number }) {
       <AdminProductNewCombo ProdId={ProdId} Refresh={run} />
     </div>
 
-    <DelegateDataGrid Items={data || []} Columns={columns} />
+    <DelegateDataGrid Items={data?.map(x => ({ ProdId, Refresh: run, ...x })) || []} Columns={columns} />
   </>
 }
