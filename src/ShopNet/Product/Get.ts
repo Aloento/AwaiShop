@@ -34,7 +34,7 @@ export class ProductGet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
   public static async Combo(id: number): Promise<IComboItem[]> {
     if (id > 100) throw null;
@@ -42,58 +42,34 @@ export class ProductGet {
     return [
       {
         Id: 1,
-        Combo: [
-          {
-            Variant: "Sleeve",
-            Type: "Short"
-          },
-          {
-            Variant: "Size",
-            Type: "S"
-          }
-        ],
+        Combo: {
+          Sleeve: "Short",
+          Size: "S"
+        },
         Stock: 8
       },
       {
         Id: 2,
-        Combo: [
-          {
-            Variant: "Sleeve",
-            Type: "Short"
-          },
-          {
-            Variant: "Size",
-            Type: "L"
-          }
-        ],
+        Combo: {
+          Sleeve: "Short",
+          Size: "L"
+        },
         Stock: 6
       },
       {
         Id: 3,
-        Combo: [
-          {
-            Variant: "Sleeve",
-            Type: "Long"
-          },
-          {
-            Variant: "Size",
-            Type: "S"
-          }
-        ],
+        Combo: {
+          Sleeve: "Long",
+          Size: "S"
+        },
         Stock: 10
       },
       {
         Id: 4,
-        Combo: [
-          {
-            Variant: "Sleeve",
-            Type: "Long"
-          },
-          {
-            Variant: "Size",
-            Type: "L"
-          }
-        ],
+        Combo: {
+          Sleeve: "Long",
+          Size: "L"
+        },
         Stock: 4
       },
     ]

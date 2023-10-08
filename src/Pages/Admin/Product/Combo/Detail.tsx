@@ -73,7 +73,7 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.1.0
  */
-export interface IEditIComboItem extends IComboItem {
+export interface IDetailComboItem extends IComboItem {
   ProdId: number;
   Refresh: (prodId: number) => void;
 }
@@ -83,7 +83,7 @@ export interface IEditIComboItem extends IComboItem {
  * @since 0.5.0
  * @version 0.2.0
  */
-export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: IEditIComboItem) {
+export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: IDetailComboItem) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState<Record<string, string>>({});
   const [stock, setStock] = useState(1);
