@@ -43,32 +43,32 @@ export class ProductGet {
       {
         Id: 1,
         Combo: {
-          Sleeve: "Short",
-          Size: "S"
+          Color: "White",
+          Size: "Big"
         },
         Stock: 8
       },
       {
         Id: 2,
         Combo: {
-          Sleeve: "Short",
-          Size: "L"
+          Color: "Red",
+          Size: "Small"
         },
         Stock: 6
       },
       {
         Id: 3,
         Combo: {
-          Sleeve: "Long",
-          Size: "S"
+          Color: "White",
+          Size: "Big"
         },
         Stock: 10
       },
       {
         Id: 4,
         Combo: {
-          Sleeve: "Long",
-          Size: "L"
+          Color: "Red",
+          Size: "Small"
         },
         Stock: 4
       },

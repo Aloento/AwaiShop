@@ -15,7 +15,8 @@ import { IVariantItem } from "../Variant";
  * @since 0.5.0
  * @version 0.1.0
  */
-interface INewComboItem extends IVariantItem {
+interface IEditComboItem extends IVariantItem {
+  Current: string;
   Update: (type: string) => void;
 }
 
@@ -24,8 +25,8 @@ interface INewComboItem extends IVariantItem {
  * @since 0.5.0
  * @version 0.1.0
  */
-const columns: TableColumnDefinition<INewComboItem>[] = [
-  createTableColumn<INewComboItem>({
+const columns: TableColumnDefinition<IEditComboItem>[] = [
+  createTableColumn<IEditComboItem>({
     columnId: "Variant",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Variant</DataGridHeaderCell>
@@ -34,7 +35,7 @@ const columns: TableColumnDefinition<INewComboItem>[] = [
       return <DataGridCell>{item.Name}</DataGridCell>
     }
   }),
-  createTableColumn<INewComboItem>({
+  createTableColumn<IEditComboItem>({
     columnId: "Type",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Type</DataGridHeaderCell>
@@ -42,7 +43,11 @@ const columns: TableColumnDefinition<INewComboItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell>
-          <Combobox onOptionSelect={(_, x) => item.Update(x.optionValue!)}>
+          <Combobox
+            defaultValue={item.Current}
+            defaultSelectedOptions={[item.Current]}
+            onOptionSelect={(_, x) => item.Update(x.optionValue!)}
+          >
             {
               item.Types.map((v, i) => <Option key={i}>{v}</Option>)
             }
@@ -85,17 +90,11 @@ export interface IDetailComboItem extends IComboItem {
  */
 export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: IDetailComboItem) {
   const [open, { toggle }] = useBoolean();
-  const [combo, setCombo] = useState<Record<string, string>>({});
-  const [stock, setStock] = useState(1);
+  const [combo, setCombo] = useState(Combo);
+  const [stock, setStock] = useState(Stock);
 
   const { data: varis } = useRequest(AdminHub.Product.Get.Variants, {
-    defaultParams: [ProdId],
-    onSuccess(data) {
-      for (const i of data)
-        combo[i.Name] = "";
-
-      setCombo({ ...combo });
-    },
+    defaultParams: [ProdId]
   });
 
   const { dispatchError, dispatchToast } = use500Toast();
@@ -144,7 +143,7 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
           <DialogContent>
             <DelegateDataGrid
               Items={varis?.map(x => ({
-                Current: combo,
+                Current: combo[x.Name],
                 Update(type: string) {
                   combo[x.Name] = type;
                   setCombo({ ...combo });
