@@ -1,4 +1,4 @@
-import { useMemoizedFn, useMount } from "ahooks";
+import { useMount } from "ahooks";
 import { createContext, useContext, useState } from "react";
 import { Combine } from "~/Helpers/Path";
 
@@ -57,20 +57,20 @@ export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Elem
     Reload: (bool) => reload = bool
   }));
 
-  const update = useMemoizedFn((path: string) => {
+  function update(path: string) {
     router.Paths = path.split("/").filter(x => x);
     setRouter({ ...router });
-  });
+  }
 
-  const nav = useMemoizedFn((path: string) => {
+  function nav(path: string) {
     history.pushState(null, "", path);
     update(path);
-  });
+  }
 
-  const rep = useMemoizedFn((path: string) => {
+  function rep(path: string) {
     history.replaceState(null, "", path);
     update(path);
-  });
+  }
 
   useMount(() => {
     if (location.pathname === "/")

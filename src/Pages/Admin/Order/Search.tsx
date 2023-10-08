@@ -15,14 +15,19 @@ export function AdminOrderSearch() {
   return (
     path1 === "Admin" && path2 === "Order" &&
     <>
-      <Input contentBefore={<SearchRegular />} appearance="underline" onChange={(_, x) => {
-        if (x.value)
-          Search.set("search", x.value);
-        else
-          Search.delete("search");
+      <Input
+        placeholder="Search in Any Field"
+        contentBefore={<SearchRegular />}
+        appearance="underline"
+        onChange={(_, x) => {
+          if (x.value)
+            Search.set("search", x.value);
+          else
+            Search.delete("search");
 
-        Put(Search);
-      }} />
+          Put(Search);
+        }}
+      />
 
       <Switch label="Only Pending" onChange={(_, d) => {
         if (d.checked)

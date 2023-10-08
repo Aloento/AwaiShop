@@ -5,7 +5,7 @@ import { useRouter } from "~/Components/Router";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function AdminUserSearch() {
   const { Paths, Search, Put } = useRouter();
@@ -15,8 +15,28 @@ export function AdminUserSearch() {
   return (
     path1 === "Admin" && path2 === "User" &&
     <>
-      <Input contentBefore={<SearchRegular />} appearance="underline" />
-      <Switch label="Only Admin" />
+      <Input
+        placeholder="Search in Any Field"
+        contentBefore={<SearchRegular />}
+        appearance="underline"
+        onChange={(_, x) => {
+          if (x.value)
+            Search.set("search", x.value);
+          else
+            Search.delete("search");
+
+          Put(Search);
+        }}
+      />
+
+      <Switch label="Only Admin" onChange={(_, d) => {
+        if (d.checked)
+          Search.set("admin", "");
+        else
+          Search.delete("admin");
+
+        Put(Search);
+      }} />
     </>
   )
 }
