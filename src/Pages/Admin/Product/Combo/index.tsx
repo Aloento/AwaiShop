@@ -141,6 +141,6 @@ export function AdminProductCombo({ ProdId }: { ProdId: number }) {
       <AdminProductNewCombo ProdId={ProdId} Refresh={run} />
     </div>
 
-    <DelegateDataGrid Items={data?.map((v, i) => ({ Id: i, ...v })) || []} Columns={columns} />
+    <DelegateDataGrid Items={data || []} Columns={columns} />
   </>
 }

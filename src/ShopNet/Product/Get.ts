@@ -36,11 +36,12 @@ export class ProductGet {
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static async Combo(id: number): Promise<Omit<IComboItem, "Id">[]> {
+  public static async Combo(id: number): Promise<IComboItem[]> {
     if (id > 100) throw null;
 
     return [
       {
+        Id: 1,
         Combo: [
           {
             Variant: "Sleeve",
@@ -54,6 +55,7 @@ export class ProductGet {
         Stock: 8
       },
       {
+        Id: 2,
         Combo: [
           {
             Variant: "Sleeve",
@@ -67,6 +69,7 @@ export class ProductGet {
         Stock: 6
       },
       {
+        Id: 3,
         Combo: [
           {
             Variant: "Sleeve",
@@ -80,6 +83,7 @@ export class ProductGet {
         Stock: 10
       },
       {
+        Id: 4,
         Combo: [
           {
             Variant: "Sleeve",
