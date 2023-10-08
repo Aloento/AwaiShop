@@ -5,13 +5,15 @@ import { Combine } from "~/Helpers/Path";
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.1.0
+ * @version 0.2.0
  */
 interface IRouter {
   Paths: readonly string[],
-  Nav: (...paths: (string | false | undefined)[]) => void,
-  Rep: (...paths: (string | false | undefined)[]) => void,
-  Reload: (bool: boolean) => void,
+  Search: URLSearchParams,
+  readonly Put: (search: URLSearchParams) => void,
+  readonly Nav: (...paths: readonly (string | false | undefined)[]) => void,
+  readonly Rep: (...paths: readonly (string | false | undefined)[]) => void,
+  readonly Reload: (bool: boolean) => void,
 }
 
 /**
@@ -40,11 +42,16 @@ let reload = false;
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.1.1
+ * @version 0.2.0
  */
 export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Element {
   const [router, setRouter] = useState<IRouter>(() => ({
     Paths: location.pathname.split("/").filter(x => x),
+    Search: new URLSearchParams(location.search),
+    Put(search) {
+      history.pushState(null, "", `${location.pathname}?${search.toString()}`);
+      setRouter({ ...router, Search: search });
+    },
     Nav: (...p) => nav(Combine(p)),
     Rep: (...p) => rep(Combine(p)),
     Reload: (bool) => reload = bool
