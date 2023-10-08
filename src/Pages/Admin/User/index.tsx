@@ -1,8 +1,8 @@
-import { Button, Checkbox, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
-import { DeleteRegular } from "@fluentui/react-icons";
+import { Checkbox, TableColumnDefinition, createTableColumn } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DefaultDataGrid } from "~/Components/DataGrid";
 import { AdminHub } from "~/ShopNet/Admin";
+import { AdminUserDelete } from "./Delete";
 
 /**
  * @author Aloento
@@ -19,9 +19,18 @@ export interface IUserItem {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 const columns: TableColumnDefinition<IUserItem>[] = [
+  createTableColumn<IUserItem>({
+    columnId: "Id",
+    renderHeaderCell: () => {
+      return "Id";
+    },
+    renderCell(item) {
+      return item.Id;
+    }
+  }),
   createTableColumn<IUserItem>({
     columnId: "Name",
     renderHeaderCell: () => {
@@ -55,10 +64,17 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "Delete";
     },
     renderCell(item) {
-      return <Button appearance="subtle" icon={<DeleteRegular />} />
+      return <AdminUserDelete UserId={item.Id} Refresh={refreshUser} />
     },
   })
 ]
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.1.0
+ */
+let refreshUser: () => void;
 
 /**
  * @author Aloento
@@ -66,7 +82,9 @@ const columns: TableColumnDefinition<IUserItem>[] = [
  * @version 0.2.0
  */
 export function AdminUser() {
-  const { data } = useRequest(AdminHub.User.Get.List);
+  const { data, run } = useRequest(AdminHub.User.Get.List);
+
+  refreshUser = run;
 
   return (
     <DefaultDataGrid Items={data || []} Columns={columns} />
