@@ -75,7 +75,7 @@ const useStyles = makeStyles({
 export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refresh: (prodId: number) => void }) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState<Record<string, string>>({});
-  const [stock, setStock] = useState(0);
+  const [stock, setStock] = useState(1);
 
   const { data: varis } = useRequest(AdminHub.Product.Get.Variants, {
     defaultParams: [ProdId],
