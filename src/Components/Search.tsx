@@ -7,13 +7,16 @@ import { useRouter } from "~/Components/Router";
  * @since 0.1.0
  * @version 0.2.0
  */
-export function AdminUserSearch() {
+export function AdminSearch() {
   const { Paths, Search, Put } = useRouter();
   const path1 = Paths.at(0);
   const path2 = Paths.at(1);
 
+  const user = path2 === "User";
+  const order = path2 === "Order";
+
   return (
-    path1 === "Admin" && path2 === "User" &&
+    path1 === "Admin" && (user || order) &&
     <>
       <Input
         placeholder="Search in Any Field"
@@ -31,9 +34,9 @@ export function AdminUserSearch() {
 
       <Switch label="Only Admin" onChange={(_, d) => {
         if (d.checked)
-          Search.set("admin", "");
+          Search.set(user ? "admin" : "pending", "");
         else
-          Search.delete("admin");
+          Search.delete(user ? "admin" : "pending");
 
         Put(Search);
       }} />
