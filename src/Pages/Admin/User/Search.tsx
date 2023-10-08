@@ -8,7 +8,7 @@ import { useRouter } from "~/Components/Router";
  * @version 0.1.0
  */
 export function AdminUserSearch() {
-  const { Paths } = useRouter();
+  const { Paths, Search, Put } = useRouter();
   const path1 = Paths.at(0);
   const path2 = Paths.at(1);
 

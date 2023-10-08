@@ -42,15 +42,15 @@ let reload = false;
 /**
  * @author Aloento
  * @since 0.5.0 MusiLand
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function BrowserRouter({ children }: { children: JSX.Element }): JSX.Element {
   const [router, setRouter] = useState<IRouter>(() => ({
     Paths: location.pathname.split("/").filter(x => x),
     Search: new URLSearchParams(location.search),
     Put(search) {
-      history.pushState(null, "", `${location.pathname}?${search.toString()}`);
-      setRouter({ ...router, Search: search });
+      history.pushState(null, "", `${location.pathname}${search.size ? "?" : ""}${search.toString()}`);
+      setRouter({ ...router, Search: new URLSearchParams(search) });
     },
     Nav: (...p) => nav(Combine(p)),
     Rep: (...p) => rep(Combine(p)),
