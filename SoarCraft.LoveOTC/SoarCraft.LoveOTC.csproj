@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0-rc.1.23421.29" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.0-rc.1.23421.29" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="2.15.1" />
-    <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="2.15.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"
+      Version="8.0.0-rc.1.23421.29" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect"
+      Version="8.0.0-rc.1.23421.29" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,5 +20,22 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Message Text="Start Build React" Importance="high" />
+    <Exec Command="cd ..  &amp; pnpm build" />
+
+    <ItemGroup>
+      <DistFiles Include="../dist/**/*" />
+      <WWWDir Include="wwwroot" />
+    </ItemGroup>
+
+    <Message Text="Remove Current wwwroot" Importance="high" />
+    <RemoveDir Directories="@(WWWDir)" />
+
+    <Message Text="Copy dist to wwwroot" Importance="high" />
+    <Copy SourceFiles="@(DistFiles)"
+      DestinationFiles="@(DistFiles->'wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
 
 </Project>
