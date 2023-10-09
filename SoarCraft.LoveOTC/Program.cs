@@ -4,12 +4,12 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.MapControllers();
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
