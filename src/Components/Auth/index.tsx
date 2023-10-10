@@ -1,6 +1,6 @@
-import { useToastController } from "@fluentui/react-components";
+import { Toast, ToastTitle, Toaster, useToastController } from "@fluentui/react-components";
 import { WebStorageStateStore } from "oidc-client-ts";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { AuthProvider, useAuth } from "react-oidc-context";
 import { useRouter } from "../Router";
 
@@ -31,9 +31,18 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
  * @since 1.0.0
  * @version 0.1.0
  */
-function AuthHandler(): null {
+function AuthHandler() {
   const auth = useAuth();
   const { dispatchToast } = useToastController();
 
-  return null;
+  useEffect(() => {
+    dispatchToast(
+      <Toast>
+        <ToastTitle>Comment Appended</ToastTitle>
+      </Toast>,
+      { intent: "success" }
+    );
+  }, []);
+
+  return <Toaster pauseOnHover />;
 }

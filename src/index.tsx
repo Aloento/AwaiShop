@@ -1,10 +1,9 @@
-import { BrandVariants, FluentProvider, Toaster, createLightTheme } from "@fluentui/react-components";
+import { BrandVariants, FluentProvider, createLightTheme } from "@fluentui/react-components";
 import ReactDOM from "react-dom/client";
 import { OIDCProvider } from "./Components/Auth";
-import { Layout } from "./Components/Layout";
 import { BrowserRouter } from "./Components/Router";
 import { ShopCartContext } from "./Components/ShopCart/Context";
-import { EShopContent } from "./Pages";
+import { Layout } from "./Pages";
 
 /**
  * @author Aloento
@@ -36,16 +35,13 @@ const Magenta: BrandVariants = {
  * @version 0.2.0
  */
 ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
-  <BrowserRouter>
-    <FluentProvider theme={createLightTheme(Magenta)}>
+  <FluentProvider theme={createLightTheme(Magenta)}>
+    <BrowserRouter>
       <OIDCProvider>
         <ShopCartContext>
-          <Layout>
-            <EShopContent />
-            <Toaster pauseOnHover />
-          </Layout>
+          <Layout />
         </ShopCartContext>
       </OIDCProvider>
-    </FluentProvider>
-  </BrowserRouter>
+    </BrowserRouter>
+  </FluentProvider>
 );
