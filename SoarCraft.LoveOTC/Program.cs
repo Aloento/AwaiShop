@@ -1,7 +1,10 @@
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Connections;
 using SoarCraft.LoveOTC;
+using SoarCraft.LoveOTC.AdminHub;
+using SoarCraft.LoveOTC.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +53,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseWebSockets();
+
+app.MapHub<ShopHub>("/Hub", x => x.Transports = HttpTransportType.WebSockets);
+
+app.MapHub<AdminHub>("/AdminHub", x => x.Transports = HttpTransportType.WebSockets);
 
 app.MapFallbackToFile("index.html");
 
