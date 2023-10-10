@@ -10,7 +10,7 @@ builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x => {
         x.Authority = "https://keycloak.eco.tsi-dev.otc-service.com/realms/eco";
-        x.Audience = "LoveOTC";
+        x.Audience = "loveotc";
         x.Events.OnMessageReceived = c => {
             string? token = c.Request.Query["access_token"];
             if (!string.IsNullOrWhiteSpace(token)) {
