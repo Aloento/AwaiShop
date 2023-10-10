@@ -37,15 +37,16 @@ const Magenta: BrandVariants = {
  */
 ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
   <BrowserRouter>
-    <OIDCProvider>
-      <FluentProvider theme={createLightTheme(Magenta)}>
+    <FluentProvider theme={createLightTheme(Magenta)}>
+      <OIDCProvider>
         <ShopCartContext>
           <Layout>
             <EShopContent />
-            <Toaster pauseOnHover />
           </Layout>
         </ShopCartContext>
-      </FluentProvider>
-    </OIDCProvider>
+      </OIDCProvider>
+
+      <Toaster pauseOnHover />
+    </FluentProvider>
   </BrowserRouter>
 );

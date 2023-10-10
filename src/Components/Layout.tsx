@@ -1,4 +1,5 @@
 import { makeStyles, tokens } from "@fluentui/react-components";
+import { ReactNode } from "react";
 import { ColFlex, NavH, NavW } from "~/Helpers/Styles";
 import { Footer } from "./Footer";
 import { TopNavBar } from "./TopNavBar";
@@ -36,7 +37,7 @@ const useStyle = makeStyles({
  * @since 0.2.2 MusiLand
  * @version 0.1.1
  */
-export function Layout({ children }: { children?: React.ReactNode; }) {
+export function Layout({ children }: { children?: ReactNode; }) {
   const style = useStyle();
 
   return <>

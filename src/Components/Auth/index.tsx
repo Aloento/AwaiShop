@@ -1,5 +1,7 @@
+import { useToastController } from "@fluentui/react-components";
 import { WebStorageStateStore } from "oidc-client-ts";
-import { AuthProvider } from "react-oidc-context";
+import { ReactNode } from "react";
+import { AuthProvider, useAuth } from "react-oidc-context";
 import { useRouter } from "../Router";
 
 /**
@@ -7,7 +9,7 @@ import { useRouter } from "../Router";
  * @since 1.0.0
  * @version 0.1.0
  */
-export function OIDCProvider({ children }: { children: JSX.Element }): JSX.Element {
+export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
   const { Rep } = useRouter();
 
   return (
@@ -18,7 +20,20 @@ export function OIDCProvider({ children }: { children: JSX.Element }): JSX.Eleme
       userStore={new WebStorageStateStore({ store: window.localStorage })}
       onSigninCallback={() => Rep("/")}
     >
+      <AuthHandler />
       {children}
     </AuthProvider>
   );
+}
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+function AuthHandler(): null {
+  const auth = useAuth();
+  const { dispatchToast } = useToastController();
+
+  return null;
 }
