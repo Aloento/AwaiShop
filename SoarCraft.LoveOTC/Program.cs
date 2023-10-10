@@ -37,10 +37,11 @@ var app = builder.Build();
 
 if (Shared.Dev) { 
     app.UseDeveloperExceptionPage();
-
-    app.UseHttpsRedirection();
-    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+
+app.UseHsts();
 
 app.UseDefaultFiles();
 
