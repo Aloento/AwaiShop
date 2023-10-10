@@ -1,5 +1,6 @@
 import { BrandVariants, FluentProvider, Toaster, createLightTheme } from "@fluentui/react-components";
 import ReactDOM from "react-dom/client";
+import { OIDCProvider } from "./Components/Auth";
 import { Layout } from "./Components/Layout";
 import { BrowserRouter } from "./Components/Router";
 import { ShopCartContext } from "./Components/ShopCart/Context";
@@ -29,15 +30,22 @@ const Magenta: BrandVariants = {
   160: "#fcf2f9",
 };
 
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.2.0
+ */
 ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
   <BrowserRouter>
-    <FluentProvider theme={createLightTheme(Magenta)}>
-      <ShopCartContext>
-        <Layout>
-          <EShopContent />
-          <Toaster pauseOnHover />
-        </Layout>
-      </ShopCartContext>
-    </FluentProvider>
+    <OIDCProvider>
+      <FluentProvider theme={createLightTheme(Magenta)}>
+        <ShopCartContext>
+          <Layout>
+            <EShopContent />
+            <Toaster pauseOnHover />
+          </Layout>
+        </ShopCartContext>
+      </FluentProvider>
+    </OIDCProvider>
   </BrowserRouter>
 );

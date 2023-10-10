@@ -1,5 +1,6 @@
 import { Avatar, Link, Menu, MenuGroupHeader, MenuItem, MenuList, MenuPopover, MenuTrigger } from "@fluentui/react-components";
 import { useBoolean } from "ahooks";
+import { useAuth } from "react-oidc-context";
 import { Setting } from "./Setting";
 
 /**
@@ -11,6 +12,8 @@ export function AvatarMenu() {
   const [isMenu, { toggle: toggleMenu }] = useBoolean();
   const [isModal, { toggle: toggleModal }] = useBoolean();
 
+  const auth = useAuth();
+
   return <>
     <Menu open={isMenu} onOpenChange={toggleMenu}>
       <MenuTrigger>
@@ -21,6 +24,8 @@ export function AvatarMenu() {
         <MenuList>
           <MenuGroupHeader>Hi Aloento</MenuGroupHeader>
 
+          <MenuItem onClick={() => auth.signinRedirect()}>Login</MenuItem>
+
           <Link appearance="subtle" href="/History">
             <MenuItem>History</MenuItem>
           </Link>
@@ -30,6 +35,7 @@ export function AvatarMenu() {
           </Link>
 
           <MenuItem onClick={toggleModal}>Setting</MenuItem>
+
           <MenuItem>Logout</MenuItem>
         </MenuList>
       </MenuPopover>
