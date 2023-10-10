@@ -14,12 +14,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x => {
         x.Authority = "https://keycloak.eco.tsi-dev.otc-service.com/realms/eco";
         x.Audience = "loveotc";
-        x.Events.OnMessageReceived = c => {
-            string? token = c.Request.Query["access_token"];
-            if (!string.IsNullOrWhiteSpace(token)) {
-                c.Token = token;
+        x.Events = new() {
+            OnMessageReceived = c => {
+                string? token = c.Request.Query["access_token"];
+                if (!string.IsNullOrWhiteSpace(token)) c.Token = token;
+                return Task.CompletedTask;
             }
-            return Task.CompletedTask;
         };
     });
 
@@ -35,7 +35,7 @@ builder.Services.AddSignalR(x => {
 
 var app = builder.Build();
 
-if (Shared.Dev) {
+if (Shared.Dev) { 
     app.UseDeveloperExceptionPage();
 
     app.UseHttpsRedirection();
