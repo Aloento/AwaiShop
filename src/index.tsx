@@ -42,11 +42,10 @@ ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
         <ShopCartContext>
           <Layout>
             <EShopContent />
+            <Toaster pauseOnHover />
           </Layout>
         </ShopCartContext>
       </OIDCProvider>
-
-      <Toaster pauseOnHover />
     </FluentProvider>
   </BrowserRouter>
 );
