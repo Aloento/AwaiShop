@@ -19,6 +19,7 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
       client_id="loveotc"
       scope="openid profile email"
       redirect_uri="https://shop.eco.tsi-dev.otc-service.com/Login"
+      post_logout_redirect_uri="https://shop.eco.tsi-dev.otc-service.com/Logout"
       userStore={new WebStorageStateStore({ store: window.localStorage })}
       onSigninCallback={() => Rep("/")}
     >
