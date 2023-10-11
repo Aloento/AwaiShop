@@ -9,20 +9,30 @@ import { useRouter } from "../Router";
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.2.0
  */
 export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
   const { Rep } = useRouter();
 
   return (
     <AuthProvider
-      authority="https://keycloak.eco.tsi-dev.otc-service.com/realms/eco"
       client_id="loveotc"
       scope="openid profile email"
-      redirect_uri="https://shop.eco.tsi-dev.otc-service.com/Login"
-      post_logout_redirect_uri="https://shop.eco.tsi-dev.otc-service.com/Logout"
       userStore={new WebStorageStateStore({ store: window.localStorage })}
       onSigninCallback={() => Rep("/")}
+
+      {...(import.meta.env.DEV ?
+        {
+          authority: "http://localhost:8080/realms/loveotc",
+          redirect_uri: "http://localhost:5173/Login",
+          post_logout_redirect_uri: "http://localhost:5173/Logout",
+        } :
+        {
+          authority: "https://keycloak.eco.tsi-dev.otc-service.com/realms/eco",
+          redirect_uri: "https://shop.eco.tsi-dev.otc-service.com/Login",
+          post_logout_redirect_uri: "https://shop.eco.tsi-dev.otc-service.com/Logout",
+        }
+      )}
     >
       <AuthHandler />
       {children}
