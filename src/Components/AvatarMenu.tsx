@@ -43,7 +43,10 @@ export function AvatarMenu() {
 
             <MenuItem onClick={toggleModal}>Setting</MenuItem>
 
-            <MenuItem onClick={() => auth.signoutRedirect()}>Logout</MenuItem>
+            <MenuItem onClick={() => {
+              auth.removeUser();
+              auth.signoutRedirect();
+            }}>Logout</MenuItem>
           </WithAuth>
 
         </MenuList>
