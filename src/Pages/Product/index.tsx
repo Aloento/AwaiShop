@@ -10,7 +10,6 @@ import { IComboItem } from "../Admin/Product/Combo";
 import { ProductAddCart } from "./AddCart";
 import { ProductCarousel } from "./Carousel";
 import { RadioGroupContext } from "./Context";
-import { ProductLexicalRender } from "./Lexical";
 import { ProductRadioList } from "./RadioGroup";
 
 /**
@@ -124,7 +123,7 @@ export function Product() {
           </div>
         </div>
 
-        <ProductLexicalRender ProdId={id} />
+        {/* <ProductLexicalRender ProdId={id} /> */}
       </div>
     </RadioGroupContext>
   )
