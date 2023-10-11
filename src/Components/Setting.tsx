@@ -69,6 +69,8 @@ export function Setting({ Open, Toggle }: ISetting) {
         <Toast>
           <ToastTitle>Info Updated</ToastTitle>
           <ToastBody>
+            {req.Name}
+            <br />
             {req.Phone}
             <br />
             {req.Address}
