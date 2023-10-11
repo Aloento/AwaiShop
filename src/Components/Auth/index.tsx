@@ -15,7 +15,7 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
 
   return (
     <AuthProvider
-      authority="https://keycloak.eco.tsi-dev.otc-service.com/realms/loveotc"
+      authority="https://keycloak.eco.tsi-dev.otc-service.com/realms/eco"
       client_id="loveotc"
       scope="openid profile email"
       redirect_uri="https://shop.eco.tsi-dev.otc-service.com/Login"
