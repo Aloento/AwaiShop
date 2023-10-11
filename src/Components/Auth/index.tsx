@@ -1,4 +1,4 @@
-import { Toaster } from "@fluentui/react-components";
+import { Toast, ToastTitle, Toaster } from "@fluentui/react-components";
 import { WebStorageStateStore } from "oidc-client-ts";
 import { ReactNode, useEffect } from "react";
 import { AuthProvider, useAuth } from "react-oidc-context";
@@ -30,11 +30,11 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 function AuthHandler() {
   const auth = useAuth();
-  const { dispatchError } = use500Toast();
+  const { dispatchError, dispatchToast } = use500Toast();
 
   useEffect(() => {
     if (auth.error) {
@@ -45,6 +45,16 @@ function AuthHandler() {
       });
     }
   }, [auth.error]);
+
+  useEffect(() => {
+    if (auth.activeNavigator) {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>{auth.activeNavigator}</ToastTitle>
+        </Toast>
+      );
+    }
+  }, [auth.activeNavigator]);
 
   return <Toaster pauseOnHover />;
 }
