@@ -17,7 +17,7 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
   return (
     <AuthProvider
       client_id="loveotc"
-      scope="openid profile email"
+      scope="openid profile email address phone"
       userStore={new WebStorageStateStore({ store: window.localStorage })}
       onSigninCallback={() => Rep("/")}
 
