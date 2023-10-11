@@ -15,10 +15,10 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
 
   return (
     <AuthProvider
-      authority="https://keycloak.eco.tsi-dev.otc-service.com/realms/eco"
+      authority="http://localhost:8080/realms/loveotc"
       client_id="loveotc"
-      scope="openid profile email loveotc"
-      redirect_uri="https://shop.eco.tsi-dev.otc-service.com/oauth2/callback"
+      scope="openid profile email"
+      redirect_uri="https://shop.eco.tsi-dev.otc-service.com/Login"
       userStore={new WebStorageStateStore({ store: window.localStorage })}
       onSigninCallback={() => Rep("/")}
     >
