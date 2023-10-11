@@ -1,6 +1,7 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { User as OIDCUser } from "oidc-client-ts";
+import { OIDC } from "./Database";
 
 /**
  * @author Aloento
@@ -8,14 +9,8 @@ import { User as OIDCUser } from "oidc-client-ts";
  * @version 0.1.0
  */
 export function accessTokenFactory(): string {
-  const oidc = localStorage.getItem(
-    import.meta.env.DEV
-      ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
-      : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:loveotc"
-  );
-
-  if (oidc) {
-    const user = OIDCUser.fromStorageString(oidc);
+  if (OIDC) {
+    const user = OIDCUser.fromStorageString(OIDC);
     return user.access_token;
   }
 
