@@ -1,7 +1,8 @@
-import { Toast, ToastTitle, Toaster } from "@fluentui/react-components";
+import { Toaster } from "@fluentui/react-components";
+import { useMount } from "ahooks";
 import { WebStorageStateStore } from "oidc-client-ts";
 import { ReactNode, useEffect } from "react";
-import { AuthProvider, useAuth } from "react-oidc-context";
+import { AuthProvider, hasAuthParams, useAuth } from "react-oidc-context";
 import { use500Toast } from "~/Helpers/useToast";
 import { useRouter } from "../Router";
 
@@ -32,11 +33,28 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.2
+ * @version 0.1.3
  */
 function AuthHandler() {
   const auth = useAuth();
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { Paths, Rep } = useRouter();
+  const { dispatchError } = use500Toast();
+
+  useMount(() => {
+    if (Paths.at(0) === "Logout") {
+      auth.removeUser();
+      return Rep("/");
+    }
+
+    if (
+      !hasAuthParams() &&
+      !auth.isAuthenticated &&
+      !auth.activeNavigator &&
+      !auth.isLoading
+    ) {
+      auth.signinRedirect();
+    }
+  });
 
   useEffect(() => {
     if (auth.error) {
@@ -47,16 +65,6 @@ function AuthHandler() {
       });
     }
   }, [auth.error]);
-
-  useEffect(() => {
-    if (auth.activeNavigator) {
-      dispatchToast(
-        <Toast>
-          <ToastTitle>{auth.activeNavigator}</ToastTitle>
-        </Toast>
-      );
-    }
-  }, [auth.activeNavigator]);
 
   return <Toaster pauseOnHover />;
 }

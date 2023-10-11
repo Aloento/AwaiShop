@@ -7,7 +7,7 @@ import { Setting } from "./Setting";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AvatarMenu() {
   const [isMenu, { toggle: toggleMenu }] = useBoolean();
@@ -25,7 +25,7 @@ export function AvatarMenu() {
         <MenuList>
 
           <WithAuth>
-            <MenuGroupHeader>Hi {auth.user?.profile.sub}</MenuGroupHeader>
+            <MenuGroupHeader>Hi {auth.user?.profile.preferred_username}</MenuGroupHeader>
           </WithAuth>
 
           <WithoutAuth>
@@ -43,10 +43,7 @@ export function AvatarMenu() {
 
             <MenuItem onClick={toggleModal}>Setting</MenuItem>
 
-            <MenuItem onClick={() => {
-              auth.removeUser();
-              auth.signoutRedirect();
-            }}>Logout</MenuItem>
+            <MenuItem onClick={() => auth.signoutRedirect()}>Logout</MenuItem>
           </WithAuth>
 
         </MenuList>
