@@ -14,7 +14,13 @@ export class AdminNet {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
-        accessTokenFactory
+        accessTokenFactory() {
+          const token = accessTokenFactory();
+          if (!token) {
+            throw new Error("Please Login First");
+          }
+          return token;
+        },
       })
     .withAutomaticReconnect()
     .withHubProtocol(new MessagePackHubProtocol())
