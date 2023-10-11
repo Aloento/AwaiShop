@@ -16,6 +16,8 @@ export class OrderGet extends ShopNet {
    * @version 0.1.0
    */
   public static async List(): Promise<IOrderItem[]> {
+    await this.EnsureConnected();
+
     return [
       {
         Id: 1,
@@ -42,6 +44,8 @@ export class OrderGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Detail(id: number): Promise<IOrderDetail> {
+    await this.EnsureConnected();
+
     return {
       ShopCart: [
         {
@@ -77,6 +81,8 @@ export class OrderGet extends ShopNet {
    * @version 0.1.0
    */
   public static async Extension(orderId: number): Promise<IOrderExtension> {
+    await this.EnsureConnected();
+
     return {
       OrderDate: new Date(),
       TrackNumber: "Number123456789",
