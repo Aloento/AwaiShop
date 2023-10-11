@@ -7,6 +7,26 @@ import { User as OIDCUser } from "oidc-client-ts";
  * @since 1.0.0
  * @version 0.1.0
  */
+export function accessTokenFactory(): string {
+  const oidc = localStorage.getItem(
+    import.meta.env.DEV
+      ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
+      : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:loveotc"
+  );
+
+  if (oidc) {
+    const user = OIDCUser.fromStorageString(oidc);
+    return user.access_token;
+  }
+
+  return "";
+}
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
 export class ShopNet {
   public static readonly Hub = new HubConnectionBuilder()
     .withUrl(import.meta.env.DEV ? "https://localhost/Hub" : "/Hub",
@@ -14,20 +34,7 @@ export class ShopNet {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
-        accessTokenFactory() {
-          const oidc = localStorage.getItem(
-            import.meta.env.DEV
-              ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
-              : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:loveotc"
-          );
-
-          if (oidc) {
-            const user = OIDCUser.fromStorageString(oidc);
-            return user.access_token;
-          }
-
-          return "";
-        },
+        accessTokenFactory
       })
     .withAutomaticReconnect()
     .withHubProtocol(new MessagePackHubProtocol())
