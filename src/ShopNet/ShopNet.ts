@@ -1,6 +1,6 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { User as OIDCUser } from "oidc-client-ts";
+import { User } from "oidc-client-ts";
 import { OIDC } from "./Database";
 
 /**
@@ -10,7 +10,7 @@ import { OIDC } from "./Database";
  */
 export function accessTokenFactory(): string {
   if (OIDC) {
-    const user = OIDCUser.fromStorageString(OIDC);
+    const user = User.fromStorageString(OIDC);
     return user.access_token;
   }
 
