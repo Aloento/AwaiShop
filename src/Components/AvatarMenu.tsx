@@ -1,12 +1,13 @@
 import { Avatar, Link, Menu, MenuGroupHeader, MenuItem, MenuList, MenuPopover, MenuTrigger } from "@fluentui/react-components";
 import { useBoolean } from "ahooks";
 import { useAuth } from "react-oidc-context";
+import { WithAuth, WithoutAuth } from "./Auth/With";
 import { Setting } from "./Setting";
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function AvatarMenu() {
   const [isMenu, { toggle: toggleMenu }] = useBoolean();
@@ -22,21 +23,29 @@ export function AvatarMenu() {
 
       <MenuPopover>
         <MenuList>
-          <MenuGroupHeader>Hi Aloento</MenuGroupHeader>
 
-          <MenuItem onClick={() => auth.signinRedirect()}>Login</MenuItem>
+          <WithAuth>
+            <MenuGroupHeader>Hi {auth.user?.profile.sub}</MenuGroupHeader>
+          </WithAuth>
 
-          <Link appearance="subtle" href="/History">
-            <MenuItem>History</MenuItem>
-          </Link>
+          <WithoutAuth>
+            <MenuItem onClick={() => auth.signinRedirect()}>Login</MenuItem>
+          </WithoutAuth>
 
-          <Link appearance="subtle" href="/Admin">
-            <MenuItem>Admin</MenuItem>
-          </Link>
+          <WithAuth>
+            <Link appearance="subtle" href="/History">
+              <MenuItem>History</MenuItem>
+            </Link>
 
-          <MenuItem onClick={toggleModal}>Setting</MenuItem>
+            <Link appearance="subtle" href="/Admin">
+              <MenuItem>Admin</MenuItem>
+            </Link>
 
-          <MenuItem>Logout</MenuItem>
+            <MenuItem onClick={toggleModal}>Setting</MenuItem>
+
+            <MenuItem onClick={() => auth.signoutRedirect()}>Logout</MenuItem>
+          </WithAuth>
+
         </MenuList>
       </MenuPopover>
     </Menu>
