@@ -95,7 +95,7 @@ function GalleryCategory({ Category }: { Category: string }) {
  */
 function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
-  const { data } = useRequest(Hub.Product.Get.Basic, {
+  const { data } = useRequest(Hub.Product.Get.Basic.bind(Hub.Product.Get), {
     defaultParams: [Id]
   })
 
