@@ -34,6 +34,7 @@ export class OrderGet extends ShopNet {
    */
   public static async Detail(id: number): Promise<IOrderDetail> {
     await this.EnsureConnected();
+
     const { ShopCart, Comments } = await this.Hub.invoke<
       Omit<IOrderDetail, "ShopCart"> & {
         ShopCart: Omit<ICartItem & { OrderId: number }, "Id">[];
