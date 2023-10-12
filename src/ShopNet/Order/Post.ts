@@ -13,8 +13,16 @@ export class OrderPost extends ShopNet {
    * @version 0.1.0
    */
   public static async New(cart: ICartItem[], cmt?: string): Promise<number> {
+    const req = cart.map(x => {
+      const { Id, ...rest } = x;
+      return {
+        OrderId: Id,
+        ...rest
+      };
+    });
+
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<number>("OrderPostNew", cart, cmt);
+    const res = await this.Hub.invoke<number>("OrderPostNew", req, cmt);
     return res;
   }
 
