@@ -16,7 +16,7 @@ export class OrderGet extends ShopNet {
    */
   public static async List(): Promise<IOrderItem[]> {
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<Omit<IOrderItem & { OrderId: number }, "Id">[]>("List");
+    const res = await this.Hub.invoke<Omit<IOrderItem & { OrderId: number }, "Id">[]>("OrderGetList");
 
     return res.map(x => {
       const { OrderId, ...rest } = x;
@@ -38,7 +38,7 @@ export class OrderGet extends ShopNet {
       Omit<IOrderDetail, "ShopCart"> & {
         ShopCart: Omit<ICartItem & { OrderId: number }, "Id">[];
       }
-    >("Detail", id);
+    >("OrderGetDetail", id);
 
     return {
       ShopCart: ShopCart.map(x => {
@@ -59,7 +59,7 @@ export class OrderGet extends ShopNet {
    */
   public static async Extension(orderId: number): Promise<IOrderExtension> {
     await this.EnsureConnected();
-    const res = await this.Hub.invoke<IOrderExtension>("Extension", orderId);
+    const res = await this.Hub.invoke<IOrderExtension>("OrderGetExtension", orderId);
     return res;
   }
 }
