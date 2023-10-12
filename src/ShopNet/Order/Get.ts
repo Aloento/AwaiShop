@@ -59,11 +59,7 @@ export class OrderGet extends ShopNet {
    */
   public static async Extension(orderId: number): Promise<IOrderExtension> {
     await this.EnsureConnected();
-
-    return {
-      OrderDate: new Date(),
-      TrackNumber: "Number123456789",
-      Status: "Finished"
-    };
+    const res = await this.Hub.invoke<IOrderExtension>("Extension", orderId);
+    return res;
   }
 }
