@@ -1,7 +1,5 @@
 namespace SoarCraft.LoveOTC.AdminHub;
 
-using JetBrains.Annotations;
-
 internal partial class AdminHub {
     /**
      * <remarks>
@@ -10,7 +8,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<bool> OrderPostAppend(uint orderId, string cmt) {
         throw new NotImplementedException();
     }
@@ -22,7 +19,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<bool> OrderPostClose(uint orderId, string reason) {
         throw new NotImplementedException();
     }
@@ -34,7 +30,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<bool> OrderPostShip(uint orderId, string track) {
         throw new NotImplementedException();
     }

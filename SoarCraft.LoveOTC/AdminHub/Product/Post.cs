@@ -1,7 +1,5 @@
 namespace SoarCraft.LoveOTC.AdminHub;
 
-using JetBrains.Annotations;
-
 internal partial class AdminHub {
     /**
      * <remarks>
@@ -10,7 +8,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<uint> ProductPostCreate(string name) {
         throw new NotImplementedException();
     }
@@ -22,7 +19,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<bool> ProductPostMovePhoto(uint photoId, bool up) {
         throw new NotImplementedException();
     }
@@ -34,7 +30,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<bool> ProductPostPhoto(string file) {
         throw new NotImplementedException();
     }
@@ -46,7 +41,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<uint> ProductPostVariant(string prodId, string name) {
         throw new NotImplementedException();
     }
@@ -58,7 +52,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<bool> ProductPostType(uint variantId, string name) {
         throw new NotImplementedException();
     }
@@ -70,7 +63,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<uint> ProductPostCombo(string prodId, Dictionary<string, string> combo, ushort stock) {
         throw new NotImplementedException();
     }

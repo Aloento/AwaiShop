@@ -1,7 +1,5 @@
 namespace SoarCraft.LoveOTC.AdminHub;
 
-using JetBrains.Annotations;
-
 internal partial class AdminHub {
     /**
      * <remarks>
@@ -10,7 +8,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<List<ProductItem>> ProductGetList() {
         return new()
         {
@@ -42,7 +39,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<string> ProductGetName(string prodId) {
         return "OTC SHIRT - GREY";
     }
@@ -54,7 +50,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<string> ProductGetCategory(string prodId) {
         return "Clothes";
     }
@@ -66,7 +61,6 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    [PublicAPI]
     public async Task<List<VariantItem>> ProductGetVariants(string prodId) {
         return new()
         {
