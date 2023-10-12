@@ -16,7 +16,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
   const [edit, { setTrue, setFalse }] = useBoolean();
   const { Nav } = useRouter();
 
-  useRequest(AdminHub.Product.Get.Name, {
+  useRequest(AdminHub.Product.Get.Name.bind(AdminHub.Product.Get), {
     defaultParams: [ProdId],
     onSuccess(data) {
       setName(data);

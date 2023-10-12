@@ -93,7 +93,7 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
   const [combo, setCombo] = useState(Combo);
   const [stock, setStock] = useState(Stock);
 
-  const { data: varis } = useRequest(AdminHub.Product.Get.Variants, {
+  const { data: varis } = useRequest(AdminHub.Product.Get.Variants.bind(AdminHub.Product.Get), {
     defaultParams: [ProdId]
   });
 

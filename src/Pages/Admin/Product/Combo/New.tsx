@@ -77,7 +77,7 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
   const [combo, setCombo] = useState<Record<string, string>>({});
   const [stock, setStock] = useState(1);
 
-  const { data: varis } = useRequest(AdminHub.Product.Get.Variants, {
+  const { data: varis } = useRequest(AdminHub.Product.Get.Variants.bind(AdminHub.Product.Get), {
     defaultParams: [ProdId],
     onSuccess(data) {
       for (const i of data)
