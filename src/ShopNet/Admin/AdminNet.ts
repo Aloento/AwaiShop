@@ -37,7 +37,8 @@ export class AdminNet extends SignalR {
    * @since 1.0.0
    * @version 0.1.0
    */
-  public static EnsureAdmin() {
+  public static async EnsureAdmin() {
     this.EnsureLogin();
+    await this.EnsureConnected();
   }
 }
