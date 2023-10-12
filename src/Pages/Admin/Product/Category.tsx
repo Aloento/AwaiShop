@@ -23,7 +23,7 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Category, {
+  const { run } = useRequest(AdminHub.Product.Patch.Category.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
       if (e)

@@ -28,7 +28,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Name, {
+  const { run } = useRequest(AdminHub.Product.Patch.Name.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
