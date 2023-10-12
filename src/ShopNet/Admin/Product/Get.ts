@@ -55,7 +55,7 @@ export class AdminProductGet extends AdminNet {
    */
   public static async Variants(prodId: number): Promise<IVariantItem[]> {
     await this.EnsureAdmin();
-    const res = await this.Hub.invoke<Omit<IVariantItem & { VariantId: number }, "Id">[]>("ProductGetList");
+    const res = await this.Hub.invoke<Omit<IVariantItem & { VariantId: number }, "Id">[]>("ProductGetVariants", prodId);
 
     return res.map(x => {
       const { VariantId, ...rest } = x;

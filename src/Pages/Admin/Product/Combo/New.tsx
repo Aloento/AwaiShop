@@ -89,7 +89,7 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
 
   const { dispatchError, dispatchToast } = use500Toast();
 
-  const { run } = useRequest(AdminHub.Product.Post.Combo, {
+  const { run } = useRequest(AdminHub.Product.Post.Combo.bind(AdminHub.Product.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
