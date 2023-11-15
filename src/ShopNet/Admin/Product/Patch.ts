@@ -41,8 +41,10 @@ export class AdminProductPatch extends AdminNet {
     if (file.size > 10 * 1024 * 1024)
       throw new RangeError("File is too large, max 10MB");
 
+    await this.EnsureConnected();
+
     const subject = new Subject<Uint8Array>();
-    const res = this.Invoke<boolean>("ProductPatchPhoto", photoId, subject);
+    const res = this.Hub.invoke<boolean>("ProductPatchPhoto", photoId, subject);
     await this.HandleFileStream(file, subject);
 
     this.EnsureTrue(await res);
