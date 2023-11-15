@@ -29,7 +29,6 @@ builder.Services.AddDbContext<ShopContext>(x => {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
     }
-    x.UseLazyLoadingProxies();
     x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
