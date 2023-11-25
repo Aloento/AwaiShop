@@ -34,7 +34,7 @@ const Magenta: BrandVariants = {
  * @since 0.1.0
  * @version 0.2.0
  */
-ReactDOM.createRoot(document.getElementById("LoveOTC")!).render(
+ReactDOM.createRoot(document.getElementById("AwaiShop")!).render(
   <FluentProvider theme={createLightTheme(Magenta)}>
     <BrowserRouter>
       <OIDCProvider>

@@ -17,7 +17,7 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
 
   return (
     <AuthProvider
-      client_id="loveotc"
+      client_id="AwaiShop"
       scope="openid profile email address phone"
       userStore={new WebStorageStateStore({ store: window.localStorage })}
       onSigninCallback={() => {
@@ -27,7 +27,7 @@ export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
 
       {...(import.meta.env.DEV ?
         {
-          authority: "http://localhost:8080/realms/loveotc",
+          authority: "http://localhost:8080/realms/AwaiShop",
           redirect_uri: "http://localhost:5173/Login",
           post_logout_redirect_uri: "http://localhost:5173/Logout",
         } :

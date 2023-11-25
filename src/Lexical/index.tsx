@@ -15,7 +15,7 @@ import { useLexEditorTheme } from "./Themes/LexEditorTheme";
  * @version 0.1.0
  */
 export function Lexical({
-  Namespace = "LoveOTC",
+  Namespace = "AwaiShop",
   Plugin = LexRichTextPreset,
   Editable = true,
   OnError = (e) => { throw e; },

@@ -48,8 +48,8 @@ export abstract class Common {
   public static get LocalUser(): User | null {
     const str = localStorage.getItem(
       import.meta.env.DEV
-        ? "oidc.user:http://localhost:8080/realms/loveotc:loveotc"
-        : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:loveotc"
+        ? "oidc.user:http://localhost:8080/realms/AwaiShop:AwaiShop"
+        : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:AwaiShop"
     );
 
     if (!str) return null;
