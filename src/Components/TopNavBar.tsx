@@ -55,7 +55,7 @@ export function TopNavBar() {
           <Link className={style.logoBox} href="/" appearance="subtle">
             <Image src="/telekom-logo.svg" height={NavH} />
 
-            <Text size={600} font="monospace" className={style.logoText}>LoveOTC</Text>
+            <Text size={600} font="monospace" className={style.logoText}>AwaiShop</Text>
           </Link>
 
           <AdminTopNav />
