@@ -247,13 +247,13 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         #region Photo
 
         using var http = new HttpClient();
-        const string url = "https://shop.eco.tsi-dev.otc-service.com/";
+        const string url = "http://awai.aloen.to/";
 
         var tasks = new[] {
-            http.GetByteArrayAsync(url + "1.webp"),
-            http.GetByteArrayAsync(url + "2.webp"),
-            http.GetByteArrayAsync(url + "3.webp"),
-            http.GetByteArrayAsync(url + "4.webp")
+            http.GetByteArrayAsync(url + "1.jpg"),
+            http.GetByteArrayAsync(url + "2.jpg"),
+            http.GetByteArrayAsync(url + "3.jpg"),
+            http.GetByteArrayAsync(url + "4.jpg")
         };
 
         Task.WaitAll(tasks);
