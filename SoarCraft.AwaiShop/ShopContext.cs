@@ -67,7 +67,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         #endregion
 
         #region MockData
-#if false
+#if true
 
         modelBuilder.Entity<User>().HasData(new User {
             UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),

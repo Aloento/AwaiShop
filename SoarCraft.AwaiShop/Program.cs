@@ -28,8 +28,9 @@ builder.Services.AddDbContext<ShopContext>(x => {
     if (Shared.Dev) {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
-    }
-    x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+        x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    } else
+        x.UseSqlServer(Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING"));
 });
 
 if (Shared.Dev)
