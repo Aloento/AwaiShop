@@ -43,7 +43,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0 MusiLand
- * @version 0.1.1
+ * @version 0.1.2
  */
 export function TopNavBar() {
   const style = useStyle();
@@ -53,7 +53,7 @@ export function TopNavBar() {
       <header className={style.navBox}>
         <nav className={style.navBar}>
           <Link className={style.logoBox} href="/" appearance="subtle">
-            <Image src="/telekom-logo.svg" height={NavH} />
+            <Image src="/Awai.png" height={NavH} />
 
             <Text size={600} font="monospace" className={style.logoText}>AwaiShop</Text>
           </Link>
