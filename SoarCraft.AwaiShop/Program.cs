@@ -30,7 +30,7 @@ builder.Services.AddDbContext<ShopContext>(x => {
         x.EnableDetailedErrors();
         x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     } else
-        x.UseSqlServer(Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING"));
+        x.UseSqlServer(Environment.GetEnvironmentVariable("SQLAZURECONNSTR_Zero"));
 });
 
 if (Shared.Dev)
