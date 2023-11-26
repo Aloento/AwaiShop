@@ -57,7 +57,7 @@ export abstract class SignalR {
    * @version 0.1.0
    */
   protected static EnsureLogin() {
-    if (!Common.LocalUser || Common.LocalUser.expired)
+    if (Common.LocalUser.expired)
       throw new Error("Please Login First");
   }
 

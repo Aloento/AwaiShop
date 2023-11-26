@@ -1,21 +1,20 @@
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { ReactNode } from "react";
-import { useAuth } from "react-oidc-context";
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function WithAuth({ children }: { children: ReactNode }): ReactNode {
-  const auth = useAuth();
+  const { inProgress } = useMsal();
+  const auth = useIsAuthenticated();
 
-  if (auth.isLoading) {
+  if (inProgress)
     return "Authenticating...";
-  }
 
-  if (auth.isAuthenticated) {
+  if (auth)
     return children;
-  }
 
   return null;
 }
@@ -23,14 +22,13 @@ export function WithAuth({ children }: { children: ReactNode }): ReactNode {
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function WithoutAuth({ children }: { children: ReactNode }): ReactNode {
-  const auth = useAuth();
+  const auth = useIsAuthenticated();
 
-  if (auth.isAuthenticated) {
+  if (auth)
     return null;
-  }
 
   return children;
 }
