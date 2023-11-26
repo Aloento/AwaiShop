@@ -2,6 +2,7 @@
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace SoarCraft.AwaiShop;
 
+using Entities;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -67,7 +68,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         #endregion
 
         #region MockData
-#if true
+#if DEBUG
 
         modelBuilder.Entity<User>().HasData(new User {
             UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),

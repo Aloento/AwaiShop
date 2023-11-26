@@ -7,11 +7,9 @@
     <Nullable>enable</Nullable>
 
     <AnalysisLevel>preview</AnalysisLevel>
+    <PublishReadyToRun>true</PublishReadyToRun>
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
-
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>aspnet-SoarCraft.AwaiShop-bd8aa786-efde-410a-8112-20d0e37af1c6</UserSecretsId>
 
     <Company>SoarCraft</Company>

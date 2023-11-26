@@ -12,7 +12,7 @@ internal partial class ShopHub {
      * </remarks>
      */
     [Authorize]
-    public async Task<dynamic?> UserGetMe(byte _, uint? version) {
+    public async Task<dynamic?> UserGetMe(byte _, byte[]? version) {
         var hasNew = this.Context.Items.TryGetValue("NewUser", out var isNew);
         if (hasNew && isNew is true) return null;
 
