@@ -13,10 +13,10 @@ export abstract class ShopNet extends SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.1.1
    */
   public static readonly Hub = new HubConnectionBuilder()
-    .withUrl(import.meta.env.DEV ? "https://localhost/Hub" : "/Hub",
+    .withUrl(import.meta.env.DEV ? "https://localhost/Hub" : "https://awai.azurewebsites.net/Hub",
       {
         ...import.meta.env.DEV ? {
           skipNegotiation: true,
