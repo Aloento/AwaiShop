@@ -1,9 +1,11 @@
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SoarCraft.AwaiShop;
 using SoarCraft.AwaiShop.AdminHub;
+using SoarCraft.AwaiShop.Helpers;
 using SoarCraft.AwaiShop.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,7 @@ builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x => {
-        x.Authority = "https://SoarCraft.b2clogin.com/SoarCraft.onmicrosoft.com/B2C_1_RegLog/v2.0";
+        x.Authority = "https://login.microsoftonline.com/9ed42989-9bdb-439d-80e7-c709641d1f08/v2.0";
         x.Audience = "0ac3ee82-159d-407c-8539-7a9e1e3a1989";
         x.RequireHttpsMetadata = !Shared.Dev;
         x.Events = new() {
@@ -46,6 +48,8 @@ builder.Services.AddSignalR(x => {
         .WithSecurity(MessagePackSecurity.UntrustedData)
         .WithResolver(ContractlessStandardResolverAllowPrivate.Instance);
 });
+
+builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
 builder.Host.UseSystemd();
 
