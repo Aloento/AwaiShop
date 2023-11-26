@@ -1,11 +1,11 @@
 namespace SoarCraft.AwaiShop.Hub;
 
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
 
 internal partial class ShopHub {
     /**
@@ -28,7 +28,7 @@ internal partial class ShopHub {
 
         var hasNew = this.Context.Items.TryGetValue("NewUser", out var isNew);
         if (hasNew && isNew is true) {
-            var email = this.Context.User!.FindFirstValue(ClaimTypes.Email);
+            var email = this.Context.User!.GetDisplayName();
 
             if (email is null || string.IsNullOrWhiteSpace(email) ||
                 !email.Equals(req.EMail, StringComparison.OrdinalIgnoreCase)) {

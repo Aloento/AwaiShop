@@ -2,7 +2,7 @@ import { HubConnectionState } from "@microsoft/signalr";
 import dayjs, { Dayjs } from "dayjs";
 import { Subject } from "rxjs";
 import { AdminNet } from "./Admin/AdminNet";
-import { Common, IConcurrency, Shared } from "./Database";
+import { IConcurrency, MSAL, Shared } from "./Database";
 import { ShopNet } from "./ShopNet";
 
 /**
@@ -54,10 +54,10 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
   protected static EnsureLogin() {
-    if (!Common.LocalUser || Common.LocalUser.expired)
+    if (!MSAL.getActiveAccount()?.idToken)
       throw new Error("Please Login First");
   }
 

@@ -1,6 +1,5 @@
+import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
 import Dexie from "dexie";
-import { User } from "oidc-client-ts";
-import { AuthContextProps } from "react-oidc-context";
 import { ICartItem } from "~/Components/ShopCart";
 import { Table } from "./Table";
 
@@ -42,46 +41,66 @@ export const CartTable = DB.table<Omit<ICartItem, "Name" | "Cover">, never>("Sho
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.2.0
+ * @version 0.1.0
  */
-export abstract class Common {
-  public static get LocalUser(): User | null {
-    const str = localStorage.getItem(
-      import.meta.env.DEV
-        ? "oidc.user:http://localhost:8080/realms/AwaiShop:AwaiShop"
-        : "oidc.user:https://keycloak.eco.tsi-dev.otc-service.com/realms/eco:AwaiShop"
-    );
+export const MSAL = new PublicClientApplication({
+  auth: {
+    clientId: "0ac3ee82-159d-407c-8539-7a9e1e3a1989",
+    authority: "https://login.microsoftonline.com/9ed42989-9bdb-439d-80e7-c709641d1f08",
+    redirectUri: import.meta.env.DEV ? "http://localhost:5173/Login" : "https://awai.aloen.to/Login",
+  },
+  cache: {
+    cacheLocation: "localStorage",
+  },
+  system: {
+    loggerOptions: {
+      loggerCallback(level, message, containsPii) {
+        if (containsPii)
+          return;
 
-    if (!str) return null;
-    return User.fromStorageString(str);
-  }
-
-  public static AuthSlot?: AuthContextProps;
-
-  public static get Auth(): Promise<AuthContextProps> {
-    return new Promise<AuthContextProps>(resolve => {
-      if (this.AuthSlot)
-        return resolve(this.AuthSlot);
-
-      const interval = setInterval(() => {
-        if (this.AuthSlot) {
-          clearInterval(interval);
-          resolve(this.AuthSlot);
+        switch (level) {
+          case LogLevel.Error:
+            console.error(message);
+            return;
+          case LogLevel.Warning:
+            console.warn(message);
+            return;
+          case LogLevel.Info:
+            console.info(message);
+            return;
+          case LogLevel.Verbose:
+            console.debug(message);
+            return;
+          default:
+            console.trace(message);
         }
-      }, 100);
-    });
+      }
+    }
   }
+});
 
-  public static async AccessToken(): Promise<string | void> {
-    let { isAuthenticated, user, signinSilent } = await this.Auth;
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export async function AccessToken(): Promise<string | void> {
+  const auth = MSAL.getActiveAccount();
 
-    if (!isAuthenticated)
-      user = await signinSilent();
+  if (auth)
+    return auth.idToken;
 
-    if (user)
-      return user.access_token;
+  try {
+    const token = await MSAL.acquireTokenSilent({ scopes: [] });
+    return token.idToken;
+  } catch (e) {
+    console.warn(e);
   }
 }
+
+await MSAL.initialize();
+await MSAL.handleRedirectPromise();
+MSAL.setActiveAccount(MSAL.getAllAccounts()[0])
 
 /**
  * @author Aloento

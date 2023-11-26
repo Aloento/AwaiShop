@@ -1,7 +1,7 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { Dayjs } from "dayjs";
-import { Common, IConcurrency } from "../Database";
+import { AccessToken, IConcurrency } from "../Database";
 import { SignalR } from "../SignalR";
 
 /**
@@ -24,7 +24,7 @@ export abstract class AdminNet extends SignalR {
         } : {},
         logMessageContent: import.meta.env.DEV,
         async accessTokenFactory() {
-          const token = await Common.AccessToken();
+          const token = await AccessToken();
           if (token) return token;
           throw new Error("Please Login First");
         },

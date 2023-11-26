@@ -1,7 +1,7 @@
+import { useMsal } from "@azure/msal-react";
 import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
-import { useAuth } from "react-oidc-context";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { use500Toast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -37,11 +37,11 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.1
+ * @version 0.3.2
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
-  const auth = useAuth();
+  const claim = useMsal().instance.getActiveAccount();
 
   const [name, setName] = useState<string>();
   const [phone, setPhone] = useState<string>();
@@ -113,7 +113,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
             </div>
 
             <Field label="E-Mail" size="large">
-              <Label>{auth.user?.profile.email}</Label>
+              <Label>{claim?.username}</Label>
             </Field>
 
             <Field label="Address" size="large" required>
@@ -129,7 +129,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
             )}
 
             <Button appearance="primary" onClick={() => run({
-              EMail: auth.user?.profile.email,
+              EMail: claim?.username,
               Name: name,
               Address: address,
               Phone: phone
