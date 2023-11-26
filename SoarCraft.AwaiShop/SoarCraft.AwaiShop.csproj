@@ -44,26 +44,4 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="wwwroot">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)'=='Release'">
-    <Message Text="Start Build React" Importance="high" />
-    <Exec Command="cd ..  &amp; pnpm build" />
-
-    <ItemGroup>
-      <DistFiles Include="../dist/**/*" />
-      <WWWDir Include="wwwroot" />
-    </ItemGroup>
-
-    <Message Text="Remove Current wwwroot" Importance="high" />
-    <RemoveDir Directories="@(WWWDir)" />
-
-    <Message Text="Copy dist to wwwroot" Importance="high" />
-    <Copy SourceFiles="@(DistFiles)" DestinationFiles="@(DistFiles->'wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
-
 </Project>

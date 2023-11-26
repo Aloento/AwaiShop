@@ -60,10 +60,6 @@ app.UseHttpsRedirection();
 
 app.UseHsts();
 
-app.UseDefaultFiles();
-
-app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
