@@ -1,4 +1,5 @@
-﻿namespace SoarCraft.AwaiShop.Entities;
+﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+namespace SoarCraft.AwaiShop.Entities;
 
 using System.ComponentModel.DataAnnotations;
 
@@ -12,5 +13,5 @@ using System.ComponentModel.DataAnnotations;
 public abstract class Concurrency {
     [Timestamp]
     [ConcurrencyCheck]
-    public uint Version { get; set; }
+    public byte[] Version { get; set; }
 }

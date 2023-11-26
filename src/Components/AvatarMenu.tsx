@@ -9,7 +9,7 @@ import { Setting } from "./Setting";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.2
+ * @version 0.2.3
  */
 export function AvatarMenu() {
   const [isMenu, { toggle: toggleMenu }] = useBoolean();
@@ -22,6 +22,8 @@ export function AvatarMenu() {
     OnNewUserSubject.subscribe(x => setMount(!x));
   }, []);
 
+  const p = auth.user?.profile;
+
   return <>
     <Menu open={isMenu} onOpenChange={toggleMenu}>
       <MenuTrigger>
@@ -32,7 +34,7 @@ export function AvatarMenu() {
         <MenuList>
 
           <WithAuth>
-            <MenuGroupHeader>Hi {auth.user?.profile.preferred_username}</MenuGroupHeader>
+            <MenuGroupHeader>Hi {p?.name || p?.given_name || p?.family_name || p?.nickname || p?.preferred_username}</MenuGroupHeader>
           </WithAuth>
 
           <WithoutAuth>

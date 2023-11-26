@@ -10,7 +10,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<dynamic?> UserEntity(Guid key, uint? version) {
+    public async Task<dynamic?> UserEntity(Guid key, byte[]? version) {
         if (version is not null) {
             var noChange = await this.Db.Users
                 .AnyAsync(x => x.UserId == key && x.Version == version);

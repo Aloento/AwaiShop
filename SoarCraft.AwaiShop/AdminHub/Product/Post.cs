@@ -22,7 +22,7 @@ internal partial class AdminHub {
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        if (await this.Db.Products.AnyAsync(x => EF.Functions.ILike(x.Name, name)))
+        if (await this.Db.Products.AnyAsync(x => EF.Functions.Like(x.Name, name)))
             throw new HubException($"Product {name} already exist");
 
         var temp = await this.Db.Products.AddAsync(new() {
@@ -124,7 +124,7 @@ internal partial class AdminHub {
 
         var has = await this.Db.Variants.AnyAsync(x =>
             x.ProductId == prodId &&
-            EF.Functions.ILike(x.Name, name));
+            EF.Functions.Like(x.Name, name));
 
         if (has)
             throw new HubException($"Variant {name} already exist");
@@ -158,7 +158,7 @@ internal partial class AdminHub {
 
         var has = await this.Db.Types.AnyAsync(x =>
             x.VariantId == variantId &&
-            EF.Functions.ILike(x.Name, name));
+            EF.Functions.Like(x.Name, name));
 
         if (has)
             throw new HubException($"Type {name} already exist");

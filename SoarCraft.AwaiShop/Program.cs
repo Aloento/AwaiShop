@@ -12,8 +12,8 @@ builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x => {
-        x.Authority = Shared.Dev ? "http://localhost:8080/realms/AwaiShop" : "https://keycloak.eco.tsi-dev.otc-service.com/realms/eco";
-        x.Audience = "account";
+        x.Authority = "https://SoarCraft.b2clogin.com/SoarCraft.onmicrosoft.com/B2C_1_RegLog/v2.0";
+        x.Audience = "0ac3ee82-159d-407c-8539-7a9e1e3a1989";
         x.RequireHttpsMetadata = !Shared.Dev;
         x.Events = new() {
             OnMessageReceived = c => {
@@ -28,8 +28,9 @@ builder.Services.AddDbContext<ShopContext>(x => {
     if (Shared.Dev) {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
-    }
-    x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+        x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    } else
+        x.UseSqlServer(Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING"));
 });
 
 if (Shared.Dev)

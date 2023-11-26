@@ -10,31 +10,30 @@ import { useRouter } from "../Router";
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.2.0
+ * @version 1.0.0
  */
 export function OIDCProvider({ children }: { children: ReactNode }): ReactNode {
   const { Rep } = useRouter();
 
   return (
     <AuthProvider
-      client_id="AwaiShop"
-      scope="openid profile email address phone"
+      client_id="0ac3ee82-159d-407c-8539-7a9e1e3a1989"
+      scope="openid offline_access profile email"
       userStore={new WebStorageStateStore({ store: window.localStorage })}
       onSigninCallback={() => {
         Rep("/");
         location.reload();
       }}
+      authority="https://SoarCraft.b2clogin.com/SoarCraft.onmicrosoft.com/B2C_1_RegLog/v2.0"
 
       {...(import.meta.env.DEV ?
         {
-          authority: "http://localhost:8080/realms/AwaiShop",
           redirect_uri: "http://localhost:5173/Login",
           post_logout_redirect_uri: "http://localhost:5173/Logout",
         } :
         {
-          authority: "https://keycloak.eco.tsi-dev.otc-service.com/realms/eco",
-          redirect_uri: "https://shop.eco.tsi-dev.otc-service.com/Login",
-          post_logout_redirect_uri: "https://shop.eco.tsi-dev.otc-service.com/Logout",
+          redirect_uri: "https://awai.aloen.to/Login",
+          post_logout_redirect_uri: "https://awai.aloen.to/Logout",
         }
       )}
     >
