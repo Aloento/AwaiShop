@@ -3,7 +3,7 @@ name: Static Web Apps
 on:
   push:
     branches:
-      - master
+      - Dev
 
 jobs:
   build_deploy:
