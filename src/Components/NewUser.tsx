@@ -1,7 +1,7 @@
+import { AuthenticatedTemplate } from "@azure/msal-react";
 import { useBoolean } from "ahooks";
 import { useEffect } from "react";
 import { Subject } from "rxjs";
-import { WithAuth } from "./Auth/With";
 import { Setting } from "./Setting";
 
 /**
@@ -24,8 +24,8 @@ export function NewUser() {
   }, []);
 
   return (
-    <WithAuth>
+    <AuthenticatedTemplate>
       <Setting Open={open} Toggle={toggle} New />
-    </WithAuth>
+    </AuthenticatedTemplate>
   )
 }

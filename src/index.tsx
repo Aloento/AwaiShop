@@ -1,23 +1,25 @@
-import { FluentProvider, webLightTheme } from "@fluentui/react-components";
+import { MsalProvider } from "@azure/msal-react";
+import { FluentProvider, Toaster, webLightTheme } from "@fluentui/react-components";
 import ReactDOM from "react-dom/client";
-import { OIDCProvider } from "./Components/Auth";
 import { BrowserRouter } from "./Components/Router";
 import { ShopCartContext } from "./Components/ShopCart/Context";
 import { Layout } from "./Pages";
+import { MSAL } from "./ShopNet/Database";
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.4.0
  */
 ReactDOM.createRoot(document.getElementById("AwaiShop")!).render(
   <FluentProvider theme={webLightTheme}>
     <BrowserRouter>
-      <OIDCProvider>
+      <MsalProvider instance={MSAL}>
         <ShopCartContext>
+          <Toaster pauseOnHover />
           <Layout />
         </ShopCartContext>
-      </OIDCProvider>
+      </MsalProvider>
     </BrowserRouter>
   </FluentProvider>
 );

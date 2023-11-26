@@ -1,28 +1,27 @@
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { Avatar, Link, Menu, MenuGroupHeader, MenuItem, MenuList, MenuPopover, MenuTrigger } from "@fluentui/react-components";
 import { useBoolean } from "ahooks";
 import { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
-import { WithAuth, WithoutAuth } from "./Auth/With";
 import { OnNewUserSubject } from "./NewUser";
 import { Setting } from "./Setting";
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.3
+ * @version 0.3.0
  */
 export function AvatarMenu() {
   const [isMenu, { toggle: toggleMenu }] = useBoolean();
   const [isModal, { toggle: toggleModal }] = useBoolean();
 
-  const auth = useAuth();
+  const { instance } = useMsal();
   const [mount, { set: setMount }] = useBoolean(true);
 
   useEffect(() => {
     OnNewUserSubject.subscribe(x => setMount(!x));
   }, []);
 
-  const p = auth.user?.profile;
+  const claim = instance.getActiveAccount();
 
   return <>
     <Menu open={isMenu} onOpenChange={toggleMenu}>
@@ -33,15 +32,17 @@ export function AvatarMenu() {
       <MenuPopover>
         <MenuList>
 
-          <WithAuth>
-            <MenuGroupHeader>Hi {p?.name || p?.given_name || p?.family_name || p?.nickname || p?.preferred_username}</MenuGroupHeader>
-          </WithAuth>
+          <AuthenticatedTemplate>
+            <MenuGroupHeader>Hi {claim?.name || claim?.username}</MenuGroupHeader>
+          </AuthenticatedTemplate>
 
-          <WithoutAuth>
-            <MenuItem onClick={() => auth.signinRedirect()}>Login</MenuItem>
-          </WithoutAuth>
+          <UnauthenticatedTemplate>
+            <MenuItem onClick={() => instance.loginRedirect()}>
+              Login
+            </MenuItem>
+          </UnauthenticatedTemplate>
 
-          <WithAuth>
+          <AuthenticatedTemplate>
             <Link appearance="subtle" href="/History">
               <MenuItem>History</MenuItem>
             </Link>
@@ -52,8 +53,10 @@ export function AvatarMenu() {
 
             <MenuItem onClick={toggleModal}>Setting</MenuItem>
 
-            <MenuItem onClick={() => auth.signoutRedirect()}>Logout</MenuItem>
-          </WithAuth>
+            <MenuItem onClick={() => instance.logoutRedirect()}>
+              Logout
+            </MenuItem>
+          </AuthenticatedTemplate>
 
         </MenuList>
       </MenuPopover>
@@ -61,9 +64,9 @@ export function AvatarMenu() {
 
     {
       mount &&
-      <WithAuth>
+      <AuthenticatedTemplate>
         <Setting Open={isModal} Toggle={toggleModal} />
-      </WithAuth>
+      </AuthenticatedTemplate>
     }
   </>
 }
