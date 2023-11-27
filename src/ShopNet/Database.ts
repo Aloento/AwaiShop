@@ -85,11 +85,6 @@ export const MSAL = new PublicClientApplication({
  * @version 0.1.0
  */
 export async function AccessToken(): Promise<string | void> {
-  const auth = MSAL.getActiveAccount();
-
-  if (auth)
-    return auth.idToken;
-
   try {
     const token = await MSAL.acquireTokenSilent({ scopes: [] });
     return token.idToken;
