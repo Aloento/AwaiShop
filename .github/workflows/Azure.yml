@@ -6,7 +6,7 @@ on:
       - Dev
 
 jobs:
-  build:
+  build_deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,30 +21,11 @@ jobs:
       - name: Build with dotnet
         run: dotnet publish SoarCraft.AwaiShop/SoarCraft.AwaiShop.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: "Production"
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: .net-app
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: "Awai"
           slot-name: "Production"
-          package: .
+          package: ${{env.DOTNET_ROOT}}/myapp
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C99EA4B4F77A41508E090AF728BF173A }}
