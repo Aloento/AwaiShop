@@ -36,7 +36,7 @@ export interface IPersona {
  */
 export function PersonaInfo() {
   const style = useStyles();
-  const { data } = useRequest(Hub.User.Get.Me.bind(Hub.User.Get));
+  const { data } = useRequest(Hub.User.Get.useMe.bind(Hub.User.Get));
 
   return <>
     <div className={style.person}>

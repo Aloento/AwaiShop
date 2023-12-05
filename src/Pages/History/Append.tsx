@@ -2,7 +2,7 @@ import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentu
 import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 
 /**
@@ -26,13 +26,13 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run: append } = useRequest(Hub.Order.Post.Append.bind(Hub.Order.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Append Comment",
           Request: req,
           Error: e
@@ -53,7 +53,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Cancel",
           Request: req,
           Error: e

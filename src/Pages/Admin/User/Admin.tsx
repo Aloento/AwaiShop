@@ -1,6 +1,6 @@
 import { Checkbox, Toast, ToastTitle } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -9,13 +9,13 @@ import { AdminHub } from "~/ShopNet/Admin";
  * @version 0.1.0
  */
 export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Admin?: boolean; Refresh: () => void }) {
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run: grant } = useRequest(AdminHub.User.Post.Admin.bind(AdminHub.User.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Grant Admin",
           Request: req,
           Error: e
@@ -36,7 +36,7 @@ export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Adm
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Revoke Admin",
           Request: req,
           Error: e

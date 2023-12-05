@@ -1,7 +1,7 @@
 import { Button, Toast, ToastTitle } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useRouter } from "~/Components/Router";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -11,13 +11,13 @@ import { AdminHub } from "~/ShopNet/Admin";
  */
 export function AdminProductDelete({ ProdId }: { ProdId: number }) {
   const { Nav } = useRouter();
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run } = useRequest(AdminHub.Product.Delete.Product.bind(AdminHub.Product.Delete), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Delete Product",
           Request: req,
           Error: e

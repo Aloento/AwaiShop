@@ -24,14 +24,14 @@ interface Cause<T = any> {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
-export function use500Toast<T>() {
+export function useErrorToast<T>() {
   const style = useStyles();
   const { dispatchToast } = useToastController();
 
   return {
-    dispatchError: (e: Cause<T>) => {
+    dispatch: (e: Cause<T>) => {
       dispatchToast(
         <Toast>
           <ToastTitle>Internal Error</ToastTitle>

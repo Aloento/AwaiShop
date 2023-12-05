@@ -2,7 +2,7 @@ import { Button, Field, Input, Toast, ToastTitle } from "@fluentui/react-compone
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 
@@ -15,7 +15,7 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
   const [edit, { setTrue, setFalse }] = useBoolean();
   const [track, setTrack] = useState("");
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   useRequest(Hub.Order.Get.Order.bind(Hub.Order.Get), {
     defaultParams: [OrderId],
@@ -28,7 +28,7 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Update Tracking Number",
           Request: req,
           Error: e

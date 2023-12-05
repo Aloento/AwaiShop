@@ -4,7 +4,7 @@ import { useRequest } from "ahooks";
 import { useState } from "react";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -29,13 +29,13 @@ export function AdminProductAddButton() {
   const style = useStyles();
   const [name, setName] = useState("");
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run } = useRequest(AdminHub.Product.Post.Create.bind(AdminHub.Product.Post), {
     manual: true,
     onFinally(req, data, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: `Failed Create ${name}`,
           Request: req,
           Error: e

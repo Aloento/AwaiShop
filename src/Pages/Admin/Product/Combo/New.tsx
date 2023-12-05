@@ -5,7 +5,7 @@ import { isInteger } from "lodash-es";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 import { IVariantItem } from "../Variant";
 
@@ -87,13 +87,13 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
     },
   });
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run } = useRequest(AdminHub.Product.Post.Combo.bind(AdminHub.Product.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Create Combo",
           Request: req,
           Error: e
