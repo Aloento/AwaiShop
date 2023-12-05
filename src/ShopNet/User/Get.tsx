@@ -35,14 +35,14 @@ export class UserGet extends ShopNet {
       onError: (e, req) => {
         if (e instanceof NotLoginError) {
           if (suppress)
+            console.debug(e);
+          else
             dispatchToast(
               <Toast>
                 <ToastTitle>{e.message}</ToastTitle>
               </Toast>,
               { intent: "warning", timeout: 5000 }
             );
-          else
-            console.debug(e);
         } else
           dispatch({
             Message: "Failed to Get Your Info",
