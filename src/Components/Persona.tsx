@@ -31,7 +31,7 @@ export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true
     manual: !Admin
   })
 
-  const { data: me } = useRequest(Hub.User.Get.useMe.bind(Hub.User.Get), {
+  const { data: me } = Hub.User.Get.useMe({
     manual: Admin
   });
 
