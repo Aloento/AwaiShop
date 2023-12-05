@@ -3,7 +3,7 @@ import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 
@@ -38,13 +38,13 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
     }
   });
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run } = useRequest(AdminHub.Product.Patch.Category.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Update Category",
           Request: req,
           Error: e

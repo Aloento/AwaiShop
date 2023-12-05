@@ -3,7 +3,7 @@ import { AddRegular, EditRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -28,13 +28,13 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
   const [open, { toggle }] = useBoolean();
   const [name, setName] = useState(Type || "");
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const options = {
     manual: true,
     onFinally(req: any[], res?: number | boolean, e?: Error) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: `Failed ${New ? "Create" : "Update"} Type ${res} ${name}`,
           Request: req,
           Error: e

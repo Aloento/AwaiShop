@@ -5,7 +5,7 @@ import { isInteger } from "lodash-es";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 import { IComboItem } from ".";
 import { IVariantItem } from "../Variant";
@@ -97,13 +97,13 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
     defaultParams: [ProdId]
   });
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run } = useRequest(AdminHub.Product.Patch.Combo.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Update Combo",
           Request: req,
           Error: e

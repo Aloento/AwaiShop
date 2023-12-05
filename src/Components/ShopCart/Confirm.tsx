@@ -4,7 +4,7 @@ import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { useRouter } from "../Router";
@@ -41,12 +41,12 @@ export function Confirm() {
   const { Nav } = useRouter();
   const style = useStyles();
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run } = useRequest(Hub.Order.Post.New.bind(Hub.Order.Post), {
     onFinally([req], data, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Create Order",
           Request: req,
           Error: e

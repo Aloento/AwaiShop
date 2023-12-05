@@ -3,7 +3,7 @@ import { AddRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -28,13 +28,13 @@ export function AdminProductNewVariant({ ProdId, Refresh }: { ProdId: number; Re
   const [open, { toggle }] = useBoolean();
   const [name, setName] = useState("");
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run } = useRequest(AdminHub.Product.Post.Variant.bind(AdminHub.Product.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Create Variant",
           Request: req,
           Error: e

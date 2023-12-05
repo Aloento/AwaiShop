@@ -4,7 +4,7 @@ import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminProductPhotoEdit } from "./Edit";
@@ -63,13 +63,13 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
       )
     },
     renderCell(item) {
-      const { dispatchError } = use500Toast();
+      const { dispatch } = useErrorToast();
 
       const { run } = useRequest(AdminHub.Product.Post.MovePhoto.bind(AdminHub.Product.Post), {
         manual: true,
         onFinally(req, _, e) {
           if (e)
-            return dispatchError({
+            return dispatch({
               Message: "Failed Update Order",
               Request: req,
               Error: e
@@ -119,13 +119,13 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
   refreshCarousel = () => run(ProdId);
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run: newPhoto } = useRequest(AdminHub.Product.Post.Photo.bind(AdminHub.Product.Post), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Upload Photo",
           Request: req,
           Error: e

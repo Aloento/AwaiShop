@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface
 import { useRequest } from "ahooks";
 import { useState } from "react";
 import { ColFlex, Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { OnNewUserSubject } from "./NewUser";
 
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.2
+ * @version 0.3.3
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
@@ -47,7 +47,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   const [phone, setPhone] = useState<string>();
   const [address, setAddress] = useState<string>();
 
-  useRequest(Hub.User.Get.Me.bind(Hub.User.Get), {
+  Hub.User.Get.useMe({
     manual: New,
     onSuccess(data) {
       if (!data) return;
@@ -59,13 +59,13 @@ export function Setting({ Open, Toggle, New }: ISetting) {
     }
   });
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run } = useRequest(Hub.User.Post.Update.bind(Hub.User.Post), {
     manual: true,
     onFinally([req], _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: `Failed ${New ? "Create" : "Update"} Info`,
           Error: e,
           Request: req

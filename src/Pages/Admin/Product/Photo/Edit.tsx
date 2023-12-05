@@ -3,7 +3,7 @@ import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { useRequest } from "ahooks";
 import { useState } from "react";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
-import { use500Toast } from "~/Helpers/useToast";
+import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 import { IPhotoItem } from ".";
 
@@ -38,13 +38,13 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
   const style = useStyles();
   const [cap, setCap] = useState(Caption || "");
 
-  const { dispatchError, dispatchToast } = use500Toast();
+  const { dispatch, dispatchToast } = useErrorToast();
 
   const { run: updateCaption } = useRequest(AdminHub.Product.Patch.Caption.bind(AdminHub.Product.Patch), {
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Update Caption",
           Request: req,
           Error: e
@@ -65,7 +65,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Update Photo",
           Request: req,
           Error: e
@@ -86,7 +86,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     manual: true,
     onFinally(req, _, e) {
       if (e)
-        return dispatchError({
+        return dispatch({
           Message: "Failed Delete Photo",
           Request: req,
           Error: e
