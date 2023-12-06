@@ -40,7 +40,7 @@ export interface IPhotoItem {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 const columns: TableColumnDefinition<IPhotoItem>[] = [
   MakeCoverCol(70),
@@ -65,18 +65,16 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
     renderCell(item) {
       const { dispatch } = useErrorToast();
 
-      const { run } = useRequest(AdminHub.Product.Post.MovePhoto.bind(AdminHub.Product.Post), {
+      const { run } = AdminHub.Product.Post.useMovePhoto({
         manual: true,
-        onFinally(req, _, e) {
-          if (e)
-            return dispatch({
-              Message: "Failed Update Order",
-              Request: req,
-              Error: e
-            });
-
-          refreshCarousel();
+        onError(e, params) {
+          dispatch({
+            Message: "Failed Update Order",
+            Request: params,
+            Error: e
+          });
         },
+        onSuccess: refreshCarousel
       });
 
       return (
@@ -110,7 +108,7 @@ let refreshCarousel: () => void;
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
   const { data, run } = useRequest(() => Hub.Product.Get.Carousel(ProdId));
@@ -118,16 +116,16 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run: newPhoto } = useRequest(AdminHub.Product.Post.Photo.bind(AdminHub.Product.Post), {
+  const { run: newPhoto } = AdminHub.Product.Post.usePhoto({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Upload Photo",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Upload Photo",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Photo Uploaded</ToastTitle>
@@ -136,7 +134,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
       );
 
       refreshCarousel();
-    },
+    }
   });
 
   return <>

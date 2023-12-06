@@ -1,6 +1,6 @@
 import { Button, Field, Input, Popover, PopoverSurface, PopoverTrigger, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, EditRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useBoolean } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
@@ -55,7 +55,7 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
     }
   }
 
-  const { run: post } = useRequest(AdminHub.Product.Post.Type.bind(AdminHub.Product.Post), options);
+  const { run: post } = AdminHub.Product.Post.useType(options);
 
   const { run: patch } = AdminHub.Product.Patch.useType(options);
 
