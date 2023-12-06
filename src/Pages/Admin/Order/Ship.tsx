@@ -9,9 +9,9 @@ import { AdminHub } from "~/ShopNet/Admin";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
-export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
+export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
   const [edit, { setTrue, setFalse }] = useBoolean();
   const [track, setTrack] = useState("");
 
@@ -23,16 +23,16 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
     }
   });
 
-  const { run } = useRequest(AdminHub.Order.Post.Ship.bind(AdminHub.Order.Post), {
+  const { run } = AdminHub.Order.Post.useShip({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Update Tracking Number",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Update Tracking Number",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Tracking Number Updated</ToastTitle>
@@ -41,8 +41,8 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
       );
 
       setFalse();
-      Refresh(OrderId);
-    },
+      Refresh();
+    }
   });
 
   return (
