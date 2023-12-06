@@ -31,8 +31,7 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   const [cate, setCate] = useState("");
   const [edit, { setTrue, setFalse }] = useBoolean();
 
-  useRequest(AdminHub.Product.Get.Category.bind(AdminHub.Product.Get), {
-    defaultParams: [ProdId],
+  useRequest(() => AdminHub.Product.Get.Category(ProdId), {
     onSuccess(data) {
       data && setCate(data);
     }

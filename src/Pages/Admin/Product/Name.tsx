@@ -16,8 +16,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
   const [edit, { setTrue, setFalse }] = useBoolean();
   const { Nav } = useRouter();
 
-  useRequest(AdminHub.Product.Get.Name.bind(AdminHub.Product.Get), {
-    defaultParams: [ProdId],
+  useRequest(() => AdminHub.Product.Get.Name(ProdId), {
     onSuccess(data) {
       setName(data);
     },
@@ -31,14 +30,14 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
 
   const { run } = useRequest(AdminHub.Product.Patch.Name.bind(AdminHub.Product.Patch), {
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Update Name",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Update Name",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Name Updated</ToastTitle>
@@ -47,7 +46,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
       );
 
       setFalse();
-    },
+    }
   });
 
   return (
