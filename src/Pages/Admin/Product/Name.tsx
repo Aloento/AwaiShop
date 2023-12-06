@@ -9,7 +9,7 @@ import { AdminHub } from "~/ShopNet/Admin";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProductName({ ProdId }: { ProdId: number; }) {
   const [name, setName] = useState("");
@@ -28,7 +28,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Name.bind(AdminHub.Product.Patch), {
+  const { run } = AdminHub.Product.Patch.useName({
     manual: true,
     onError(e, req) {
       dispatch({

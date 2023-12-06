@@ -1,6 +1,7 @@
 import { Button, Field, Input, Popover, PopoverSurface, PopoverTrigger, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { AddRegular, EditRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -21,7 +22,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId: number; Type?: string; Refresh: () => void; New?: true }) {
   const style = useStyles();
@@ -30,20 +31,20 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const options = {
+  const options: Options<any, any> = {
     manual: true,
-    onFinally(req: any[], res?: number | boolean, e?: Error) {
-      if (e)
-        return dispatch({
-          Message: `Failed ${New ? "Create" : "Update"} Type ${res} ${name}`,
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: `Failed ${New ? "Create" : "Update"} Type ${name}`,
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess(data) {
       dispatchToast(
         <Toast>
           <ToastTitle>Type {New ? "Created" : "Updated"}</ToastTitle>
-          <ToastBody>{res} {name}</ToastBody>
+          <ToastBody>{data} {name}</ToastBody>
         </Toast>,
         { intent: "success" }
       );
@@ -56,7 +57,7 @@ export function AdminProductType({ VariantId, Type, Refresh, New }: { VariantId:
 
   const { run: post } = useRequest(AdminHub.Product.Post.Type.bind(AdminHub.Product.Post), options);
 
-  const { run: patch } = useRequest(AdminHub.Product.Patch.Type.bind(AdminHub.Product.Patch), options);
+  const { run: patch } = AdminHub.Product.Patch.useType(options);
 
   return (
     <Popover withArrow open={open} onOpenChange={toggle}>

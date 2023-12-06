@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
   const [cate, setCate] = useState("");
@@ -39,16 +39,16 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Category.bind(AdminHub.Product.Patch), {
+  const { run } = AdminHub.Product.Patch.useCategory({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Update Category",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Update Category",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Category Updated</ToastTitle>
@@ -57,7 +57,7 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
       );
 
       setFalse();
-    },
+    }
   });
 
   const { data: cates } = useRequest(() => Hub.Gallery.Get.Categories(), {

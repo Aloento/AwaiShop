@@ -1,7 +1,7 @@
 import { HubConnectionState } from "@microsoft/signalr";
 import dayjs, { Dayjs } from "dayjs";
 import { Subject } from "rxjs";
-import { NotLoginError } from "~/Helpers/Exceptions";
+import { NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
 import type { AdminNet } from "./Admin/AdminNet";
 import { IConcurrency, MSAL, Shared } from "./Database";
 import type { ShopNet } from "./ShopNet";
@@ -69,7 +69,7 @@ export abstract class SignalR {
    */
   protected static EnsureTrue(res: boolean | null | undefined): asserts res is true {
     if (!res)
-      throw new Error("Server Returned False");
+      throw new NotTrueError();
   }
 
   /**

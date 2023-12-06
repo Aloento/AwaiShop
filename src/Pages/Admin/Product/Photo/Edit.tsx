@@ -1,6 +1,5 @@
 import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
-import { useRequest } from "ahooks";
 import { useState } from "react";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -40,7 +39,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run: updateCaption } = useRequest(AdminHub.Product.Patch.Caption.bind(AdminHub.Product.Patch), {
+  const { run: updateCaption } = AdminHub.Product.Patch.useCaption({
     manual: true,
     onError(e, req) {
       dispatch({
@@ -61,7 +60,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
     }
   });
 
-  const { run: updateFile } = useRequest(AdminHub.Product.Patch.Photo.bind(AdminHub.Product.Patch), {
+  const { run: updateFile } = AdminHub.Product.Patch.usePhoto({
     manual: true,
     onError(e, req) {
       dispatch({

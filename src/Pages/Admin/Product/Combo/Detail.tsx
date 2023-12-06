@@ -97,7 +97,7 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Combo.bind(AdminHub.Product.Patch), {
+  const { run } = AdminHub.Product.Patch.useCombo({
     manual: true,
     onError(e, req) {
       dispatch({
