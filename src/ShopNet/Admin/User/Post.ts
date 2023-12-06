@@ -7,13 +7,13 @@ import { AdminNet } from "../AdminNet";
  * @since 0.5.0
  * @version 0.2.0
  */
-export class AdminUserPost extends AdminNet {
+export abstract class AdminUserPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 0.1.0
    */
-  public static Admin(options: Options<true, [string]>) {
-    return useRequest((userId) => this.Invoke<true>("UserPostAdmin", userId), options);
+  public static useAdmin(options: Options<true, [string]>) {
+    return useRequest((userId) => this.Invoke("UserPostAdmin", userId), options);
   }
 }

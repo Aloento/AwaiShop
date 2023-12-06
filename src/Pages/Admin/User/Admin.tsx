@@ -1,5 +1,4 @@
 import { Checkbox, Toast, ToastTitle } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
@@ -11,7 +10,7 @@ import { AdminHub } from "~/ShopNet/Admin";
 export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Admin?: boolean; Refresh: () => void }) {
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run: grant } = AdminHub.User.Post.Admin({
+  const { run: grant } = AdminHub.User.Post.useAdmin({
     manual: true,
     onError(e, req) {
       dispatch({
@@ -32,16 +31,16 @@ export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Adm
     }
   });
 
-  const { run: revoke } = useRequest(AdminHub.User.Delete.Admin.bind(AdminHub.User.Delete), {
+  const { run: revoke } = AdminHub.User.Delete.useAdmin({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Revoke Admin",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Revoke Admin",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Admin Revoked</ToastTitle>
@@ -50,7 +49,7 @@ export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Adm
       );
 
       Refresh();
-    },
+    }
   });
 
   return (
