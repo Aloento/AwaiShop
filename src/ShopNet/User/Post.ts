@@ -8,7 +8,7 @@ import { ShopNet } from "../ShopNet";
  * @since 0.5.0
  * @version 0.1.0
  */
-export class UserPost extends ShopNet {
+export abstract class UserPost extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0

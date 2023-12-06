@@ -17,8 +17,7 @@ export function Shipment({ OrderId, Refresh }: { OrderId: number; Refresh: (id: 
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  useRequest(Hub.Order.Get.Order.bind(Hub.Order.Get), {
-    defaultParams: [OrderId],
+  useRequest(() => Hub.Order.Get.Order(OrderId), {
     onSuccess(data) {
       setTrack(data?.TrackingNumber!);
     }
