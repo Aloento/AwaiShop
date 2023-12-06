@@ -1,3 +1,5 @@
+import { useRequest } from "ahooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import { ICartItem } from "~/Components/ShopCart";
 import { ShopNet } from "../ShopNet";
 
@@ -10,21 +12,22 @@ export abstract class OrderPost extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async New(cart: ICartItem[], cmt?: string): Promise<number> {
-    this.EnsureLogin();
+  public static useNew(options: Options<number, [ICartItem[], string | undefined]>) {
+    return useRequest((cart, cmt) => {
+      this.EnsureLogin();
 
-    const req = cart.map(x => {
-      const { Id, ...rest } = x;
-      return {
-        OrderId: Id,
-        ...rest
-      };
-    });
+      const req = cart.map(x => {
+        const { Id, ...rest } = x;
+        return {
+          OrderId: Id,
+          ...rest
+        };
+      });
 
-    const res = await this.Invoke<number>("OrderPostNew", req, cmt);
-    return res;
+      return this.Invoke<number>("OrderPostNew", req, cmt);
+    }, options);
   }
 
   /**

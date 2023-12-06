@@ -1,7 +1,7 @@
 import { Button, Field, Textarea, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
+import { useBoolean } from "ahooks";
 import { useState } from "react";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.4.0
+ * @version 0.4.1
  */
 export function Confirm() {
   const [cmt, setCmt] = useState<string>();
@@ -43,15 +43,16 @@ export function Confirm() {
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(Hub.Order.Post.New.bind(Hub.Order.Post), {
-    onFinally([req], data, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Create Order",
-          Request: req,
-          Error: e
-        });
-
+  const { run } = Hub.Order.Post.useNew({
+    manual: true,
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Create Order",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess(data) {
       dispatchToast(
         <Toast>
           <ToastTitle>Order Placed</ToastTitle>
@@ -64,8 +65,7 @@ export function Confirm() {
       toggle();
       Nav("History", data);
     },
-    manual: true,
-  })
+  });
 
   return <>
     <Button appearance="primary" onClick={toggle} disabled={!List.length}>Checkout</Button>
