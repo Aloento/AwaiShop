@@ -1,5 +1,4 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -22,22 +21,22 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.2.1
  */
-export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (id: number) => void }) {
+export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run: append } = useRequest(Hub.Order.Post.Append.bind(Hub.Order.Post), {
+  const { run: append } = Hub.Order.Post.useAppend({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Append Comment",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Append Comment",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Comment Appended</ToastTitle>
@@ -45,11 +44,11 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
         { intent: "success" }
       );
 
-      Refresh(OrderId);
-    },
+      Refresh();
+    }
   });
 
-  const { run: cancel } = useRequest(Hub.Order.Post.Cancel.bind(Hub.Order.Post), {
+  const { run: cancel } = Hub.Order.Post.Cancel({
     manual: true,
     onFinally(req, _, e) {
       if (e)
@@ -66,7 +65,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: (i
         { intent: "success" }
       );
 
-      Refresh(OrderId);
+      Refresh();
     },
   });
 

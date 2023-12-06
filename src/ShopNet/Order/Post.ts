@@ -26,29 +26,31 @@ export abstract class OrderPost extends ShopNet {
         };
       });
 
-      return this.Invoke<number>("OrderPostNew", req, cmt);
+      return this.Invoke("OrderPostNew", req, cmt);
     }, options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Append(orderId: number, cmt: string): Promise<true> {
-    this.EnsureLogin();
-    const res = await this.Invoke<true>("OrderPostNew", orderId, cmt);
-    return res;
+  public static useAppend(options: Options<true, [number, string]>) {
+    return useRequest((orderId, cmt) => {
+      this.EnsureLogin();
+      return this.Invoke("OrderPostNew", orderId, cmt);
+    }, options);
   }
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.2.0
    */
-  public static async Cancel(orderId: number, reason: string): Promise<true> {
-    this.EnsureLogin();
-    const res = await this.Invoke<true>("OrderPostCancel", orderId, reason);
-    return res;
+  public static Cancel(options: Options<true, [number, string]>) {
+    return useRequest((orderId, reason) => {
+      this.EnsureLogin();
+      return this.Invoke("OrderPostCancel", orderId, reason);
+    }, options);
   }
 }
