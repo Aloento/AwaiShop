@@ -48,7 +48,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: ()
     }
   });
 
-  const { run: cancel } = Hub.Order.Post.Cancel({
+  const { run: cancel } = Hub.Order.Post.useCancel({
     manual: true,
     onFinally(req, _, e) {
       if (e)

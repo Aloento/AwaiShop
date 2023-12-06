@@ -61,7 +61,7 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
     },
   });
 
-  const { data: cates } = useRequest(Hub.Gallery.Get.Categories.bind(Hub.Gallery.Get), {
+  const { data: cates } = useRequest(() => Hub.Gallery.Get.Categories(), {
     onSuccess(data) {
       setMatchCate(data);
     }

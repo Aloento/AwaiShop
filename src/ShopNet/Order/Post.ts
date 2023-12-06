@@ -47,7 +47,7 @@ export abstract class OrderPost extends ShopNet {
    * @since 0.5.0
    * @version 0.2.0
    */
-  public static Cancel(options: Options<true, [number, string]>) {
+  public static useCancel(options: Options<true, [number, string]>) {
     return useRequest((orderId, reason) => {
       this.EnsureLogin();
       return this.Invoke("OrderPostCancel", orderId, reason);
