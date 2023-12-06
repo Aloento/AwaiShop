@@ -105,7 +105,7 @@ const columns: TableColumnDefinition<IDetailComboItem>[] = [
         <DataGridCell className={useStyles().seven}>
           <AdminProductComboDetail {...item} />
 
-          <AdminProductComboDelete ComboId={item.Id} Refresh={() => item.Refresh()} />
+          <AdminProductComboDelete ComboId={item.Id} Refresh={item.Refresh} />
         </DataGridCell>
       )
     }
