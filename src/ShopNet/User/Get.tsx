@@ -18,7 +18,7 @@ interface IuseMe extends IConcurrency {
  * @since 0.5.0
  * @version 0.1.0
  */
-export class UserGet extends ShopNet {
+export abstract class UserGet extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0

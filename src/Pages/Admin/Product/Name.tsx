@@ -9,15 +9,14 @@ import { AdminHub } from "~/ShopNet/Admin";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProductName({ ProdId }: { ProdId: number; }) {
   const [name, setName] = useState("");
   const [edit, { setTrue, setFalse }] = useBoolean();
   const { Nav } = useRouter();
 
-  useRequest(AdminHub.Product.Get.Name.bind(AdminHub.Product.Get), {
-    defaultParams: [ProdId],
+  useRequest(() => AdminHub.Product.Get.Name(ProdId), {
     onSuccess(data) {
       setName(data);
     },
@@ -29,16 +28,16 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
 
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Patch.Name.bind(AdminHub.Product.Patch), {
+  const { run } = AdminHub.Product.Patch.useName({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Update Name",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Update Name",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Name Updated</ToastTitle>
@@ -47,7 +46,7 @@ export function AdminProductName({ ProdId }: { ProdId: number; }) {
       );
 
       setFalse();
-    },
+    }
   });
 
   return (
