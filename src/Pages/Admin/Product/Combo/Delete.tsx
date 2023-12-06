@@ -1,6 +1,5 @@
 import { Button, Toast, ToastTitle } from "@fluentui/react-components";
 import { DeleteRegular } from "@fluentui/react-icons";
-import { useRequest } from "ahooks";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
@@ -12,7 +11,7 @@ import { AdminHub } from "~/ShopNet/Admin";
 export function AdminProductComboDelete({ ComboId, Refresh }: { ComboId: number; Refresh: () => void }) {
   const { dispatch, dispatchToast } = useErrorToast();
 
-  const { run } = useRequest(AdminHub.Product.Delete.Combo.bind(AdminHub.Product.Delete), {
+  const { run } = AdminHub.Product.Delete.useCombo({
     manual: true,
     onError(e, req) {
       dispatch({

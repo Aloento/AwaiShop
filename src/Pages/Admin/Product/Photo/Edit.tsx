@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: { Photo: IPhotoItem; Refresh: () => void; }) {
   const style = useStyles();
@@ -42,14 +42,14 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
 
   const { run: updateCaption } = useRequest(AdminHub.Product.Patch.Caption.bind(AdminHub.Product.Patch), {
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Update Caption",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Update Caption",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Caption Updated</ToastTitle>
@@ -58,19 +58,19 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
       );
 
       Refresh();
-    },
+    }
   });
 
   const { run: updateFile } = useRequest(AdminHub.Product.Patch.Photo.bind(AdminHub.Product.Patch), {
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Update Photo",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Update Photo",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Photo Updated</ToastTitle>
@@ -79,19 +79,19 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
       );
 
       Refresh();
-    },
+    }
   });
 
-  const { run: deletePhoto } = useRequest(AdminHub.Product.Delete.Photo.bind(AdminHub.Product.Delete), {
+  const { run: deletePhoto } = AdminHub.Product.Delete.usePhoto({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Delete Photo",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Delete Photo",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Photo Deleted</ToastTitle>
@@ -100,7 +100,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
       );
 
       Refresh();
-    },
+    }
   });
 
   return (
