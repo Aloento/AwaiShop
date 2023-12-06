@@ -50,14 +50,14 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: ()
 
   const { run: cancel } = Hub.Order.Post.useCancel({
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Cancel",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, params) {
+      dispatch({
+        Message: "Failed Cancel Order",
+        Request: params,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Order Canceled</ToastTitle>
@@ -66,7 +66,7 @@ export function OrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: ()
       );
 
       Refresh();
-    },
+    }
   });
 
   return <>
