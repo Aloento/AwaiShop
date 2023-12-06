@@ -70,15 +70,14 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
-export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refresh: (prodId: number) => void }) {
+export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refresh: () => void }) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState<Record<string, string>>({});
   const [stock, setStock] = useState(1);
 
-  const { data: varis } = useRequest(AdminHub.Product.Get.Variants.bind(AdminHub.Product.Get), {
-    defaultParams: [ProdId],
+  const { data: varis } = useRequest(() => AdminHub.Product.Get.Variants(ProdId), {
     onSuccess(data) {
       for (const i of data)
         combo[i.Name] = "";
@@ -91,14 +90,14 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
 
   const { run } = useRequest(AdminHub.Product.Post.Combo.bind(AdminHub.Product.Post), {
     manual: true,
-    onFinally(req, _, e) {
-      if (e)
-        return dispatch({
-          Message: "Failed Create Combo",
-          Request: req,
-          Error: e
-        });
-
+    onError(e, req) {
+      dispatch({
+        Message: "Failed Create Combo",
+        Request: req,
+        Error: e
+      });
+    },
+    onSuccess() {
       dispatchToast(
         <Toast>
           <ToastTitle>Combo Created</ToastTitle>
@@ -106,7 +105,7 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
         { intent: "success" }
       );
 
-      Refresh(ProdId);
+      Refresh();
       toggle();
     },
   });
