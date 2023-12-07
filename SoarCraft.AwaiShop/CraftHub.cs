@@ -40,7 +40,7 @@ internal abstract class CraftHub<TSelf, TClient>(ShopContext db, ILogger<TSelf> 
         }
     }
 
-    protected string? Name => this.Context.User?.FindFirstValue("preferred_username");
+    protected string? Name => this.Context.User?.FindFirstValue("name");
 
     protected List<Func<Task>> OnDisconnect { get; } = new();
 

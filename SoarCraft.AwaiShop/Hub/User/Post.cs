@@ -1,18 +1,18 @@
 namespace SoarCraft.AwaiShop.Hub;
 
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
 
 internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.1.1
+     * @version 0.1.2
      * </remarks>
      */
     [Authorize]
@@ -28,12 +28,12 @@ internal partial class ShopHub {
 
         var hasNew = this.Context.Items.TryGetValue("NewUser", out var isNew);
         if (hasNew && isNew is true) {
-            var email = this.Context.User!.GetDisplayName();
+            var email = this.Context.User!.FindFirstValue("emails");
 
             if (email is null || string.IsNullOrWhiteSpace(email) ||
                 !email.Equals(req.EMail, StringComparison.OrdinalIgnoreCase)) {
                 this.Context.Abort();
-                return false;
+                throw new HubException($"EMail ${email} wanted, but got ${req.EMail} from [${this.UserId}]");
             }
 
             await this.Db.Users.AddAsync(new() {
