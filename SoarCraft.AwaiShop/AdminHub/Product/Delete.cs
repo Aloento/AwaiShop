@@ -20,6 +20,34 @@ internal partial class AdminHub {
     }
 
     /**
+     * <summary>
+     * Include Types -> Combos
+     * </summary>
+     *
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    private async Task deleteVariant(Variant variant) {
+        var any = await this.Db.Variants
+            .Where(x => x.VariantId == variant.VariantId)
+            .SelectMany(x => x.Types)
+            .SelectMany(x => x.Combos)
+            .SelectMany(x => x.Orders)
+            .AnyAsync();
+
+        if (any) {
+            variant.IsArchived = true;
+
+            foreach (var type in variant.Types)
+                await this.deleteType(type);
+        } else
+            this.Db.Variants.Remove(variant);
+    }
+
+    /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
@@ -27,25 +55,13 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductDeleteVariant(uint variantId) {
-        var variant = this.Db.Variants
-            .Where(x => x.VariantId == variantId);
-
-        var any = await variant
-            .SelectMany(x => x.Types)
-            .SelectMany(x => x.Combos)
-            .SelectMany(x => x.Orders)
-            .AnyAsync();
-
-        if (!any)
-            return await variant.ExecuteDeleteAsync() > 0;
-
-        var oldVari = await variant
+        await this.deleteVariant(
+            await this.Db.Variants
+                .Where(x => x.VariantId == variantId)
                 .Include(x => x.Types)
                 .ThenInclude(x => x.Combos)
-                .SingleAsync();
-
-        oldVari.IsArchived = true;
-        await this.archiveTypes(oldVari.Types);
+                .SingleAsync()
+        );
 
         return await this.Db.SaveChangesAsync() > 0;
     }
@@ -70,7 +86,9 @@ internal partial class AdminHub {
 
         if (any) {
             type.IsArchived = true;
-            await this.archiveCombos(type.Combos);
+
+            foreach (var combo in type.Combos)
+                await this.deleteCombo(combo);
         } else
             this.Db.Types.Remove(type);
     }
@@ -100,19 +118,16 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    private async Task deleteCombo(uint comboId) {
+    private async Task deleteCombo(Combo combo) {
         var any = await this.Db.Combos
-            .Where(x => x.ComboId == comboId)
+            .Where(x => x.ComboId == combo.ComboId)
             .SelectMany(x => x.Orders)
             .AnyAsync();
 
-        var ins = new Combo { ComboId = comboId };
-
-        if (any) {
-            this.Db.Combos.Attach(ins);
-            ins.IsArchived = true;
-        } else
-            this.Db.Combos.Remove(ins);
+        if (any)
+            combo.IsArchived = true;
+        else
+            this.Db.Combos.Remove(combo);
     }
 
     /**
@@ -123,7 +138,12 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductDeleteCombo(uint comboId) {
-        await this.deleteCombo(comboId);
+        await this.deleteCombo(
+            await this.Db.Combos
+                .Where(x => x.ComboId == comboId)
+                .SingleAsync()
+        );
+
         return await this.Db.SaveChangesAsync() > 0;
     }
 
@@ -135,6 +155,28 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductDeleteProduct(uint prodId) {
-        return true;
+        var prod = this.Db.Products
+            .Where(x => x.ProductId == prodId);
+
+        var any = await prod
+            .SelectMany(x => x.Combos)
+            .SelectMany(x => x.Orders)
+            .AnyAsync();
+
+        if (!any)
+            return await prod.ExecuteDeleteAsync() > 0;
+
+        var product = await prod
+                .Include(x => x.Variants)
+                .ThenInclude(x => x.Types)
+                .ThenInclude(x => x.Combos)
+                .SingleAsync();
+
+        product.IsArchived = true;
+
+        foreach (var variant in product.Variants)
+            await this.deleteVariant(variant);
+
+        return await this.Db.SaveChangesAsync() > 0;
     }
 }

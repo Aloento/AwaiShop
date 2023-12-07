@@ -206,7 +206,7 @@ internal partial class AdminHub {
                 Stock = combo.Stock
             });
 
-            await this.deleteCombo(combo.ComboId);
+            await this.deleteCombo(combo);
         }
 
         return newCombos;
