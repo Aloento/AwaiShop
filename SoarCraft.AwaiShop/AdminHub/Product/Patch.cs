@@ -116,6 +116,10 @@ internal partial class AdminHub {
     }
 
     /**
+     * <summary>
+     * Include Combos
+     * </summary>
+     *
      * <remarks>
      * @author Aloento
      * @since 0.5.0
@@ -126,13 +130,13 @@ internal partial class AdminHub {
         var newTypes = new List<Type>(oldTypes.Count);
 
         foreach (var type in oldTypes) {
-            var newType = new Type {
+            newTypes.Add(new() {
                 Name = type.Name,
                 VariantId = type.VariantId,
                 Combos = await this.archiveCombos(type.Combos)
-            };
+            });
 
-            newTypes.Add(newType);
+            await this.deleteType(type);
         }
 
         return newTypes;

@@ -45,9 +45,34 @@ internal partial class AdminHub {
                 .SingleAsync();
 
         oldVari.IsArchived = true;
-        this.archiveTypes(oldVari.Types);
+        await this.archiveTypes(oldVari.Types);
 
         return await this.Db.SaveChangesAsync() > 0;
+    }
+
+    /**
+     * <summary>
+     * Include Combos
+     * </summary>
+     *
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    private async Task deleteType(Type type) {
+        var any = await this.Db.Types
+            .Where(x => x.TypeId == type.TypeId)
+            .SelectMany(x => x.Combos)
+            .SelectMany(x => x.Orders)
+            .AnyAsync();
+
+        if (any) {
+            type.IsArchived = true;
+            await this.archiveCombos(type.Combos);
+        } else
+            this.Db.Types.Remove(type);
     }
 
     /**
@@ -58,23 +83,12 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductDeleteType(uint variantId, string reqType) {
-        var type = this.Db.Types
-            .Where(x => x.VariantId == variantId && x.Name == reqType);
-
-        var any = await type
-            .SelectMany(x => x.Combos)
-            .SelectMany(x => x.Orders)
-            .AnyAsync();
-
-        if (!any)
-            return await type.ExecuteDeleteAsync() > 0;
-
-        var oldType = await type
-            .Include(x => x.Combos)
-            .SingleAsync();
-
-        oldType.IsArchived = true;
-        await this.archiveCombos(oldType.Combos);
+        await this.deleteType(
+            await this.Db.Types
+                .Where(x => x.VariantId == variantId && x.Name == reqType)
+                .Include(x => x.Combos)
+                .SingleAsync()
+        );
 
         return await this.Db.SaveChangesAsync() > 0;
     }
@@ -83,7 +97,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 0.2.0
+     * @version 0.1.0
      * </remarks>
      */
     private async Task deleteCombo(uint comboId) {
