@@ -27,6 +27,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddDbContext<ShopContext>(x => {
+    x.UseLazyLoadingProxies();
+
     if (Shared.Dev) {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();

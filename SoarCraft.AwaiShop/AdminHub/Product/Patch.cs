@@ -3,57 +3,12 @@ namespace SoarCraft.AwaiShop.AdminHub;
 using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
 internal partial class AdminHub {
-    /**
-     * <remarks>
-     * @author Aloento
-     * @since 0.5.0
-     * @version 0.1.0
-     * </remarks>
-     */
-    private static List<Combo> archiveCombos(ICollection<Combo> oldCombos) {
-        var newTypes = new List<Combo>(oldCombos.Count);
-
-        foreach (var oldCombo in oldCombos) {
-            oldCombo.IsArchived = true;
-
-            newTypes.Add(new() {
-                ProductId = oldCombo.ProductId,
-                Stock = oldCombo.Stock
-            });
-        }
-
-        return newTypes;
-    }
-
-    /**
-     * <remarks>
-     * @author Aloento
-     * @since 0.5.0
-     * @version 0.1.0
-     * </remarks>
-     */
-    private static List<Type> archiveTypes(ICollection<Type> oldTypes) {
-        var newTypes = new List<Type>(oldTypes.Count);
-
-        foreach (var oldType in oldTypes) {
-            oldType.IsArchived = true;
-
-            var newType = new Type {
-                Name = oldType.Name,
-                VariantId = oldType.VariantId,
-                Combos = archiveCombos(oldType.Combos)
-            };
-            newTypes.Add(newType);
-        }
-
-        return newTypes;
-    }
-
     /**
      * <remarks>
      * @author Aloento
@@ -163,6 +118,29 @@ internal partial class AdminHub {
     /**
      * <remarks>
      * @author Aloento
+     * @since 0.5.0
+     * @version 0.2.0
+     * </remarks>
+     */
+    private async Task<List<Type>> archiveTypes(ICollection<Type> oldTypes) {
+        var newTypes = new List<Type>(oldTypes.Count);
+
+        foreach (var type in oldTypes) {
+            var newType = new Type {
+                Name = type.Name,
+                VariantId = type.VariantId,
+                Combos = await this.archiveCombos(type.Combos)
+            };
+
+            newTypes.Add(newType);
+        }
+
+        return newTypes;
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
      * @since 0.1.0
      * @version 1.0.0
      * </remarks>
@@ -195,7 +173,7 @@ internal partial class AdminHub {
             await this.Db.Variants.AddAsync(new() {
                 Name = name,
                 ProductId = oldVari.ProductId,
-                Types = archiveTypes(oldVari.Types)
+                Types = await this.archiveTypes(oldVari.Types)
             });
 
             return await this.Db.SaveChangesAsync() > 0;
@@ -206,6 +184,28 @@ internal partial class AdminHub {
                 x.SetProperty(p => p.Name, name));
 
         return row > 0;
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 0.5.0
+     * @version 0.2.0
+     * </remarks>
+     */
+    private async Task<List<Combo>> archiveCombos(ICollection<Combo> oldCombos) {
+        var newCombos = new List<Combo>(oldCombos.Count);
+
+        foreach (var combo in oldCombos) {
+            newCombos.Add(new() {
+                ProductId = combo.ProductId,
+                Stock = combo.Stock
+            });
+
+            await this.deleteCombo(combo.ComboId);
+        }
+
+        return newCombos;
     }
 
     /**
@@ -241,7 +241,7 @@ internal partial class AdminHub {
             await this.Db.Types.AddAsync(new() {
                 Name = newName,
                 VariantId = oldType.VariantId,
-                Combos = archiveCombos(oldType.Combos)
+                Combos = await this.archiveCombos(oldType.Combos)
             });
 
             return await this.Db.SaveChangesAsync() > 0;
@@ -262,8 +262,10 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductPatchCombo(uint comboId, Dictionary<string, string> combo, ushort stock) {
-        var dbCombo = await this.Db.Combos
-            .Where(x => x.ComboId == comboId)
+        var queryCombo = this.Db.Combos
+            .Where(x => x.ComboId == comboId);
+
+        var dbCombo = await queryCombo
             .Include(x => x.Types)
             .ThenInclude(x => x.Variant)
             .SingleAsync();
@@ -284,8 +286,7 @@ internal partial class AdminHub {
         }
 
         var allVariTypes = (await this.Db.Variants
-                .Where(x => x.ProductId == this.Db.Combos
-                    .Where(c => c.ComboId == comboId)
+                .Where(x => x.ProductId == queryCombo
                     .Select(c => c.ProductId)
                     .Single())
                 .Include(x => x.Types)
@@ -304,8 +305,8 @@ internal partial class AdminHub {
                     .Single(x => x.Name == type)
             );
 
-        var inUse = await this.Db.OrderCombos
-            .Where(x => x.ComboId == comboId)
+        var inUse = await queryCombo
+            .SelectMany(x => x.Orders)
             .AnyAsync();
 
         if (inUse) {
