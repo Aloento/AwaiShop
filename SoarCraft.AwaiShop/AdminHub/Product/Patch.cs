@@ -62,15 +62,17 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductPatchName(uint prodId, string name) {
-        var prop = typeof(Product).GetProperty(nameof(Product.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Product)
+            .GetProperty(nameof(Product.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
         var row = await this.Db.Products
             .Where(x => x.ProductId == prodId)
-            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Name, name));
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(p => p.Name, name));
 
         return row > 0;
     }
@@ -83,8 +85,9 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductPatchCategory(uint prodId, string name) {
-        var prop = typeof(Category).GetProperty(nameof(Category.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Category)
+            .GetProperty(nameof(Category.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
@@ -108,9 +111,8 @@ internal partial class AdminHub {
             this.Db.Categories.Remove(prod.Category!);
 
         prod.Category = newCate;
-        await this.Db.SaveChangesAsync();
 
-        return true;
+        return await this.Db.SaveChangesAsync() > 0;
     }
 
     /**
@@ -144,8 +146,9 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductPatchCaption(uint photoId, string caption) {
-        var prop = typeof(Photo).GetProperty(nameof(Photo.Caption))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Photo)
+            .GetProperty(nameof(Photo.Caption))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(caption))
             throw new HubException(valid.FormatErrorMessage("Caption"));
@@ -165,24 +168,27 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductPatchVariantName(uint variantId, string name) {
-        var prop = typeof(Variant).GetProperty(nameof(Variant.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Variant)
+            .GetProperty(nameof(Variant.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        var any = await this.Db.Variants
-            .Where(x => x.VariantId == variantId)
+        var variant = this.Db.Variants
+            .Where(x => x.VariantId == variantId);
+
+        var any = await variant
             .SelectMany(x => x.Types)
             .SelectMany(x => x.Combos)
             .SelectMany(x => x.Orders)
             .AnyAsync();
 
         if (any) {
-            var oldVari = await this.Db.Variants
+            var oldVari = await variant
                 .Include(x => x.Types)
                 .ThenInclude(x => x.Combos)
-                .SingleAsync(x => x.VariantId == variantId);
+                .SingleAsync();
 
             oldVari.IsArchived = true;
 
@@ -192,13 +198,12 @@ internal partial class AdminHub {
                 Types = archiveTypes(oldVari.Types)
             });
 
-            await this.Db.SaveChangesAsync();
-            return true;
+            return await this.Db.SaveChangesAsync() > 0;
         }
 
-        var row = await this.Db.Variants
-            .Where(x => x.VariantId == variantId)
-            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Name, name));
+        var row = await variant
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(p => p.Name, name));
 
         return row > 0;
     }
@@ -211,22 +216,25 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<bool> ProductPatchType(uint variantId, string oldName, string newName) {
-        var prop = typeof(Type).GetProperty(nameof(Type.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Type)
+            .GetProperty(nameof(Type.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(newName))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        var any = await this.Db.Types
-            .Where(x => x.VariantId == variantId && x.Name == oldName)
+        var type = this.Db.Types
+            .Where(x => x.VariantId == variantId && x.Name == oldName);
+
+        var any = await type
             .SelectMany(x => x.Combos)
             .SelectMany(x => x.Orders)
             .AnyAsync();
 
         if (any) {
-            var oldType = await this.Db.Types
+            var oldType = await type
                 .Include(x => x.Combos)
-                .SingleAsync(x => x.VariantId == variantId && x.Name == oldName);
+                .SingleAsync();
 
             oldType.IsArchived = true;
 
@@ -236,13 +244,12 @@ internal partial class AdminHub {
                 Combos = archiveCombos(oldType.Combos)
             });
 
-            await this.Db.SaveChangesAsync();
-            return true;
+            return await this.Db.SaveChangesAsync() > 0;
         }
 
-        var row = await this.Db.Types
-            .Where(x => x.VariantId == variantId && x.Name == oldName)
-            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Name, newName));
+        var row = await type
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(p => p.Name, newName));
 
         return row > 0;
     }
@@ -272,8 +279,7 @@ internal partial class AdminHub {
 
             if (comboVariType.SequenceEqual(reqCombo)) {
                 dbCombo.Stock = stock;
-                await this.Db.SaveChangesAsync();
-                return true;
+                return await this.Db.SaveChangesAsync() > 0;
             }
         }
 
@@ -313,7 +319,6 @@ internal partial class AdminHub {
         } else
             dbCombo.Types = reqTypes;
 
-        await this.Db.SaveChangesAsync();
-        return true;
+        return await this.Db.SaveChangesAsync() > 0;
     }
 }
