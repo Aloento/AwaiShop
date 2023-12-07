@@ -41,12 +41,13 @@ export const CartTable = DB.table<Omit<ICartItem, "Name" | "Cover">, never>("Sho
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export const MSAL = new PublicClientApplication({
   auth: {
     clientId: "0ac3ee82-159d-407c-8539-7a9e1e3a1989",
-    authority: "https://login.microsoftonline.com/9ed42989-9bdb-439d-80e7-c709641d1f08",
+    authority: "https://SoarCraft.b2clogin.com/SoarCraft.onmicrosoft.com/B2C_1_RegLog",
+    knownAuthorities: ["SoarCraft.b2clogin.com"],
     redirectUri: import.meta.env.DEV ? "http://localhost:5173/Login" : "https://awai.aloen.to/Login",
   },
   cache: {

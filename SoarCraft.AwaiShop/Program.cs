@@ -1,11 +1,11 @@
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Logging;
 using SoarCraft.AwaiShop;
 using SoarCraft.AwaiShop.AdminHub;
-using SoarCraft.AwaiShop.Helpers;
 using SoarCraft.AwaiShop.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,10 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(x => x.AddServerHeader = false);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x => {
-        x.Authority = "https://login.microsoftonline.com/9ed42989-9bdb-439d-80e7-c709641d1f08/v2.0";
+    .AddMicrosoftIdentityWebApi(x => {
         x.Audience = "0ac3ee82-159d-407c-8539-7a9e1e3a1989";
-        x.RequireHttpsMetadata = !Shared.Dev;
         x.Events = new() {
             OnMessageReceived = c => {
                 string? token = c.Request.Query["access_token"];
@@ -24,6 +22,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 return Task.CompletedTask;
             }
         };
+    }, x => {
+        if (Shared.Dev) {
+            x.RequireHttpsMetadata = false;
+            IdentityModelEventSource.ShowPII = true;
+            IdentityModelEventSource.LogCompleteSecurityArtifact = true;
+        }
+
+        x.Authority = "https://SoarCraft.b2clogin.com/SoarCraft.onmicrosoft.com/B2C_1_RegLog";
+        x.ClientId = "0ac3ee82-159d-407c-8539-7a9e1e3a1989";
+        x.TenantId = "9ed42989-9bdb-439d-80e7-c709641d1f08";
+        x.AllowWebApiToBeAuthorizedByACL = true;
     });
 
 builder.Services.AddDbContext<ShopContext>(x => {
@@ -50,8 +59,6 @@ builder.Services.AddSignalR(x => {
         .WithSecurity(MessagePackSecurity.UntrustedData)
         .WithResolver(ContractlessStandardResolverAllowPrivate.Instance);
 });
-
-builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
 builder.Host.UseSystemd();
 
