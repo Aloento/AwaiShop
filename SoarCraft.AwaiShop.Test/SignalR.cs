@@ -37,4 +37,11 @@ public abstract class SignalR
         _ = Guest.On("OnNewUser", () => Assert.Fail("[Guest] OnNewUser"));
         _ = User.On("OnNewUser", () => testContext.WriteLine("[User] OnNewUser"));
     }
+
+    [AssemblyCleanup]
+    public static async Task AssemblyCleanup()
+    {
+        await Guest.DisposeAsync();
+        await User.DisposeAsync();
+    }
 }

@@ -1,7 +1,7 @@
-﻿namespace SoarCraft.AwaiShop.Test;
+﻿namespace SoarCraft.AwaiShop.Test.Hub;
 
 [TestClass]
-public class ShopNet : SignalR
+public abstract class ShopNet : SignalR
 {
     [ClassInitialize]
     public static async Task ClassInitialize(TestContext testContext)
