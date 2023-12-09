@@ -83,13 +83,16 @@ export const MSAL = new PublicClientApplication({
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export async function AccessToken(): Promise<string | void> {
   try {
     const token = await MSAL.acquireTokenSilent({ scopes: [] });
     return token.idToken;
   } catch (e) {
+    if (MSAL.getActiveAccount())
+      await MSAL.loginRedirect();
+
     console.warn(e);
   }
 }

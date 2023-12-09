@@ -18,6 +18,8 @@ public abstract class SignalR
 
     protected static HubConnection Guest => new HubConnectionBuilder()
         .WithUrl($"{Url}Hub")
+        .WithAutomaticReconnect()
+        .WithStatefulReconnect()
         .AddMessagePackProtocol()
         .Build();
 
@@ -25,9 +27,11 @@ public abstract class SignalR
         .WithUrl($"{Url}Hub", opt =>
             opt.AccessTokenProvider = () => Sec
                 .TryGet("UserJWT", out string? jwt)
-                ? Task.FromResult<string?>(jwt)
+                ? Task.FromResult(jwt)
                 : throw new AuthenticationException()
         )
+        .WithAutomaticReconnect()
+        .WithStatefulReconnect()
         .AddMessagePackProtocol()
         .Build();
 
@@ -36,12 +40,5 @@ public abstract class SignalR
     {
         _ = Guest.On("OnNewUser", () => Assert.Fail("[Guest] OnNewUser"));
         _ = User.On("OnNewUser", () => testContext.WriteLine("[User] OnNewUser"));
-    }
-
-    [AssemblyCleanup]
-    public static async Task AssemblyCleanup()
-    {
-        await Guest.DisposeAsync();
-        await User.DisposeAsync();
     }
 }
