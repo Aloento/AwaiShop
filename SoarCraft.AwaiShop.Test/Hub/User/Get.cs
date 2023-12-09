@@ -5,13 +5,13 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 
 [TestClass]
-[TestCategory("ShopHub.Get")]
+[TestCategory("Hub.User.Get")]
 public class Get : ShopNet
 {
     /**
      * <remarks>
-     * @author Aloento
-     * @targetVersion 0.1.0
+     * @Author Aloento
+     * @TargetVersion 0.1.0
      * </remarks>
      */
     [TestMethod]
