@@ -7,7 +7,7 @@ using System.Security.Authentication;
 [TestClass]
 public abstract class AdminNet : SignalR
 {
-    protected static HubConnection Admin => new HubConnectionBuilder()
+    protected static HubConnection Admin { get; } = new HubConnectionBuilder()
         .WithUrl($"{Url}AdminHub", opt =>
             opt.AccessTokenProvider = () => Sec
                 .TryGet("AdminJWT", out string? jwt)

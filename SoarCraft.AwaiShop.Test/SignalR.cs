@@ -10,20 +10,20 @@ public abstract class SignalR
 {
     protected const string Url = "https://localhost/";
 
-    protected static IConfigurationProvider Sec => new ConfigurationBuilder()
+    protected static IConfigurationProvider Sec { get; } = new ConfigurationBuilder()
         .AddUserSecrets<SignalR>()
         .Build()
         .Providers
         .First();
 
-    protected static HubConnection Guest => new HubConnectionBuilder()
+    protected static HubConnection Guest { get; } = new HubConnectionBuilder()
         .WithUrl($"{Url}Hub")
         .WithAutomaticReconnect()
         .WithStatefulReconnect()
         .AddMessagePackProtocol()
         .Build();
 
-    protected static HubConnection User => new HubConnectionBuilder()
+    protected static HubConnection User { get; } = new HubConnectionBuilder()
         .WithUrl($"{Url}Hub", opt =>
             opt.AccessTokenProvider = () => Sec
                 .TryGet("UserJWT", out string? jwt)

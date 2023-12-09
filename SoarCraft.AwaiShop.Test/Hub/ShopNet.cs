@@ -1,4 +1,5 @@
 ﻿namespace SoarCraft.AwaiShop.Test.Hub;
+
 using Microsoft.AspNetCore.SignalR.Client;
 
 [TestClass]
