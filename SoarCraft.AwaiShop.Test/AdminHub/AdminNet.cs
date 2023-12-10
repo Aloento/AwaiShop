@@ -1,11 +1,12 @@
 ﻿namespace SoarCraft.AwaiShop.Test.AdminHub;
 
+using Hub;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Authentication;
 
 [TestClass]
-public abstract class AdminNet : SignalR
+public abstract class AdminNet : ShopNet
 {
     protected static HubConnection Admin { get; } = new HubConnectionBuilder()
         .WithUrl($"{Url}AdminHub", opt =>

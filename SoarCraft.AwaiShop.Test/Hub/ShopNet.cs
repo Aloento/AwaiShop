@@ -21,4 +21,7 @@ public abstract class ShopNet : SignalR
         await Guest.StartAsync();
         Assert.AreEqual(HubConnectionState.Connected, Guest.State);
     }
+
+    public static IAsyncEnumerable<byte[]> ObjectStorageGet(Guid oid) =>
+        Guest.StreamAsync<byte[]>(nameof(ObjectStorageGet), oid);
 }
