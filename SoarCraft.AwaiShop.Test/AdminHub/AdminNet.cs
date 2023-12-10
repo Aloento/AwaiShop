@@ -10,7 +10,7 @@ public abstract class AdminNet : SignalR
     protected static HubConnection Admin { get; } = new HubConnectionBuilder()
         .WithUrl($"{Url}AdminHub", opt =>
             opt.AccessTokenProvider = () => Sec
-                .TryGet("AdminJWT", out string? jwt)
+                .TryGet("AdminJWT", out var jwt)
                 ? Task.FromResult(jwt)
                 : throw new AuthenticationException()
         )
@@ -19,16 +19,11 @@ public abstract class AdminNet : SignalR
         .AddMessagePackProtocol()
         .Build();
 
-    [ClassInitialize(InheritanceBehavior.BeforeEachDerivedClass)]
-    public static async Task ClassInitialize(TestContext testContext)
+    [TestInitialize]
+    public virtual async Task TestInitialize()
     {
-        await Guest.StartAsync();
-        Assert.AreEqual(HubConnectionState.Connected, Guest.State);
-
-        await User.StartAsync();
-        Assert.AreEqual(HubConnectionState.Connected, User.State);
-
         _ = Admin.On("OnNewUser", () => Assert.Fail("[Admin] OnNewUser"));
+
         await Admin.StartAsync();
         Assert.AreEqual(HubConnectionState.Connected, Admin.State);
     }

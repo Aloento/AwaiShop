@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 [TestClass]
 [TestCategory("Hub.User.Get")]
-public class Get : ShopNet
+public class Get : UserNet
 {
     /**
      * <remarks>

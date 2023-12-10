@@ -1,9 +1,6 @@
 namespace SoarCraft.AwaiShop.Test;
 
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System.Security.Authentication;
 
 [TestClass]
 public abstract class SignalR
@@ -15,30 +12,4 @@ public abstract class SignalR
         .Build()
         .Providers
         .First();
-
-    protected static HubConnection Guest { get; } = new HubConnectionBuilder()
-        .WithUrl($"{Url}Hub")
-        .WithAutomaticReconnect()
-        .WithStatefulReconnect()
-        .AddMessagePackProtocol()
-        .Build();
-
-    protected static HubConnection User { get; } = new HubConnectionBuilder()
-        .WithUrl($"{Url}Hub", opt =>
-            opt.AccessTokenProvider = () => Sec
-                .TryGet("UserJWT", out string? jwt)
-                ? Task.FromResult(jwt)
-                : throw new AuthenticationException()
-        )
-        .WithAutomaticReconnect()
-        .WithStatefulReconnect()
-        .AddMessagePackProtocol()
-        .Build();
-
-    [AssemblyInitialize]
-    public static void AssemblyInitialize(TestContext testContext)
-    {
-        _ = Guest.On("OnNewUser", () => Assert.Fail("[Guest] OnNewUser"));
-        _ = User.On("OnNewUser", () => testContext.WriteLine("[User] OnNewUser"));
-    }
 }

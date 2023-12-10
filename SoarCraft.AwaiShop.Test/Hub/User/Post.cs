@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 [TestClass]
 [TestCategory("Hub.User.Post")]
-public class Post : ShopNet
+public class Post : UserNet
 {
     /**
      * <remarks>
