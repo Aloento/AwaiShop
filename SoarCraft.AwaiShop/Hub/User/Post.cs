@@ -43,11 +43,11 @@ internal partial class ShopHub {
                 Phone = req.Phone!,
                 Address = req.Address!
             });
-            await this.Db.SaveChangesAsync();
+            var row1 = await this.Db.SaveChangesAsync();
 
             this.Context.Items.Remove("NewUser");
             this.Logger.NewUser(req.Name, this.Context);
-            return true;
+            return row1 > 0;
         }
 
         var row = await this.Db.Users
@@ -59,6 +59,6 @@ internal partial class ShopHub {
                 .SetProperty(u => u.Address, req.Address!)
             );
 
-        return row == 0 ? throw new HubException("Operation is invalid.") : true;
+        return row > 0;
     }
 }
