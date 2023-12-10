@@ -1,4 +1,5 @@
 ﻿namespace SoarCraft.AwaiShop.Test.Hub.Product;
+
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 using System.Diagnostics;

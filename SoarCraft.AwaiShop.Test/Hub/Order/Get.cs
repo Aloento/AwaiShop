@@ -1,6 +1,6 @@
 ﻿namespace SoarCraft.AwaiShop.Test.Hub.Order;
 
-public class Get
+public class Get : UserNet
 {
 
 }
