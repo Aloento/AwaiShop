@@ -1,29 +1,31 @@
-﻿namespace SoarCraft.AwaiShop.Test;
+﻿namespace SoarCraft.AwaiShop.Test.AdminHub;
 
+using Hub;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Authentication;
 
 [TestClass]
-public class AdminNet : SignalR
+public abstract class AdminNet : ShopNet
 {
-    protected static HubConnection Admin => new HubConnectionBuilder()
+    protected static HubConnection Admin { get; } = new HubConnectionBuilder()
         .WithUrl($"{Url}AdminHub", opt =>
             opt.AccessTokenProvider = () => Sec
-                .TryGet("AdminJWT", out string? jwt)
-                ? Task.FromResult<string?>(jwt)
+                .TryGet("AdminJWT", out var jwt)
+                ? Task.FromResult(jwt)
                 : throw new AuthenticationException()
         )
+        .WithAutomaticReconnect()
+        .WithStatefulReconnect()
         .AddMessagePackProtocol()
         .Build();
 
-    [ClassInitialize]
-    public static async Task ClassInitialize(TestContext testContext)
+    [TestInitialize]
+    public virtual async Task TestInitialize()
     {
-        await Guest.StartAsync();
-        await User.StartAsync();
-
         _ = Admin.On("OnNewUser", () => Assert.Fail("[Admin] OnNewUser"));
+
         await Admin.StartAsync();
+        Assert.AreEqual(HubConnectionState.Connected, Admin.State);
     }
 }
