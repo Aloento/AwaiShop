@@ -1,5 +1,7 @@
 ﻿namespace SoarCraft.AwaiShop.Test.Hub.Product;
 
+using Microsoft.AspNetCore.SignalR.Client;
+
 [TestClass]
 [TestCategory("Hub.Product.Get")]
 public class Get : ShopNet
@@ -13,6 +15,6 @@ public class Get : ShopNet
     [TestMethod]
     public async Task ProductGetComboList()
     {
-
+        _ = await Guest.InvokeAsync<Dictionary<string, dynamic>[]>(nameof(ProductGetComboList), 0);
     }
 }
