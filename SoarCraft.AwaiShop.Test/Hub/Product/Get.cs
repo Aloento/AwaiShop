@@ -65,7 +65,7 @@ public class Get : ShopNet
         {
             Id = (uint)combos[0]["ComboId"],
             Stock = (ushort)combos[0]["Stock"],
-            Types = ((object[])combos[0]["Types"]).Cast<byte>().ToArray()
+            Types = ((object[])combos[0]["Types"]).Select(Convert.ToUInt32).ToArray()
         };
 
         #endregion
