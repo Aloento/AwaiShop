@@ -23,7 +23,7 @@ public class Get : UserNet
     /**
      * <remarks>
      * @Author Aloento
-     * @Version 2023/12/10
+     * @Version 2023/12/11
      * </remarks>
      */
     [TestMethod]
@@ -31,24 +31,49 @@ public class Get : UserNet
     {
         var orders = await OrderGetList();
         Assert.IsTrue(orders.Length > 0);
-        Debug.WriteLine("OrderList : " + JsonConvert.SerializeObject(orders[0], Formatting.Indented));
 
         var orderInf = new
         {
             Id = (uint)orders[0]["OrderId"],
-            Prods = ((object[])orders[0]["Products"]).Select(Convert.ToUInt32).ToArray(),
+            Prods = ((dynamic[])orders[0]["Products"]).Select(Convert.ToUInt32).ToArray(),
             Quantity = (ushort)orders[0]["Quantity"]
         };
 
+        var orderIns = await OrderEntity<Dictionary<string, dynamic>>(orderInf.Id, null);
+        Assert.IsNotNull(orderIns);
+        Debug.WriteLine("Order : " + JsonConvert.SerializeObject(orderIns, Formatting.Indented));
+
         var order = await OrderGetDetail(orderInf.Id);
         Assert.IsNotNull(order);
-        Debug.WriteLine("OrderDetail : " + JsonConvert.SerializeObject(order, Formatting.Indented));
 
-        var items = ((Dictionary<string, dynamic>[])order["Items"])
+        var items = ((dynamic[])order["Items"])
             .Select(x => new
             {
                 Quantity = (byte)x["Quantity"],
-                Types = ((object[])x["Types"]).Select(Convert.ToUInt32).ToArray()
+                Types = ((dynamic[])x["Types"]).Select(Convert.ToUInt32).ToArray()
             }).ToArray();
+        Assert.IsTrue(items.Length > 0);
+
+        foreach (var item in items)
+        {
+            Debug.WriteLine($"Quantity : {item.Quantity}");
+
+            foreach (var typeId in item.Types)
+            {
+                var type = await Product.Get.TypeEntity<Dictionary<string, dynamic>>(typeId, null);
+                Assert.IsNotNull(type);
+                Debug.WriteLine($"HasType : {type["Name"]}");
+            }
+        }
+
+        var cmts = ((dynamic[])order["Comments"]).Select(Convert.ToUInt32).ToArray();
+        Assert.IsTrue(cmts.Length > 0);
+
+        foreach (var cmtId in cmts)
+        {
+            var cmt = await CommentEntity<Dictionary<string, dynamic>>(cmtId, null);
+            Assert.IsNotNull(cmt);
+            Debug.WriteLine($"Comment : {cmt["Content"]}");
+        }
     }
 }
