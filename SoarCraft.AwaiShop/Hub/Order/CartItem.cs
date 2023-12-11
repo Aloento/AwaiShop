@@ -10,7 +10,7 @@ namespace SoarCraft.AwaiShop.Hub;
 internal record CartItem {
     public required uint ProdId { get; init; }
 
-    public required IDictionary<string, string> Type { get; init; }
+    public required string[] Type { get; init; }
 
     public required byte Quantity { get; init; }
 }

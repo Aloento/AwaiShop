@@ -12,7 +12,7 @@ export abstract class OrderPost extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.1
+   * @version 0.3.0
    */
   public static useNew(options: Options<number, [ICartItem[], string | undefined]>) {
     return useRequest((cart, cmt) => {
@@ -21,7 +21,7 @@ export abstract class OrderPost extends ShopNet {
       const req = cart.map(x => {
         return {
           ProdId: x.ProdId,
-          Type: x.Type,
+          Type: Object.values(x.Type),
           Quantity: x.Quantity,
         };
       });

@@ -24,7 +24,7 @@ interface Cause<T = any> {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function useErrorToast<T>() {
   const style = useStyles();
@@ -33,8 +33,11 @@ export function useErrorToast<T>() {
   return {
     dispatch: (e: Cause<T>) => {
       const oMsg = e.Error.message;
-      const nMsg = oMsg.substring(oMsg.indexOf("Exception:") + 10);
-      e.Error.message = nMsg;
+      const pos = oMsg.indexOf("Exception:");
+
+      let nMsg = oMsg;
+      if (pos !== -1)
+        nMsg = oMsg.substring(pos + 10);
 
       dispatchToast(
         <Toast>
