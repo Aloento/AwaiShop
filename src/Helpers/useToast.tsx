@@ -32,13 +32,17 @@ export function useErrorToast<T>() {
 
   return {
     dispatch: (e: Cause<T>) => {
+      const oMsg = e.Error.message;
+      const nMsg = oMsg.substring(oMsg.indexOf("Exception:") + 10);
+      e.Error.message = nMsg;
+
       dispatchToast(
         <Toast>
           <ToastTitle>Internal Error</ToastTitle>
 
           <ToastBody subtitle={
             <Text className={style.pre}>
-              {e.Error.message}
+              {nMsg}
               <br />
               More Info, See Console
             </Text>

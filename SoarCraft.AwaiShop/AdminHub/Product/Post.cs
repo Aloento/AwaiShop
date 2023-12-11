@@ -16,8 +16,9 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<uint> ProductPostCreate(string name) {
-        var prop = typeof(Product).GetProperty(nameof(Product.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Product)
+            .GetProperty(nameof(Product.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
@@ -112,8 +113,9 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<uint> ProductPostVariant(uint prodId, string name) {
-        var prop = typeof(Variant).GetProperty(nameof(Variant.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Variant)
+            .GetProperty(nameof(Variant.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
@@ -146,8 +148,9 @@ internal partial class AdminHub {
      * </remarks>
      */
     public async Task<uint> ProductPostType(uint variantId, string name) {
-        var prop = typeof(Type).GetProperty(nameof(Type.Name))!;
-        var valid = prop.GetCustomAttribute<StringLengthAttribute>()!;
+        var valid = typeof(Type)
+            .GetProperty(nameof(Type.Name))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));

@@ -23,7 +23,7 @@ internal partial class ShopHub {
         var isValid = Validator.TryValidateObject(req, validCtx, validRes, true);
         if (!isValid) {
             var msg = validRes.Select(x => x.ErrorMessage);
-            throw new HubException("\n" + string.Join("; \n", msg));
+            throw new HubException(string.Join("; \n", msg));
         }
 
         var hasNew = this.Context.Items.TryGetValue("NewUser", out var isNew);
