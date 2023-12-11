@@ -12,17 +12,17 @@ export abstract class OrderPost extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
   public static useNew(options: Options<number, [ICartItem[], string | undefined]>) {
     return useRequest((cart, cmt) => {
       this.EnsureLogin();
 
       const req = cart.map(x => {
-        const { Id, ...rest } = x;
         return {
-          OrderId: Id,
-          ...rest
+          ProdId: x.ProdId,
+          Type: Object.values(x.Type),
+          Quantity: x.Quantity,
         };
       });
 
