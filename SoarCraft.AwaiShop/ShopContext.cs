@@ -70,12 +70,14 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         #region MockData
 #if DEBUG
 
+        var userId = Guid.Parse("171B20BE-E180-410D-AAE2-EE28773AA0B7");
+
         modelBuilder.Entity<User>().HasData(new User {
-            UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
+            UserId = userId,
             Name = "Aloento",
-            EMail = "me@Aloen.to",
-            Phone = "+36 300000000",
-            Address = "Budapest, Hungary",
+            EMail = "me@example.com",
+            Phone = "+1 300000000",
+            Address = "Address, Address",
             Admin = true
         });
 
@@ -312,7 +314,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
 
         modelBuilder.Entity<Order>().HasData(new Order {
             OrderId = 1,
-            UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
+            UserId = userId,
             Status = OrderStatus.Finished,
             CreateAt = DateTime.UtcNow,
             TrackingNumber = "1234567890"
@@ -338,7 +340,7 @@ internal class ShopContext(DbContextOptions<ShopContext> opts) : DbContext(opts)
         modelBuilder.Entity<Comment>().HasData(new Comment {
             CommentId = 2,
             Content = "This is a comment",
-            UserId = Guid.Parse("e2653b80-9be7-41d0-aff0-524ad0e66944"),
+            UserId = userId,
             CreateAt = DateTime.UtcNow,
             OrderId = 1
         });
