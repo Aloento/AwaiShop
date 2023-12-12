@@ -38,7 +38,7 @@ export abstract class OrderPost extends ShopNet {
   public static useAppend(options: Options<true, [number, string]>) {
     return useRequest((orderId, cmt) => {
       this.EnsureLogin();
-      return this.Invoke("OrderPostNew", orderId, cmt);
+      return this.Invoke("OrderPostAppend", orderId, cmt);
     }, options);
   }
 

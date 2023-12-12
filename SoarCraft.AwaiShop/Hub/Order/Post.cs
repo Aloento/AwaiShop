@@ -23,7 +23,7 @@ internal partial class ShopHub {
             .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(cmt))
-            throw new HubException(valid.FormatErrorMessage("Name"));
+            throw new HubException(valid.FormatErrorMessage("Comment"));
 
         var order = (await this.Db.Orders.AddAsync(new() {
             UserId = this.UserId,
@@ -69,22 +69,66 @@ internal partial class ShopHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 1.0.0
      * </remarks>
      */
+    [Authorize]
     public async Task<bool> OrderPostAppend(uint orderId, string cmt) {
-        throw new NotImplementedException();
+        var valid = typeof(Comment)
+            .GetProperty(nameof(Comment.Content))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (string.IsNullOrWhiteSpace(cmt) || !valid.IsValid(cmt))
+            throw new HubException(valid.FormatErrorMessage("Comment"));
+
+        var order = await this.Db.Orders
+            .Where(x => x.UserId == this.UserId)
+            .Where(x => x.OrderId == orderId)
+            .Where(x => x.Status != OrderStatus.Cancelled)
+            .Where(x => x.Status != OrderStatus.Finished)
+            .SingleAsync();
+
+        order.Comments.Add(new() {
+            Content = cmt,
+            CreateAt = DateTime.UtcNow,
+            Order = order,
+        });
+
+        await this.Db.SaveChangesAsync();
+        return true;
     }
 
     /**
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 0.1.0
+     * @version 1.0.0
      * </remarks>
      */
     [Authorize]
     public async Task<bool> OrderPostCancel(uint orderId, string reason) {
-        throw new NotImplementedException();
+        var valid = typeof(Comment)
+            .GetProperty(nameof(Comment.Content))!
+            .GetCustomAttribute<StringLengthAttribute>()!;
+
+        if (string.IsNullOrWhiteSpace(reason) || !valid.IsValid(reason))
+            throw new HubException(valid.FormatErrorMessage("Reason"));
+
+        var order = await this.Db.Orders
+            .Where(x => x.UserId == this.UserId)
+            .Where(x => x.OrderId == orderId)
+            .Where(x => x.Status != OrderStatus.Cancelled)
+            .Where(x => x.Status != OrderStatus.Finished)
+            .SingleAsync();
+
+        order.Status = OrderStatus.Cancelled;
+        order.Comments.Add(new() {
+            Content = "[User Cancel] " + reason,
+            CreateAt = DateTime.UtcNow,
+            Order = order,
+        });
+
+        await this.Db.SaveChangesAsync();
+        return true;
     }
 }
