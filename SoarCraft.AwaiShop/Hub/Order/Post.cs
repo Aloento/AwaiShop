@@ -12,7 +12,7 @@ internal partial class ShopHub {
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 1.0.0
      * </remarks>
      */
@@ -23,7 +23,7 @@ internal partial class ShopHub {
             .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (!valid.IsValid(cmt))
-            throw new HubException(valid.FormatErrorMessage("Comment"));
+            throw new HubException(valid.FormatErrorMessage(nameof(Comment)));
 
         var order = (await this.Db.Orders.AddAsync(new() {
             UserId = this.UserId,
@@ -61,14 +61,14 @@ internal partial class ShopHub {
             });
         }
 
-        await this.Db.SaveChangesAsync();
-        return order.OrderId;
+        return await this.Db.SaveChangesAsync() > 0
+            ? order.OrderId : throw new HubException();
     }
 
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 1.0.0
      * </remarks>
      */
@@ -79,7 +79,7 @@ internal partial class ShopHub {
             .GetCustomAttribute<StringLengthAttribute>()!;
 
         if (string.IsNullOrWhiteSpace(cmt) || !valid.IsValid(cmt))
-            throw new HubException(valid.FormatErrorMessage("Comment"));
+            throw new HubException(valid.FormatErrorMessage(nameof(Comment)));
 
         var order = await this.Db.Orders
             .Where(x => x.UserId == this.UserId)
@@ -94,14 +94,13 @@ internal partial class ShopHub {
             Order = order,
         });
 
-        await this.Db.SaveChangesAsync();
-        return true;
+        return await this.Db.SaveChangesAsync() > 0;
     }
 
     /**
      * <remarks>
      * @author Aloento
-     * @since 0.1.0
+     * @since 0.5.0
      * @version 1.0.0
      * </remarks>
      */
@@ -128,7 +127,6 @@ internal partial class ShopHub {
             Order = order,
         });
 
-        await this.Db.SaveChangesAsync();
-        return true;
+        return await this.Db.SaveChangesAsync() > 0;
     }
 }
