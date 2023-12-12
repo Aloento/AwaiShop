@@ -37,6 +37,7 @@ public class Post : UserNet
         Assert.IsTrue(c.Length > 0);
 
         var t = ((dynamic[])c[0]["Types"]).Select(Convert.ToUInt32).ToArray();
+        Assert.IsTrue(t.Length > 0);
 
         var types = new List<string>();
 
