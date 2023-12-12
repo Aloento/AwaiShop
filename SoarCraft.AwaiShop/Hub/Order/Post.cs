@@ -129,4 +129,7 @@ internal partial class ShopHub {
 
         return await this.Db.SaveChangesAsync() > 0;
     }
+
+    // TODO: OrderPostReceived
+    // TODO: OrderDelete
 }
