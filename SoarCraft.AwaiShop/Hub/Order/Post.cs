@@ -84,6 +84,8 @@ internal partial class ShopHub {
         var order = await this.Db.Orders
             .Where(x => x.UserId == this.UserId)
             .Where(x => x.OrderId == orderId)
+            .Where(x => x.Status != OrderStatus.Cancelled)
+            .Where(x => x.Status != OrderStatus.Finished)
             .SingleAsync();
 
         order.Comments.Add(new() {
@@ -115,6 +117,8 @@ internal partial class ShopHub {
         var order = await this.Db.Orders
             .Where(x => x.UserId == this.UserId)
             .Where(x => x.OrderId == orderId)
+            .Where(x => x.Status != OrderStatus.Cancelled)
+            .Where(x => x.Status != OrderStatus.Finished)
             .SingleAsync();
 
         order.Status = OrderStatus.Cancelled;
