@@ -12,7 +12,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.5.0
-     * @version 1.0.0
+     * @version 1.0.1
      * </remarks>
      */
     public async Task<bool> OrderPostAppend(uint orderId, string cmt) {
@@ -26,6 +26,9 @@ internal partial class AdminHub {
         var order = await this.Db.Orders
             .Where(x => x.OrderId == orderId)
             .SingleAsync();
+
+        if (order.Status == OrderStatus.Pending)
+            order.Status = OrderStatus.Processing;
 
         order.Comments.Add(new() {
             Content = cmt,

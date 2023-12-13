@@ -28,7 +28,7 @@ export function OrderInfo({ OrderId, Admin }: { OrderId: number; Admin?: true })
 
   const { data: admin } = useRequest(() => AdminHub.User.Get.OrderUser(OrderId), {
     manual: !Admin
-  })
+  });
 
   const { data: me } = Hub.User.Get.useMe({
     manual: Admin
