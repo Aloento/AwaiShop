@@ -9,6 +9,7 @@ import { ICartItem } from "~/Components/ShopCart";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
+import { OrderAction } from "./Action";
 import { OrderAppend } from "./Append";
 import { IComment, OrderComment } from "./Comment";
 
@@ -86,7 +87,7 @@ export interface IOrderDetail {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function OrderDetail({ OrderId }: { OrderId: number }) {
   const style = useStyles();
@@ -148,6 +149,8 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
           <OrderComment Comments={data?.Comments} />
 
           <OrderAppend OrderId={OrderId} Refresh={run} />
+
+          <OrderAction OrderId={OrderId} Refresh={run} />
         </div>
       </DrawerBody>
     </Drawer>

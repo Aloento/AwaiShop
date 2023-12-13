@@ -133,5 +133,5 @@ internal partial class ShopHub {
     }
 
     // TODO: OrderPostReceived
-    // TODO: OrderDelete
+    // TODO: OrderDeleteCancel
 }

@@ -30,7 +30,7 @@ interface IOrderAppend {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.4.0
  */
 export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
   const style = useStyles();
@@ -82,6 +82,12 @@ export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
 
   const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId));
 
+  switch (order?.Status) {
+    case "Cancelled":
+    case "Finished":
+      return null;
+  }
+
   return <>
     <Field label="Append" size="large">
       <Textarea value={cmt} onChange={(_, v) => setCmt(v.value)} maxLength={1000} />
@@ -89,7 +95,7 @@ export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
 
     <div className={style.body}>
       {
-        (order?.Status === "Finished" || order?.Status === "Cancelled" || order?.Status === "Returning")
+        (order?.Status === "Finished" || order?.Status === "Returning")
           ? null :
           <Button onClick={() => cancel(OrderId, cmt!)}>
             {order?.Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason

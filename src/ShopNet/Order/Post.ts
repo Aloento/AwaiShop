@@ -53,4 +53,16 @@ export abstract class OrderPost extends ShopNet {
       return this.Invoke("OrderPostCancel", orderId, reason);
     }, options);
   }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static useReceived(options: Options<true, [number]>) {
+    return useRequest(orderId => {
+      this.EnsureLogin();
+      return this.Invoke("OrderPostReceived", orderId);
+    }, options);
+  }
 }
