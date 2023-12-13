@@ -23,7 +23,7 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.4.0
  */
-export function OrderPersona({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
+export function OrderInfo({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
   const style = useStyles();
 
   const { data: admin } = useRequest(() => AdminHub.User.Get.OrderUser(OrderId), {

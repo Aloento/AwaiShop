@@ -120,7 +120,9 @@ internal partial class ShopHub {
             .Where(x => x.Status != OrderStatus.Finished)
             .SingleAsync();
 
-        order.Status = OrderStatus.Cancelled;
+        order.Status = order.Status == OrderStatus.Shipping
+            ? OrderStatus.Returning : OrderStatus.Cancelled;
+
         order.Comments.Add(new() {
             Content = "[User Cancel] " + reason,
             CreateAt = DateTime.UtcNow,

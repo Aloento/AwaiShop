@@ -2,7 +2,7 @@ import { Button, Field, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useMount, useRequest } from "ahooks";
-import { OrderPersona } from "~/Components/Persona";
+import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { OrderComment } from "~/Pages/History/Comment";
@@ -82,7 +82,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
       </DrawerHeader>
 
       <DrawerBody className={style.body}>
-        <OrderPersona OrderId={OrderId} Admin />
+        <OrderInfo OrderId={OrderId} Admin />
 
         <Field label="Required Products" size="large">
           <AdminOrderList Items={data?.ShopCart} />
