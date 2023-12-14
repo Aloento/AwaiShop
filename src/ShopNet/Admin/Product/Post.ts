@@ -15,7 +15,7 @@ export abstract class AdminProductPost extends AdminNet {
    * @version 0.2.0
    */
   public static useCreate(options: Options<number, [string]>) {
-    return useRequest((name) => this.Invoke("ProductPostCreate", name), options);
+    return useRequest(name => this.Invoke("ProductPostCreate", name), options);
   }
 
   /**
@@ -24,7 +24,11 @@ export abstract class AdminProductPost extends AdminNet {
    * @version 0.2.0
    */
   public static useMovePhoto(options: Options<true, [number, boolean]>) {
-    return useRequest((photoId, up) => this.Invoke("ProductPostMovePhoto", photoId, up), options);
+    return useRequest(async (photoId, up) => {
+      const res = await this.Invoke<boolean>("ProductPostMovePhoto", photoId, up);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 
   /**
@@ -41,10 +45,11 @@ export abstract class AdminProductPost extends AdminNet {
         throw new RangeError("File is too large, max 10MB");
 
       const subject = new Subject<Uint8Array>();
-      const res = this.Invoke<true>("ProductPostPhoto", prodId, subject);
+      const res = this.Invoke<boolean>("ProductPostPhoto", prodId, subject);
       await this.HandleFileStream(file, subject);
 
-      return res;
+      this.EnsureTrue(await res);
+      return true as const;
     }, options);
   }
 

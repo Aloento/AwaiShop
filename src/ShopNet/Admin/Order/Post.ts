@@ -59,4 +59,17 @@ export abstract class AdminOrderPost extends AdminNet {
       return res;
     }, options);
   }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static useReject(options: Options<true, [number]>) {
+    return useRequest(async orderId => {
+      const res = await this.Invoke<boolean>("OrderPostReject", orderId);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
+  }
 }

@@ -36,9 +36,11 @@ export abstract class OrderPost extends ShopNet {
    * @version 0.2.0
    */
   public static useAppend(options: Options<true, [number, string]>) {
-    return useRequest((orderId, cmt) => {
+    return useRequest(async (orderId, cmt) => {
       this.EnsureLogin();
-      return this.Invoke("OrderPostAppend", orderId, cmt);
+      const res = await this.Invoke<boolean>("OrderPostAppend", orderId, cmt);
+      this.EnsureTrue(res);
+      return res;
     }, options);
   }
 
@@ -48,9 +50,11 @@ export abstract class OrderPost extends ShopNet {
    * @version 0.2.0
    */
   public static useCancel(options: Options<true, [number, string]>) {
-    return useRequest((orderId, reason) => {
+    return useRequest(async (orderId, reason) => {
       this.EnsureLogin();
-      return this.Invoke("OrderPostCancel", orderId, reason);
+      const res = await this.Invoke<boolean>("OrderPostCancel", orderId, reason);
+      this.EnsureTrue(res);
+      return res;
     }, options);
   }
 
