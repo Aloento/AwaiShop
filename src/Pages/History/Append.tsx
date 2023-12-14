@@ -95,11 +95,10 @@ export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
 
     <div className={style.body}>
       {
-        (order?.Status === "Finished" || order?.Status === "Returning")
-          ? null :
-          <Button onClick={() => cancel(OrderId, cmt!)}>
-            {order?.Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason
-          </Button>
+        !(order?.Status === "Finished" || order?.Status === "Returning") &&
+        <Button onClick={() => cancel(OrderId, cmt!)}>
+          {order?.Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason
+        </Button>
       }
 
       <Button appearance="primary" onClick={() => append(OrderId, cmt!)}>

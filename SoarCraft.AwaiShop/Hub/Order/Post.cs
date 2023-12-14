@@ -132,6 +132,30 @@ internal partial class ShopHub {
         return await this.Db.SaveChangesAsync() > 0;
     }
 
-    // TODO: OrderPostReceived
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 1.0.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    [Authorize]
+    public async Task<bool> OrderPostReceived(uint orderId) {
+        var order = await this.Db.Orders
+            .Where(x => x.UserId == this.UserId)
+            .Where(x => x.OrderId == orderId)
+            .Where(x => x.Status == OrderStatus.Shipping)
+            .SingleAsync();
+
+        order.Status = OrderStatus.Finished;
+        order.Comments.Add(new() {
+            Content = "[User Mark Received Order]",
+            CreateAt = DateTime.UtcNow,
+            Order = order,
+        });
+
+        return await this.Db.SaveChangesAsync() > 0;
+    }
+
     // TODO: OrderDeleteCancel
 }

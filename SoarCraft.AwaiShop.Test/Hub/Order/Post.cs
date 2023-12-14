@@ -16,6 +16,10 @@ public class Post : UserNet
     public static Task<bool> OrderPostCancel(uint orderId, string reason) =>
         User.InvokeAsync<bool>(nameof(OrderPostCancel), orderId, reason);
 
+    // TODO
+    public static Task<bool> OrderPostReceived(uint orderId) =>
+        User.InvokeAsync<bool>(nameof(OrderPostReceived), orderId);
+
     /**
      * <remarks>
      * @Author Aloento

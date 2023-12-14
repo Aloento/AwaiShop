@@ -27,9 +27,6 @@ internal partial class AdminHub {
             .Where(x => x.OrderId == orderId)
             .SingleAsync();
 
-        if (order.Status == OrderStatus.Pending)
-            order.Status = OrderStatus.Processing;
-
         order.Comments.Add(new() {
             Content = cmt,
             UserId = this.UserId,
