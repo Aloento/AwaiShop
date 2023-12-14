@@ -60,9 +60,11 @@ export abstract class OrderPost extends ShopNet {
    * @version 0.1.0
    */
   public static useReceived(options: Options<true, [number]>) {
-    return useRequest(orderId => {
+    return useRequest(async orderId => {
       this.EnsureLogin();
-      return this.Invoke("OrderPostReceived", orderId);
+      const res = await this.Invoke<boolean>("OrderPostReceived", orderId);
+      this.EnsureTrue(res);
+      return res;
     }, options);
   }
 }
