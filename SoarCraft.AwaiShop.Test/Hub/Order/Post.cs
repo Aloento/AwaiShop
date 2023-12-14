@@ -16,6 +16,13 @@ public class Post : UserNet
     public static Task<bool> OrderPostCancel(uint orderId, string reason) =>
         User.InvokeAsync<bool>(nameof(OrderPostCancel), orderId, reason);
 
+    // TODO
+    public static Task<bool> OrderPostReceived(uint orderId) =>
+        User.InvokeAsync<bool>(nameof(OrderPostReceived), orderId);
+
+    public static Task<bool> OrderDeleteCancel(uint orderId) =>
+        User.InvokeAsync<bool>(nameof(OrderDeleteCancel), orderId);
+
     /**
      * <remarks>
      * @Author Aloento
@@ -48,20 +55,20 @@ public class Post : UserNet
             types.Add(type["Name"]);
         }
 
+        var faker = new Faker();
+
         #endregion
 
-        #region Create
-
-        var faker = new Faker();
+        #region CreateCancel
 
         var orderId = await OrderPostNew(
         [
             new
-            {
-                ProdId = p[0],
-                Type = types,
-                Quantity = 3
-            }
+                {
+                    ProdId = p[0],
+                    Type = types,
+                    Quantity = 3
+                }
         ], faker.Lorem.Sentence());
         Assert.IsTrue(orderId > 0);
         Debug.WriteLine($"Created Order : {orderId}");
@@ -71,6 +78,9 @@ public class Post : UserNet
 
         var cancel = await OrderPostCancel(orderId, faker.Lorem.Sentence());
         Assert.IsTrue(cancel);
+
+        var del = await OrderDeleteCancel(orderId);
+        Assert.IsTrue(del);
 
         #endregion
 
