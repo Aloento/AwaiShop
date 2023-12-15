@@ -7,7 +7,7 @@ import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { OrderComment } from "~/Pages/History/Comment";
-import { Hub } from "~/ShopNet";
+import { AdminHub } from "~/ShopNet/Admin";
 import { AdminOrderAction } from "./Action";
 import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.2
+ * @version 0.3.0
  */
 export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
@@ -37,11 +37,11 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const { Nav, Paths } = useRouter();
   const curr = parseInt(Paths.at(2)!);
 
-  const { data, run: runDetail } = useRequest(() => Hub.Order.Get.Detail(OrderId), {
+  const { data, run: runDetail } = useRequest(() => AdminHub.Order.Get.Detail(OrderId), {
     manual: true
   })
 
-  const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
+  const { data: order, run: runOrder } = useRequest(() => AdminHub.Order.Get.Order(OrderId), {
     onError(e) {
       Nav("Admin", "Order");
       console.error(e);
@@ -102,7 +102,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
 
         <AdminOrderAppend OrderId={OrderId} Refresh={run} />
 
-        <AdminOrderAction OrderId={OrderId} Order={order} Refresh={run} />
+        <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} />
       </DrawerBody>
     </Drawer>
   </>

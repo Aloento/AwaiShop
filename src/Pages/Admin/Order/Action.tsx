@@ -1,7 +1,6 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
-import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
@@ -23,7 +22,7 @@ const useStyles = makeStyles({
  */
 interface IAdminOrderAction {
   OrderId: number;
-  Order: Awaited<ReturnType<typeof Hub.Order.Get.Order>>;
+  Status?: string;
   Refresh: () => void;
 }
 
@@ -32,7 +31,7 @@ interface IAdminOrderAction {
  * @since 1.0.0
  * @version 0.1.1
  */
-export function AdminOrderAction({ OrderId, Order, Refresh }: IAdminOrderAction) {
+export function AdminOrderAction({ OrderId, Status, Refresh }: IAdminOrderAction) {
   const style = useStyles();
   const { dispatch, dispatchToast } = useErrorToast();
 
@@ -57,7 +56,7 @@ export function AdminOrderAction({ OrderId, Order, Refresh }: IAdminOrderAction)
     }
   });
 
-  switch (Order?.Status) {
+  switch (Status) {
     // case "Pending":
     case "Processing":
     case "Shipping":
@@ -71,7 +70,7 @@ export function AdminOrderAction({ OrderId, Order, Refresh }: IAdminOrderAction)
     <Field label="Action" size="large">
       <div className={style.body}>
         {
-          Order?.Status === "Pending" &&
+          Status === "Pending" &&
           <Button appearance="subtle" onClick={() => accept(OrderId)}>
             Accept Order
           </Button>
