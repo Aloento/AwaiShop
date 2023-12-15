@@ -39,7 +39,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
 
   const { data, run: runDetail } = useRequest(() => AdminHub.Order.Get.Detail(OrderId), {
     manual: true
-  })
+  });
 
   const { data: order, run: runOrder } = useRequest(() => AdminHub.Order.Get.Order(OrderId), {
     onError(e) {
