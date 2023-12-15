@@ -1,12 +1,14 @@
 import { Button, Field, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
-import { useBoolean, useMount, useRequest } from "ahooks";
+import { useBoolean, useRequest } from "ahooks";
+import { useEffect } from "react";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { OrderComment } from "~/Pages/History/Comment";
-import { Hub } from "~/ShopNet";
+import { AdminHub } from "~/ShopNet/Admin";
+import { AdminOrderAction } from "./Action";
 import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
 import { Shipment } from "./Ship";
@@ -26,63 +28,69 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
-  const [open, { toggle, setTrue }] = useBoolean();
-  const { Nav, Paths } = useRouter();
+  const [open, { setTrue, setFalse }] = useBoolean();
 
-  const { data, run } = useRequest(() => Hub.Order.Get.Detail(OrderId), {
+  const { Nav, Paths } = useRouter();
+  const curr = parseInt(Paths.at(2)!);
+
+  const { data, run: runDetail } = useRequest(() => AdminHub.Order.Get.Detail(OrderId), {
+    manual: true
+  });
+
+  const { data: order, run: runOrder } = useRequest(() => AdminHub.Order.Get.Order(OrderId), {
     onError(e) {
       Nav("Admin", "Order");
       console.error(e);
     },
     manual: true
-  })
+  });
 
-  useMount(() => {
-    if (parseInt(Paths.at(2)!) === OrderId) {
+  function run() {
+    runOrder();
+    runDetail();
+  }
+
+  useEffect(() => {
+    if (curr === OrderId) {
       run();
       setTrue();
-    }
-  });
+    } else
+      setFalse();
+  }, [curr]);
 
   return <>
     <Button
       appearance="subtle"
       icon={<OpenRegular />}
-      onClick={() => {
-        Nav("Admin", "Order", OrderId);
-        run();
-        setTrue();
-      }}
+      onClick={() => Nav("Admin", "Order", OrderId)}
     />
 
     <Drawer
       open={open}
-      onOpenChange={toggle}
       position="end"
       size="medium"
       modalType="alert"
     >
       <DrawerHeader>
-        <DrawerHeaderTitle action={
-          <Button
-            appearance="subtle"
-            icon={<DismissRegular />}
-            onClick={() => {
-              Nav("Admin", "Order");
-              toggle();
-            }}
-          />}
+        <DrawerHeaderTitle
+          action={
+            <Button
+              appearance="subtle"
+              icon={<DismissRegular />}
+              onClick={() => Nav("Admin", "Order")}
+            />
+          }
         >
           Order Detail
         </DrawerHeaderTitle>
       </DrawerHeader>
 
       <DrawerBody className={style.body}>
-        <OrderInfo OrderId={OrderId} Admin />
+        <OrderInfo OrderId={OrderId} Order={order} Admin />
 
         <Field label="Required Products" size="large">
           <AdminOrderList Items={data?.ShopCart} />
@@ -93,6 +101,8 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
         <OrderComment Comments={data?.Comments} />
 
         <AdminOrderAppend OrderId={OrderId} Refresh={run} />
+
+        <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} />
       </DrawerBody>
     </Drawer>
   </>
