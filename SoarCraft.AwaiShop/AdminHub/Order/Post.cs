@@ -122,28 +122,4 @@ internal partial class AdminHub {
 
         return await this.Db.SaveChangesAsync() > 0;
     }
-
-    /**
-     * <remarks>
-     * @author Aloento
-     * @since 1.0.0
-     * @version 0.1.0
-     * </remarks>
-     */
-    public async Task<bool> OrderPostReject(uint orderId) {
-        var order = await this.Db.Orders
-            .Where(x => x.OrderId == orderId)
-            .Where(x => x.Status == OrderStatus.Pending)
-            .SingleAsync();
-
-        order.Status = OrderStatus.Cancelled;
-        order.Comments.Add(new() {
-            Content = "[Admin Rejected Order]",
-            UserId = this.UserId,
-            CreateAt = DateTime.UtcNow,
-            Order = order,
-        });
-
-        return await this.Db.SaveChangesAsync() > 0;
-    }
 }

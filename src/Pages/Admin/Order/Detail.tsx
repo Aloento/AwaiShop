@@ -7,6 +7,7 @@ import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { OrderComment } from "~/Pages/History/Comment";
 import { Hub } from "~/ShopNet";
+import { AdminOrderAction } from "./Action";
 import { AdminOrderAppend } from "./Append";
 import { AdminOrderList } from "./List";
 import { Shipment } from "./Ship";
@@ -26,7 +27,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
@@ -93,6 +94,8 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
         <OrderComment Comments={data?.Comments} />
 
         <AdminOrderAppend OrderId={OrderId} Refresh={run} />
+
+        <AdminOrderAction OrderId={OrderId} Refresh={run} />
       </DrawerBody>
     </Drawer>
   </>
