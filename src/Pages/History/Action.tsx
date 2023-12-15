@@ -1,5 +1,6 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
+import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -18,7 +19,7 @@ const useStyles = makeStyles({
 
 /**
  * @author Aloento
- * @since 0.5.0
+ * @since 1.0.0
  * @version 0.1.0
  */
 interface IOrderAction {
@@ -29,10 +30,11 @@ interface IOrderAction {
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function OrderAction({ OrderId, Refresh }: IOrderAction) {
   const style = useStyles();
+  const { Fresh } = useRouter();
   const { dispatch, dispatchToast } = useErrorToast();
 
   const { run: received } = Hub.Order.Post.useReceived({
@@ -73,7 +75,7 @@ export function OrderAction({ OrderId, Refresh }: IOrderAction) {
         { intent: "success" }
       );
 
-      Refresh();
+      Fresh("History");
     }
   });
 

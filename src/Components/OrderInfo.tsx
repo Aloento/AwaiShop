@@ -20,10 +20,21 @@ const useStyles = makeStyles({
 
 /**
  * @author Aloento
- * @since 0.5.0
- * @version 0.4.0
+ * @since 1.0.0
+ * @version 0.1.1
  */
-export function OrderInfo({ OrderId, Admin }: { OrderId: number; Admin?: true }) {
+interface IOrderInfo {
+  OrderId: number;
+  Order: Awaited<ReturnType<typeof Hub.Order.Get.Order>>;
+  Admin?: true;
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.4.1
+ */
+export function OrderInfo({ OrderId, Order, Admin }: IOrderInfo) {
   const style = useStyles();
 
   const { data: admin } = useRequest(() => AdminHub.User.Get.OrderUser(OrderId), {
@@ -33,8 +44,6 @@ export function OrderInfo({ OrderId, Admin }: { OrderId: number; Admin?: true })
   const { data: me } = Hub.User.Get.useMe({
     manual: Admin
   });
-
-  const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId));
 
   const data = Admin ? admin : me;
 
@@ -56,13 +65,13 @@ export function OrderInfo({ OrderId, Admin }: { OrderId: number; Admin?: true })
     <div className={style.flex}>
       <div className={style.box}>
         <Field label="Order Date" size="large">
-          <Label>{order?.CreateAt.toLocaleDateString()}</Label>
+          <Label>{Order?.CreateAt.toLocaleDateString()}</Label>
         </Field>
       </div>
 
       <div className={style.box}>
         <Field label="Status" size="large">
-          <Label>{order?.Status}</Label>
+          <Label>{Order?.Status}</Label>
         </Field>
       </div>
     </div>
@@ -78,7 +87,7 @@ export function OrderInfo({ OrderId, Admin }: { OrderId: number; Admin?: true })
         !Admin &&
         <div className={style.box}>
           <Field label="Tracking Number" size="large">
-            <Label>{order?.TrackingNumber}</Label>
+            <Label>{Order?.TrackingNumber}</Label>
           </Field>
         </div>
       }

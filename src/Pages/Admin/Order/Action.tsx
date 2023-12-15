@@ -1,5 +1,4 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -19,20 +18,21 @@ const useStyles = makeStyles({
 
 /**
  * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
+ * @since 1.0.0
+ * @version 0.1.1
  */
 interface IAdminOrderAction {
   OrderId: number;
+  Order: Awaited<ReturnType<typeof Hub.Order.Get.Order>>;
   Refresh: () => void;
 }
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
-export function AdminOrderAction({ OrderId, Refresh }: IAdminOrderAction) {
+export function AdminOrderAction({ OrderId, Order, Refresh }: IAdminOrderAction) {
   const style = useStyles();
   const { dispatch, dispatchToast } = useErrorToast();
 
@@ -57,9 +57,7 @@ export function AdminOrderAction({ OrderId, Refresh }: IAdminOrderAction) {
     }
   });
 
-  const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId));
-
-  switch (order?.Status) {
+  switch (Order?.Status) {
     // case "Pending":
     case "Processing":
     case "Shipping":
@@ -73,7 +71,7 @@ export function AdminOrderAction({ OrderId, Refresh }: IAdminOrderAction) {
     <Field label="Action" size="large">
       <div className={style.body}>
         {
-          order?.Status === "Pending" &&
+          Order?.Status === "Pending" &&
           <Button appearance="subtle" onClick={() => accept(OrderId)}>
             Accept Order
           </Button>
