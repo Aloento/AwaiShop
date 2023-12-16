@@ -50,7 +50,7 @@ const enum ANSI {
   default_bg = 49,
 };
 
-type level = "error" | "warn" | "info" | "debug";
+type level = "error" | "warn" | "info" | "debug" | "throw";
 
 /**
  * @author Aloento
@@ -64,34 +64,47 @@ export class Logger {
   public readonly error;
   public readonly warn;
   public readonly debug;
+  public readonly throw;
 
   public constructor(...namespace: string[]) {
     this.namespace = namespace.join(":");
 
-    this.error = console.error.bind(console, this.baseColor(
-      ANSI.red_bg_hl,
-      "error"
-    ), "\n\t");
+    this.error = console.error.bind(this,
+      this.baseColor(
+        ANSI.red_bg_hl,
+        "error"
+      ), "\n\t");
 
-    this.warn = console.warn.bind(console, this.baseColor(
-      ANSI.yellow_bg_hl,
-      "warn"
-    ), "\n\t");
+    this.warn = console.warn.bind(this,
+      this.baseColor(
+        ANSI.yellow_bg_hl,
+        "warn"
+      ), "\n\t");
 
-    this.info = console.info.bind(console, this.baseColor(
-      ANSI.blue_bg_hl,
-      "info"
-    ), "\n\t");
+    this.info = console.info.bind(this,
+      this.baseColor(
+        ANSI.blue_bg_hl,
+        "info"
+      ), "\n\t");
 
-    this.debug = console.debug.bind(console, this.baseColor(
-      ANSI.green_bg_hl,
-      "debug"
-    ), "\n\t");
+    this.debug = console.debug.bind(this,
+      this.baseColor(
+        ANSI.green_bg_hl,
+        "debug"
+      ), "\n\t");
+
+    this.throw = console.log.bind(this,
+      this.baseColor(
+        ANSI.magenta_bg_hl,
+        "throw"
+      ),
+      "↓ The Following Error is Thrown ↓"
+    );
   }
 
   private baseColor(color: ANSI, level: level): string {
     return `\x1b[${color};${ANSI.black};1m ${level.toUpperCase()} `
       + `\x1b[0m\x1b[${ANSI.black_bg_hl};${ANSI.white_hl}m ${dayjs().format("YY-M-D H:m:s")} `
-      + `\x1b[1m\x1b[${ANSI.balck_bg};${ANSI.white_hl}m ${this.namespace} -> `;
+      + `\x1b[1m\x1b[${ANSI.balck_bg};${ANSI.white_hl}m ${this.namespace} `;
   }
 }

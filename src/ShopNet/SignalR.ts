@@ -2,35 +2,34 @@ import { HubConnectionState } from "@microsoft/signalr";
 import dayjs, { Dayjs } from "dayjs";
 import { Subject } from "rxjs";
 import { NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
-import type { AdminNet } from "./Admin/AdminNet";
-import { IConcurrency, MSAL, Shared } from "./Database";
-import type { ShopNet } from "./ShopNet";
+import { MSAL, Shared, type IConcurrency } from "./Database";
+import type { INet } from "./INet";
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
- */
-type Nets = typeof ShopNet | typeof AdminNet;
-
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
+ * @version 1.0.0
  */
 export abstract class SignalR {
   /**
+   * Catched
+   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.1.2
    */
-  protected static EnsureConnected(this: Nets): Promise<void> {
+  protected static async EnsureConnected(this: INet): Promise<void> {
     if (this.Hub.state === HubConnectionState.Connected)
       return Promise.resolve();
 
     if (this.Hub.state === HubConnectionState.Disconnected
       || this.Hub.state === HubConnectionState.Disconnecting)
-      return this.Hub.start();
+      try {
+        await this.Hub.start();
+      } catch (error) {
+        this.Log.throw();
+        throw error;
+      }
 
     return new Promise<void>(resolve => {
       const interval = setInterval(() => {
@@ -43,33 +42,48 @@ export abstract class SignalR {
   }
 
   /**
+   * Catched
+   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.1.1
    */
-  protected static async Invoke<T>(this: Nets, methodName: string, ...args: any[]): Promise<T> {
+  protected static async Invoke<T>(this: INet, methodName: string, ...args: any[]): Promise<T> {
     await this.EnsureConnected();
-    return this.Hub.invoke<T>(methodName, ...args);
+    try {
+      return await this.Hub.invoke<T>(methodName, ...args);
+    } catch (error) {
+      this.Log.throw();
+      throw error;
+    }
   }
 
   /**
+   * Catched
+   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.1
+   * @version 0.2.2
    */
-  protected static EnsureLogin() {
-    if (!MSAL.getActiveAccount())
+  protected static EnsureLogin(this: INet) {
+    if (!MSAL.getActiveAccount()) {
+      this.Log.throw();
       throw new NotLoginError();
+    }
   }
 
   /**
+   * Catched
+   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.1.1
    */
-  protected static EnsureTrue(res: boolean | null | undefined): asserts res is true {
-    if (!res)
+  protected static EnsureTrue(this: INet, res: boolean | null | undefined): asserts res is true {
+    if (!res) {
+      this.Log.throw();
       throw new NotTrueError();
+    }
   }
 
   /**
@@ -78,7 +92,7 @@ export abstract class SignalR {
    * @version 0.2.1
    */
   protected static async WithVersionCache<T extends IConcurrency>(
-    this: Nets, key: string | number, methodName: string, admin?: boolean
+    this: INet, key: string | number, methodName: string, admin?: boolean
   ): Promise<T | void> {
     const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
     const find = await Shared.Get<T & { QueryExp: number }>(index);
@@ -114,7 +128,7 @@ export abstract class SignalR {
    * @version 0.1.1
    */
   protected static async WithTimeCache<T>(
-    this: Nets, key: string | number, methodName: string, exp: Dayjs, ...args: any[]
+    this: INet, key: string | number, methodName: string, exp: Dayjs, ...args: any[]
   ): Promise<T> {
     const res = await Shared.GetOrSet(
       `${methodName}_${key}`,
@@ -131,14 +145,13 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.0
+   * @version 0.2.1
    */
-  protected static async FindCover(photos: number[], prodId?: number): Promise<string | void> {
+  protected static async FindCover(this: INet, photos: number[], prodId?: number): Promise<string | void> {
     const list = [];
 
     for (const photoId of photos) {
-      const { ProductEntity } = await import("./Product/Entity")
-      const photo = await ProductEntity.Photo(photoId);
+      const photo = await (await import("./Product/Entity")).ProductEntity.Photo(photoId);
 
       if (photo) {
         list.push(photo);
@@ -146,21 +159,23 @@ export abstract class SignalR {
         if (photo.Cover)
           return photo.ObjectId;
       } else
-        console.warn(`Photo ${photoId} not found in Product ${prodId}`);
+        this.Log.warn(`Photo ${photoId} not found in Product ${prodId}`);
     }
 
     if (list.length > 0) {
-      console.warn(`Product ${prodId} has no cover photo, using first photo instead`);
+      this.Log.warn(`Product ${prodId} has no cover photo, using first photo instead`);
       return list.sort((a, b) => a.Order - b.Order)[0].ObjectId;
     }
   }
 
   /**
+   * Catched
+   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.1.1
    */
-  protected static async HandleFileStream(file: File, subject: Subject<Uint8Array>) {
+  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>) {
     const chunkSize = 30 * 1024;
     const chunks = Math.ceil(file.size / chunkSize);
     let index = 0;
@@ -173,12 +188,15 @@ export abstract class SignalR {
       const reader = new FileReader();
       const buffer = await new Promise<Uint8Array>((resolve, reject) => {
         reader.onload = () => resolve(new Uint8Array(reader.result as ArrayBuffer));
-        reader.onerror = () => reject(reader.error);
+        reader.onerror = () => {
+          this.Log.throw();
+          reject(reader.error);
+        };
         reader.readAsArrayBuffer(chunk);
       });
 
       subject.next(buffer);
-      console.debug(`Sent chunk ${index + 1}/${chunks}`);
+      this.Log.debug(`Sent chunk ${index + 1}/${chunks}`);
       index++;
     }
 
