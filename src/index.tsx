@@ -3,8 +3,15 @@ import { FluentProvider, Toaster, webLightTheme } from "@fluentui/react-componen
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "./Components/Router";
 import { ShopCartContext } from "./Components/ShopCart/Context";
+import { Logger } from "./Helpers/Logger";
 import { Layout } from "./Pages";
 import { MSAL } from "./ShopNet/Database";
+
+var a = new Logger("AwaiShop");
+a.error("Error");
+a.warn("Warning");
+a.info("Info");
+a.debug("Debug");
 
 /**
  * @author Aloento
