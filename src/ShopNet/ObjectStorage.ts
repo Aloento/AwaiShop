@@ -27,21 +27,22 @@ export class ObjectStorage extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.0
+   * @version 0.2.1
    */
   public static GetBySlice(objId: string): Promise<Uint8Array[]> {
     const slice: Uint8Array[] = [];
+    const my = this;
 
     return Shared.GetOrSet(objId, () => new Promise(
       (resolve, reject) => {
-        ObjectStorage.Get(objId).then(x =>
+        my.Get(objId).then(x =>
           x.subscribe({
             error(err) {
               reject(err);
             },
             next(value) {
               slice.push(value);
-              ObjectStorage.Log.debug("Received Slice", objId, slice.length);
+              my.Log.debug("Received Slice", objId, slice.length);
             },
             complete() {
               resolve(slice);
