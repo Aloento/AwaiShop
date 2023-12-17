@@ -186,11 +186,11 @@ export abstract class SignalR {
       const chunk = file.slice(start, end);
 
       const reader = new FileReader();
-      const buffer = await new Promise<Uint8Array>((resolve, reject) => {
+      const buffer = await new Promise<Uint8Array>(resolve => {
         reader.onload = () => resolve(new Uint8Array(reader.result as ArrayBuffer));
         reader.onerror = () => {
           this.Log.throw();
-          reject(reader.error);
+          throw reader.error;
         };
         reader.readAsArrayBuffer(chunk);
       });
