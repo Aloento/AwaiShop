@@ -18,7 +18,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.2
    */
-  protected static async EnsureConnected(this: INet): Promise<void> {
+  static async EnsureConnected(this: INet): Promise<void> {
     if (this.Hub.state === HubConnectionState.Connected)
       return Promise.resolve();
 
@@ -48,7 +48,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.1
    */
-  protected static async Invoke<T>(this: INet, methodName: string, ...args: any[]): Promise<T> {
+  static async Invoke<T>(this: INet, methodName: string, ...args: any[]): Promise<T> {
     await this.EnsureConnected();
     try {
       return await this.Hub.invoke<T>(methodName, ...args);
