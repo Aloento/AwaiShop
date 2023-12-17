@@ -41,7 +41,7 @@ export const CartTable = DB.table<Omit<ICartItem, "Name" | "Cover">, never>("Sho
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 export const MSAL = new PublicClientApplication({
   auth: {
@@ -55,10 +55,7 @@ export const MSAL = new PublicClientApplication({
   },
   system: {
     loggerOptions: {
-      loggerCallback(level, message, containsPii) {
-        if (containsPii)
-          return;
-
+      loggerCallback(level, message) {
         switch (level) {
           case LogLevel.Error:
             console.error(message);
@@ -66,14 +63,8 @@ export const MSAL = new PublicClientApplication({
           case LogLevel.Warning:
             console.warn(message);
             return;
-          case LogLevel.Info:
-            console.info(message);
-            return;
-          case LogLevel.Verbose:
-            console.debug(message);
-            return;
           default:
-            console.trace(message);
+            console.debug(message);
         }
       }
     }

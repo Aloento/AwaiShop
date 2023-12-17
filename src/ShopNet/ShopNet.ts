@@ -13,7 +13,7 @@ export abstract class ShopNet extends SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.1.2
    */
   public static readonly Hub = new HubConnectionBuilder()
     .withUrl(import.meta.env.DEV ? "https://localhost/Hub" : "https://awai.azurewebsites.net/Hub",
@@ -30,6 +30,7 @@ export abstract class ShopNet extends SignalR {
         },
       })
     .withAutomaticReconnect()
+    .withStatefulReconnect()
     .withHubProtocol(new MessagePackHubProtocol())
     .configureLogging(import.meta.env.DEV ? LogLevel.Debug : LogLevel.Information)
     .build();
