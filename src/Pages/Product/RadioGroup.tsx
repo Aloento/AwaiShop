@@ -1,6 +1,6 @@
 import { Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { useRadioGroup } from "./Context";
@@ -31,15 +31,16 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export function ProductRadioList({ ProdId }: { ProdId: number }) {
   const { data } = useRequest(() => Hub.Product.Get.Combo(ProdId));
 
   const { Update } = useRadioGroup();
+  const [variants, setVariants] = useState<Record<string, Set<string>>>({});
 
-  const variants = useMemo(() => {
-    if (!data) return {};
+  useEffect(() => {
+    if (!data) return;
 
     const variant: Record<string, Set<string>> = {};
     const cur: Record<string, string> = {};
@@ -54,7 +55,7 @@ export function ProductRadioList({ ProdId }: { ProdId: number }) {
         }
 
     Update(cur);
-    return variant;
+    setVariants(variant);
   }, [data]);
 
   return Object.keys(variants).map((val, i) => <VariRadioGroup key={i} Variant={val} Types={variants[val]} />);
