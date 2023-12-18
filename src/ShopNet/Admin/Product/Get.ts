@@ -8,13 +8,17 @@ import { AdminNet } from "../AdminNet";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export abstract class AdminProductGet extends AdminNet {
+  protected static override readonly Log = super.Log.With("Product", "Get");
+
+  private static readonly list = this.Log.With("List");
+
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
   public static async List(): Promise<IProductItem[]> {
     const list = await this.WithTimeCache<
@@ -32,15 +36,15 @@ export abstract class AdminProductGet extends AdminNet {
       const prod = await ProductEntity.Product(meta.ProductId);
 
       if (!prod) {
-        console.error(`Product ${meta.ProductId} Not Found`);
+        this.list.warn(`Product ${meta.ProductId} Not Found`);
         continue;
       }
 
       const photos = await ProductGet.PhotoList(meta.ProductId);
-      const cover = await this.FindCover(photos, meta.ProductId);
+      const cover = await this.FindCover(photos, meta.ProductId, this.list);
 
       if (!cover)
-        console.warn(`Product ${meta.ProductId} has no photo`);
+        this.list.warn(`Product ${meta.ProductId} has no photo`);
 
       items.push({
         Id: meta.ProductId,
@@ -84,10 +88,12 @@ export abstract class AdminProductGet extends AdminNet {
     return prod.Category;
   }
 
+  private static readonly variants = this.Log.With("Variants");
+
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
   public static async Variants(prodId: number): Promise<IVariantItem[]> {
     const list = await this.WithTimeCache<
@@ -103,7 +109,7 @@ export abstract class AdminProductGet extends AdminNet {
       const vari = await ProductEntity.Variant(meta.VariantId);
 
       if (!vari) {
-        console.error(`Variant ${meta} Not Found. Product : ${prodId}`);
+        this.variants.warn(`Variant ${meta} Not Found. Product : ${prodId}`);
         continue;
       }
 
@@ -113,7 +119,7 @@ export abstract class AdminProductGet extends AdminNet {
         const type = await ProductEntity.Type(typeId);
 
         if (!type) {
-          console.error(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);
+          this.variants.warn(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);
           continue;
         }
 
