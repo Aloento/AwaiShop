@@ -46,6 +46,7 @@ export function ProductCarousel({ Id }: { Id: number; }) {
         });
       }
     },
+    onError: log.error
   });
 
   return (
