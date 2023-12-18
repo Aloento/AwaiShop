@@ -134,9 +134,9 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.1
+   * @version 0.2.2
    */
-  protected static async FindCover(this: INet, photos: number[], prodId?: number, logger?: Logger): Promise<string | void> {
+  protected static async FindCover(this: INet, photos: number[], prodId: number, logger: Logger): Promise<string | void> {
     const list = [];
 
     for (const photoId of photos) {
@@ -160,9 +160,9 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.1.2
    */
-  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, logger?: Logger) {
+  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, logger: Logger) {
     const chunkSize = 30 * 1024;
     const chunks = Math.ceil(file.size / chunkSize);
     let index = 0;
