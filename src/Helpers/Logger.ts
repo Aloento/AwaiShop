@@ -55,7 +55,7 @@ type level = "error" | "warn" | "info" | "debug" | "throw";
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 1.0.0
+ * @version 1.0.1
  */
 export class Logger {
   public readonly namespace;
@@ -67,7 +67,7 @@ export class Logger {
   public readonly throw;
 
   public constructor(...namespace: string[]) {
-    this.namespace = namespace.join(":");
+    this.namespace = namespace.join(" > ");
 
     this.error = console.error.bind(this,
       this.baseColor(
@@ -100,6 +100,10 @@ export class Logger {
       ),
       "↓ The Following Error is Thrown ↓"
     );
+  }
+
+  public With(...names: string[]): Logger {
+    return new Logger(this.namespace, ...names);
   }
 
   private baseColor(color: ANSI, level: level): string {

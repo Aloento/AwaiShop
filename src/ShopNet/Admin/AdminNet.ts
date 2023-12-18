@@ -1,15 +1,18 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { Dayjs } from "dayjs";
+import { Logger } from "~/Helpers/Logger";
 import { AccessToken, IConcurrency } from "../Database";
 import { SignalR } from "../SignalR";
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 export abstract class AdminNet extends SignalR {
+  protected static readonly Log = new Logger("AdminNet");
+
   /**
    * @author Aloento
    * @since 1.0.0
