@@ -9,13 +9,17 @@ import { ProductEntity } from "./Entity";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export abstract class ProductGet extends ShopNet {
+  protected static override readonly Log = super.Log.With("Product", "Get");
+
+  private static readonly basic = this.Log.With("Basic");
+
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
   public static async Basic(prodId: number): Promise<IProductInfo> {
     const res = await ProductEntity.Product(prodId);
@@ -23,7 +27,7 @@ export abstract class ProductGet extends ShopNet {
       throw new Error(`Product ${prodId} Not Found`);
 
     const list = await this.PhotoList(prodId);
-    const cover = await this.FindCover(list, prodId);
+    const cover = await this.FindCover(list, prodId, this.basic);
 
     if (cover)
       return {
@@ -31,7 +35,7 @@ export abstract class ProductGet extends ShopNet {
         Cover: cover
       };
 
-    console.warn(`Product ${prodId} has no photo`);
+    this.basic.warn(`Product ${prodId} has no photo`);
     return {
       Name: res.Name,
       Cover: "",
@@ -47,10 +51,12 @@ export abstract class ProductGet extends ShopNet {
     return this.Invoke<number>("ProdGetLimit", prodId);
   }
 
+  private static readonly combo = this.Log.With("Combo");
+
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
   public static async Combo(prodId: number): Promise<IComboItem[]> {
     const list = await this.ComboList(prodId);
@@ -63,14 +69,14 @@ export abstract class ProductGet extends ShopNet {
         const type = await ProductEntity.Type(typeId);
 
         if (!type) {
-          console.error(`ComboList Mismatch: Type ${typeId} not found. Combo ${combo.ComboId} : Product ${prodId}`);
+          this.combo.error(`ComboList Mismatch: Type ${typeId} not found. Combo ${combo.ComboId} : Product ${prodId}`);
           continue;
         }
 
         const vari = await ProductEntity.Variant(type.VariantId);
 
         if (!vari) {
-          console.error(`ComboList Mismatch: Variant ${type.VariantId} not found. Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
+          this.combo.error(`ComboList Mismatch: Variant ${type.VariantId} not found. Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
           continue;
         }
 
@@ -87,10 +93,12 @@ export abstract class ProductGet extends ShopNet {
     return items;
   }
 
+  private static readonly carousel = this.Log.With("Carousel");
+
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.0
+   * @version 1.0.1
    */
   public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
     const list = await this.PhotoList(prodId);
@@ -107,7 +115,7 @@ export abstract class ProductGet extends ShopNet {
           Caption: p.Caption,
         });
       else
-        console.warn(`Photo ${id} not found in Product ${prodId}`);
+        this.carousel.warn(`Photo ${id} not found in Product ${prodId}`);
     }
 
     return photos.sort((a, b) => a.Id - b.Id);
