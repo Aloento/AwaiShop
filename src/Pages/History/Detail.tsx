@@ -93,8 +93,8 @@ export interface IOrderDetail {
  * @since 0.5.0
  * @version 0.3.4
  */
-export function OrderDetail({ OrderId, Log }: { OrderId: number; Log: Logger }) {
-  const log = useConst(() => Log.With("Detail"));
+export function OrderDetail({ OrderId, ParentLog }: { OrderId: number; ParentLog: Logger }) {
+  const log = useConst(() => ParentLog.With("Detail"));
 
   const style = useStyles();
   const [open, { setTrue, setFalse }] = useBoolean();
