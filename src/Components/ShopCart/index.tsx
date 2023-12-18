@@ -1,6 +1,7 @@
 import { Body1, Popover, PopoverSurface, PopoverTrigger, ToggleButton, Tooltip, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { CartRegular } from "@fluentui/react-icons";
 import { useBoolean, useUpdateEffect } from "ahooks";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { DelegateDataGrid } from "../DataGrid/Delegate";
 import { CartColumns } from "./Columns";
@@ -42,6 +43,8 @@ export interface ICartItem {
   Quantity: number;
 }
 
+const log = new Logger("TopNavBar", "ShopCart");
+
 /**
  * @author Aloento
  * @since 0.1.0
@@ -80,10 +83,12 @@ export function ShopCart() {
       </PopoverTrigger>
 
       <PopoverSurface>
-        <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
+        <DelegateDataGrid Items={List} Columns={CartColumns(log)} NoHeader />
 
         <div className={style.conf}>
-          <Body1>{List.map(x => x.Quantity).reduce((prev, curr) => prev + curr, 0)} items in shopping cart</Body1>
+          <Body1>
+            {List.map(x => x.Quantity).reduce((prev, curr) => prev + curr, 0)} items in shopping cart
+          </Body1>
 
           <Confirm />
         </div>

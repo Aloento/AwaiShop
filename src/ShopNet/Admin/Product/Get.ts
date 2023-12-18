@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import type { Logger } from "~/Helpers/Logger";
 import { IProductItem } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
 import { ProductEntity } from "~/ShopNet/Product/Entity";
@@ -13,14 +14,14 @@ import { AdminNet } from "../AdminNet";
 export abstract class AdminProductGet extends AdminNet {
   protected static override readonly Log = super.Log.With("Product", "Get");
 
-  private static readonly list = this.Log.With("List");
-
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 1.0.1
    */
-  public static async List(): Promise<IProductItem[]> {
+  public static async List(compLog: Logger): Promise<IProductItem[]> {
+    const log = compLog.With("|", this.Log.namespace, "List");
+
     const list = await this.WithTimeCache<
       {
         ProductId: number;
@@ -36,15 +37,15 @@ export abstract class AdminProductGet extends AdminNet {
       const prod = await ProductEntity.Product(meta.ProductId);
 
       if (!prod) {
-        this.list.warn(`Product ${meta.ProductId} Not Found`);
+        log.warn(`Product ${meta.ProductId} Not Found`);
         continue;
       }
 
       const photos = await ProductGet.PhotoList(meta.ProductId);
-      const cover = await this.FindCover(photos, meta.ProductId, this.list);
+      const cover = await this.FindCover(photos, meta.ProductId, log);
 
       if (!cover)
-        this.list.warn(`Product ${meta.ProductId} has no photo`);
+        log.warn(`Product ${meta.ProductId} has no photo`);
 
       items.push({
         Id: meta.ProductId,

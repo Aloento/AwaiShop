@@ -3,6 +3,7 @@ import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/r
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -28,10 +29,12 @@ const useStyles = makeStyles({
   }
 });
 
+const log = new Logger("TopNavBar", "ShopCart", "Confirm");
+
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.4.1
+ * @version 0.4.2
  */
 export function Confirm() {
   const [cmt, setCmt] = useState<string>();
@@ -41,7 +44,7 @@ export function Confirm() {
   const { Nav } = useRouter();
   const style = useStyles();
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = Hub.Order.Post.useNew({
     manual: true,
@@ -95,7 +98,7 @@ export function Confirm() {
         <div className={style.body}>
           <PersonaInfo />
 
-          <DelegateDataGrid Items={List} Columns={CartColumns} NoHeader />
+          <DelegateDataGrid Items={List} Columns={CartColumns(log)} NoHeader />
 
           <Field label="Comment" size="large">
             <Textarea value={cmt} onChange={(_, v) => setCmt(v.value)} maxLength={1000} />
