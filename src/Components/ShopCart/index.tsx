@@ -1,4 +1,5 @@
 import { Body1, Popover, PopoverSurface, PopoverTrigger, ToggleButton, Tooltip, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
 import { CartRegular } from "@fluentui/react-icons";
 import { useBoolean, useUpdateEffect } from "ahooks";
 import { Logger } from "~/Helpers/Logger";
@@ -83,7 +84,7 @@ export function ShopCart() {
       </PopoverTrigger>
 
       <PopoverSurface>
-        <DelegateDataGrid Items={List} Columns={CartColumns(log)} NoHeader />
+        <DelegateDataGrid Items={List} Columns={useConst(() => CartColumns(log))} NoHeader />
 
         <div className={style.conf}>
           <Body1>

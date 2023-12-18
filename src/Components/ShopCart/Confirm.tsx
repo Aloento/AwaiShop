@@ -1,5 +1,6 @@
 import { Button, Field, Textarea, Toast, ToastBody, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
+import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { useState } from "react";
@@ -96,9 +97,9 @@ export function Confirm() {
 
       <DrawerBody>
         <div className={style.body}>
-          <PersonaInfo />
+          <PersonaInfo Log={log} />
 
-          <DelegateDataGrid Items={List} Columns={CartColumns(log)} NoHeader />
+          <DelegateDataGrid Items={List} Columns={useConst(() => CartColumns(log))} NoHeader />
 
           <Field label="Comment" size="large">
             <Textarea value={cmt} onChange={(_, v) => setCmt(v.value)} maxLength={1000} />
