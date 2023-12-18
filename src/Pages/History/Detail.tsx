@@ -1,5 +1,6 @@
 import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
+import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
@@ -8,6 +9,7 @@ import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { ICartItem } from "~/Components/ShopCart";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { OrderAction } from "./Action";
@@ -39,10 +41,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 const columns: TableColumnDefinition<ICartItem>[] = [
-  MakeCoverCol(44),
   createTableColumn<ICartItem>({
     columnId: "Product",
     renderHeaderCell() {
@@ -55,7 +56,9 @@ const columns: TableColumnDefinition<ICartItem>[] = [
             <Body1Strong>{item.Name}</Body1Strong>
           </Link>
 
-          <Caption1>{Object.values(item.Type).reduce((prev, curr) => `${prev} ${curr},`, "")}</Caption1>
+          <Caption1>
+            {Object.values(item.Type).reduce((prev, curr) => `${prev} ${curr},`, "")}
+          </Caption1>
         </DataGridCell>
       );
     }
@@ -88,9 +91,11 @@ export interface IOrderDetail {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.3
+ * @version 0.3.4
  */
-export function OrderDetail({ OrderId }: { OrderId: number }) {
+export function OrderDetail({ OrderId, Log }: { OrderId: number; Log: Logger }) {
+  const log = useConst(() => Log.With("Detail"));
+
   const style = useStyles();
   const [open, { setTrue, setFalse }] = useBoolean();
 
@@ -98,13 +103,14 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
   const curr = parseInt(Paths.at(1)!);
 
   const { data, run: runDetail } = useRequest(() => Hub.Order.Get.Detail(OrderId), {
-    manual: true
+    manual: true,
+    onError: log.error
   });
 
   const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
     onError(e) {
       Nav("History");
-      console.error(e);
+      log.error(e);
     },
     manual: true
   });
@@ -153,7 +159,10 @@ export function OrderDetail({ OrderId }: { OrderId: number }) {
         <div className={style.body}>
           <OrderInfo OrderId={OrderId} Order={order} />
 
-          <DelegateDataGrid Items={data?.ShopCart || []} Columns={columns} />
+          <DelegateDataGrid
+            Items={data?.ShopCart || []}
+            Columns={[MakeCoverCol(44, log), ...columns]}
+          />
 
           <OrderComment Comments={data?.Comments} />
 
