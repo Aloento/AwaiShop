@@ -1,6 +1,7 @@
 import { DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { AdminProductComboDelete } from "./Delete";
@@ -112,13 +113,17 @@ const columns: TableColumnDefinition<IDetailComboItem>[] = [
   })
 ]
 
+const log = new Logger("Admin", "Product", "Detail", "Combo");
+
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminProductCombo({ ProdId }: { ProdId: number }) {
-  const { data, run } = useRequest(() => Hub.Product.Get.Combo(ProdId));
+  const { data, run } = useRequest(() => Hub.Product.Get.Combo(ProdId, log), {
+    onError: log.error
+  });
 
   return <>
     <div className={useStyles().body}>

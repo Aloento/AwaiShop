@@ -52,14 +52,14 @@ export abstract class ProductGet extends ShopNet {
     return this.Invoke<number>("ProdGetLimit", prodId);
   }
 
-  private static readonly combo = this.Log.With("Combo");
-
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 1.0.1
    */
-  public static async Combo(prodId: number): Promise<IComboItem[]> {
+  public static async Combo(prodId: number, pLog: Logger): Promise<IComboItem[]> {
+    const log = pLog.With("|", this.Log.namespace, "Combo");
+
     const list = await this.ComboList(prodId);
     const items: IComboItem[] = [];
 
@@ -70,14 +70,14 @@ export abstract class ProductGet extends ShopNet {
         const type = await ProductEntity.Type(typeId);
 
         if (!type) {
-          this.combo.error(`ComboList Mismatch: Type ${typeId} not found. Combo ${combo.ComboId} : Product ${prodId}`);
+          log.error(`[Mismatch] Type ${typeId} not found. Combo ${combo.ComboId} : Product ${prodId}`);
           continue;
         }
 
         const vari = await ProductEntity.Variant(type.VariantId);
 
         if (!vari) {
-          this.combo.error(`ComboList Mismatch: Variant ${type.VariantId} not found. Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
+          log.error(`[Mismatch] Variant ${type.VariantId} not found. Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
           continue;
         }
 

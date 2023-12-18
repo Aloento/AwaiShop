@@ -37,7 +37,7 @@ const log = new Logger("Product", "RadioGroup");
  * @version 0.3.0
  */
 export function ProductRadioList({ ProdId }: { ProdId: number }) {
-  const { data } = useRequest(() => Hub.Product.Get.Combo(ProdId), {
+  const { data } = useRequest(() => Hub.Product.Get.Combo(ProdId, log), {
     onError: log.error
   });
 
