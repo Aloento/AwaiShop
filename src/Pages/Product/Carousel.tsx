@@ -32,7 +32,7 @@ export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyle();
   const [imgs, setImgs] = useState<string[]>([img]);
 
-  useRequest(() => Hub.Product.Get.Carousel(Id), {
+  useRequest(() => Hub.Product.Get.Carousel(Id, log), {
     async onSuccess(data) {
       setImgs(Array<string>(data.length).fill(img));
 

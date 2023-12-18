@@ -13,7 +13,8 @@ import { ProductEntity } from "./Entity";
  * @version 0.2.0
  */
 export abstract class ProductGet extends ShopNet {
-  protected static override readonly Log = super.Log.With("Product", "Get");
+  /** "Product", "Get" */
+  protected static override readonly Log = [...super.Log, "Product", "Get"];
 
   /**
    * @author Aloento
@@ -21,7 +22,7 @@ export abstract class ProductGet extends ShopNet {
    * @version 1.0.1
    */
   public static async Basic(prodId: number, pLog: Logger): Promise<IProductInfo> {
-    const log = pLog.With("|", this.Log.namespace, "Basic");
+    const log = pLog.With(...this.Log, "Basic");
 
     const res = await ProductEntity.Product(prodId);
     if (!res)
@@ -58,7 +59,7 @@ export abstract class ProductGet extends ShopNet {
    * @version 1.0.1
    */
   public static async Combo(prodId: number, pLog: Logger): Promise<IComboItem[]> {
-    const log = pLog.With("|", this.Log.namespace, "Combo");
+    const log = pLog.With(...this.Log, "Combo");
 
     const list = await this.ComboList(prodId);
     const items: IComboItem[] = [];
@@ -94,14 +95,14 @@ export abstract class ProductGet extends ShopNet {
     return items;
   }
 
-  private static readonly carousel = this.Log.With("Carousel");
-
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 1.0.1
    */
-  public static async Carousel(prodId: number): Promise<IPhotoItem[]> {
+  public static async Carousel(prodId: number, pLog: Logger): Promise<IPhotoItem[]> {
+    const log = pLog.With(...this.Log, "Carousel");
+
     const list = await this.PhotoList(prodId);
     const photos: IPhotoItem[] = [];
 
@@ -116,7 +117,7 @@ export abstract class ProductGet extends ShopNet {
           Caption: p.Caption,
         });
       else
-        this.carousel.warn(`Photo ${id} not found in Product ${prodId}`);
+        log.warn(`Photo ${id} not found in Product ${prodId}`);
     }
 
     return photos.sort((a, b) => a.Id - b.Id);

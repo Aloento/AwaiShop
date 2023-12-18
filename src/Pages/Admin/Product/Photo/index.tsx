@@ -114,7 +114,9 @@ let refreshCarousel: () => void;
  * @version 0.3.2
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
-  const { data, run } = useRequest(() => Hub.Product.Get.Carousel(ProdId));
+  const { data, run } = useRequest(() => Hub.Product.Get.Carousel(ProdId, log), {
+    onError: log.error
+  });
   refreshCarousel = run;
 
   const { dispatch, dispatchToast } = useErrorToast(log);

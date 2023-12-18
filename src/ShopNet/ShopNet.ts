@@ -1,7 +1,6 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
 import { OnNewUserSubject } from "~/Components/NewUser";
-import { Logger } from "~/Helpers/Logger";
 import { AccessToken } from "./Database";
 import { SignalR } from "./SignalR";
 
@@ -11,7 +10,8 @@ import { SignalR } from "./SignalR";
  * @version 0.1.2
  */
 export abstract class ShopNet extends SignalR {
-  protected static readonly Log = new Logger("ShopNet");
+  /** "|", "ShopNet" */
+  protected static readonly Log = ["|", "ShopNet"];
 
   /**
    * @author Aloento
