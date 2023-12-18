@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import type { Logger } from "~/Helpers/Logger";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import { IProductInfo } from "~/Pages/Gallery";
@@ -14,20 +15,20 @@ import { ProductEntity } from "./Entity";
 export abstract class ProductGet extends ShopNet {
   protected static override readonly Log = super.Log.With("Product", "Get");
 
-  private static readonly basic = this.Log.With("Basic");
-
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 1.0.1
    */
-  public static async Basic(prodId: number): Promise<IProductInfo> {
+  public static async Basic(prodId: number, pLog: Logger): Promise<IProductInfo> {
+    const log = pLog.With("|", this.Log.namespace, "Basic");
+
     const res = await ProductEntity.Product(prodId);
     if (!res)
       throw new Error(`Product ${prodId} Not Found`);
 
     const list = await this.PhotoList(prodId);
-    const cover = await this.FindCover(list, prodId, this.basic);
+    const cover = await this.FindCover(list, prodId, log);
 
     if (cover)
       return {
@@ -35,7 +36,7 @@ export abstract class ProductGet extends ShopNet {
         Cover: cover
       };
 
-    this.basic.warn(`Product ${prodId} has no photo`);
+    log.warn(`Product ${prodId} has no photo`);
     return {
       Name: res.Name,
       Cover: "",

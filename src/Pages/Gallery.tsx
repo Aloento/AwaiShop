@@ -105,7 +105,7 @@ const log3 = log2.With("Card");
  */
 function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
-  const { data } = useRequest(() => Hub.Product.Get.Basic(Id), {
+  const { data } = useRequest(() => Hub.Product.Get.Basic(Id, log3), {
     onError: log3.error
   });
 

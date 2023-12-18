@@ -1,6 +1,7 @@
 import { Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useEffect, useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { useRadioGroup } from "./Context";
@@ -28,13 +29,17 @@ const useStyle = makeStyles({
   }
 })
 
+const log = new Logger("Product", "RadioGroup");
+
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.3.0
  */
 export function ProductRadioList({ ProdId }: { ProdId: number }) {
-  const { data } = useRequest(() => Hub.Product.Get.Combo(ProdId));
+  const { data } = useRequest(() => Hub.Product.Get.Combo(ProdId), {
+    onError: log.error
+  });
 
   const { Update } = useRadioGroup();
   const [variants, setVariants] = useState<Record<string, Set<string>>>({});
