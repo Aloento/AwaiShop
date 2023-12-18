@@ -29,9 +29,7 @@ const useStyle = makeStyles({
 export function MakeCoverCol(size: number, log: Logger) {
   const w = { width: `${size}px` };
 
-  return createTableColumn<{
-    Cover: string;
-  }>({
+  return createTableColumn<{ Cover: string; }>({
     columnId: "Cover",
     renderHeaderCell: () => {
       const style = useStyle();
