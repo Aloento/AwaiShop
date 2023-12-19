@@ -1,14 +1,18 @@
 import { Checkbox, Toast, ToastTitle } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
+import { ICompLog } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.1.2
  */
-export function AdminUserAdmin({ UserId, Admin, Refresh }: { UserId: string; Admin?: boolean; Refresh: () => void }) {
-  const { dispatch, dispatchToast } = useErrorToast();
+export function AdminUserGrant({ UserId, Admin, Refresh, ParentLog }: { UserId: string; Admin?: boolean; Refresh: () => void } & ICompLog) {
+  const log = useConst(() => ParentLog.With("Grant"));
+
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: grant } = AdminHub.User.Post.useAdmin({
     manual: true,

@@ -1,15 +1,19 @@
 import { Button, Toast, ToastTitle } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
 import { DeleteRegular } from "@fluentui/react-icons";
+import { ICompLog } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.1.2
  */
-export function AdminUserDelete({ UserId, Refresh }: { UserId: string; Refresh: () => void }) {
-  const { dispatch, dispatchToast } = useErrorToast();
+export function AdminUserDelete({ UserId, Refresh, ParentLog }: { UserId: string; Refresh: () => void } & ICompLog) {
+  const log = useConst(() => ParentLog.With("Delete"));
+
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.User.Delete.useUser({
     manual: true,
