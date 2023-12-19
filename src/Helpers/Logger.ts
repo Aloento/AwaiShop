@@ -112,3 +112,12 @@ export class Logger {
       + `\x1b[1m\x1b[${ANSI.balck_bg};${ANSI.white_hl}m ${this.namespace} `;
   }
 }
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export interface ICompLog {
+  ParentLog: Logger
+}

@@ -26,8 +26,8 @@ export abstract class UserGet extends ShopNet {
    * @since 1.0.0
    * @version 0.2.1
    */
-  public static useMe(parentLog: Logger, options?: Options<IuseMe | void, []>, suppress: boolean = true) {
-    const log = useConst(() => parentLog.With("|", "Hub", "User", "Get", "Me"));
+  public static useMe(pLog: Logger, options?: Options<IuseMe | void, []>, suppress: boolean = true) {
+    const log = useConst(() => pLog.With("|", "Hub", "User", "Get", "Me"));
     const { dispatch, dispatchToast } = useErrorToast(log);
 
     return useRequest(() => {

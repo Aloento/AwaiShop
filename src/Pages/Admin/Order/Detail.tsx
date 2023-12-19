@@ -6,7 +6,7 @@ import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
-import { Logger } from "~/Helpers/Logger";
+import { ICompLog } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { OrderComment } from "~/Pages/History/Comment";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.3.1
  */
-export function AdminOrderDetail({ OrderId, ParentLog }: { OrderId: number; ParentLog: Logger }) {
+export function AdminOrderDetail({ OrderId, ParentLog }: { OrderId: number; } & ICompLog) {
   const log = useConst(() => ParentLog.With("Detail"));
 
   const style = useStyles();
@@ -105,9 +105,9 @@ export function AdminOrderDetail({ OrderId, ParentLog }: { OrderId: number; Pare
 
         <OrderComment Comments={data?.Comments} />
 
-        <AdminOrderAppend OrderId={OrderId} Refresh={run} />
+        <AdminOrderAppend OrderId={OrderId} Refresh={run} ParentLog={log} />
 
-        <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} />
+        <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
       </DrawerBody>
     </Drawer>
   </>

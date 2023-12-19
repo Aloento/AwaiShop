@@ -3,7 +3,7 @@ import { useConst } from "@fluentui/react-hooks";
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { useState } from "react";
-import { Logger } from "~/Helpers/Logger";
+import { ICompLog } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
@@ -12,11 +12,10 @@ import { AdminHub } from "~/ShopNet/Admin";
  * @since 1.0.0
  * @version 0.1.0
  */
-interface IShipment {
+interface IShipment extends ICompLog {
   OrderId: number;
   TrackingNumber?: string;
   Refresh: () => void;
-  ParentLog: Logger;
 }
 
 /**

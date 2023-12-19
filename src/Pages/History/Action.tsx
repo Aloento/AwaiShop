@@ -1,7 +1,7 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
 import { useRouter } from "~/Components/Router";
-import { Logger } from "~/Helpers/Logger";
+import { ICompLog } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -23,11 +23,10 @@ const useStyles = makeStyles({
  * @since 1.0.0
  * @version 0.1.1
  */
-interface IOrderAction {
+interface IOrderAction extends ICompLog {
   OrderId: number;
   Status?: string;
   Refresh: () => void;
-  ParentLog: Logger;
 }
 
 /**

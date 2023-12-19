@@ -1,5 +1,7 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
 import { useState } from "react";
+import { ICompLog } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -16,16 +18,23 @@ const useStyles = makeStyles({
   },
 });
 
+interface IAdminOrderAppend extends ICompLog {
+  OrderId: number;
+  Refresh: () => void;
+}
+
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
-export function AdminOrderAppend({ OrderId, Refresh }: { OrderId: number; Refresh: () => void }) {
+export function AdminOrderAppend({ OrderId, Refresh, ParentLog }: IAdminOrderAppend) {
+  const log = useConst(() => ParentLog.With("Append"));
+
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: append } = AdminHub.Order.Post.useAppend({
     manual: true,

@@ -113,7 +113,7 @@ const columns: TableColumnDefinition<IOrderItem>[] = [
  * @since 0.1.0
  * @version 0.3.1
  */
-export function HistoryColumns(parentLog: Logger): TableColumnDefinition<IOrderItem>[] {
+export function HistoryColumns(pLog: Logger): TableColumnDefinition<IOrderItem>[] {
   return [
     ...columns,
     createTableColumn<IOrderItem>({
@@ -128,7 +128,7 @@ export function HistoryColumns(parentLog: Logger): TableColumnDefinition<IOrderI
       renderCell(item) {
         return (
           <DataGridCell className={useStyles().two}>
-            <OrderDetail OrderId={item.Id} ParentLog={parentLog} />
+            <OrderDetail OrderId={item.Id} ParentLog={pLog} />
           </DataGridCell>
         );
       },

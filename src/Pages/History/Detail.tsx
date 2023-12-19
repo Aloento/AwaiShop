@@ -9,7 +9,7 @@ import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { ICartItem } from "~/Components/ShopCart";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
-import { Logger } from "~/Helpers/Logger";
+import { ICompLog } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { OrderAction } from "./Action";
@@ -93,7 +93,7 @@ export interface IOrderDetail {
  * @since 0.5.0
  * @version 0.3.5
  */
-export function OrderDetail({ OrderId, ParentLog }: { OrderId: number; ParentLog: Logger }) {
+export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
   const log = useConst(() => ParentLog.With("Detail"));
 
   const style = useStyles();
