@@ -1,9 +1,11 @@
 import { Button, Combobox, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, Option, SpinButton, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
 import { AddRegular, DismissRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { isInteger } from "lodash-es";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { ICompLog } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -70,23 +72,26 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
-export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refresh: () => void }) {
+export function AdminProductNewCombo({ ProdId, Refresh, ParentLog }: { ProdId: number; Refresh: () => void } & ICompLog) {
+  const log = useConst(() => ParentLog.With("NewCombo"));
+
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState<Record<string, string>>({});
   const [stock, setStock] = useState(1);
 
-  const { data: varis } = useRequest(() => AdminHub.Product.Get.Variants(ProdId), {
+  const { data: varis } = useRequest(() => AdminHub.Product.Get.Variants(ProdId, log), {
     onSuccess(data) {
       for (const i of data)
         combo[i.Name] = "";
 
       setCombo({ ...combo });
     },
+    onError: log.error
   });
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Post.useCombo({
     manual: true,

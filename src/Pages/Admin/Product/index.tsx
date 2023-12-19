@@ -125,7 +125,9 @@ const columns: TableColumnDefinition<IProductItem>[] = [
  * @version 0.1.1
  */
 export function AdminProduct() {
-  const { data } = useRequest(() => AdminHub.Product.Get.List(log));
+  const { data } = useRequest(() => AdminHub.Product.Get.List(log), {
+    onError: log.error
+  });
 
   return (
     <DelegateDataGrid Items={data || []} Columns={columns} />

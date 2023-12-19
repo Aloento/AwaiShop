@@ -43,6 +43,8 @@ const useStyles = makeStyles({
   }
 });
 
+const log = new Logger("Admin", "Product", "Detail", "Combo");
+
 /**
  * @author Aloento
  * @since 0.5.0
@@ -106,19 +108,17 @@ const columns: TableColumnDefinition<IDetailComboItem>[] = [
         <DataGridCell className={useStyles().seven}>
           <AdminProductComboDetail {...item} />
 
-          <AdminProductComboDelete ComboId={item.Id} Refresh={item.Refresh} />
+          <AdminProductComboDelete ComboId={item.Id} Refresh={item.Refresh} ParentLog={log} />
         </DataGridCell>
       )
     }
   })
 ]
 
-const log = new Logger("Admin", "Product", "Detail", "Combo");
-
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function AdminProductCombo({ ProdId }: { ProdId: number }) {
   const { data, run } = useRequest(() => Hub.Product.Get.Combo(ProdId, log), {
@@ -128,9 +128,9 @@ export function AdminProductCombo({ ProdId }: { ProdId: number }) {
   return <>
     <div className={useStyles().body}>
       <Subtitle1>Combo</Subtitle1>
-      <AdminProductNewCombo ProdId={ProdId} Refresh={run} />
+      <AdminProductNewCombo ProdId={ProdId} Refresh={run} ParentLog={log} />
     </div>
 
-    <DelegateDataGrid Items={data?.map(x => ({ ProdId, Refresh: run, ...x })) || []} Columns={columns} />
+    <DelegateDataGrid Items={data?.map(x => ({ ProdId, Refresh: run, ...x, ParentLog: log })) || []} Columns={columns} />
   </>
 }

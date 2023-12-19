@@ -12,15 +12,16 @@ import { AdminNet } from "../AdminNet";
  * @version 0.1.1
  */
 export abstract class AdminProductGet extends AdminNet {
-  protected static override readonly Log = super.Log.With("Product", "Get");
+  /** "Product", "Get" */
+  protected static override readonly Log = [...super.Log, "Product", "Get"];
 
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 1.0.1
    */
-  public static async List(compLog: Logger): Promise<IProductItem[]> {
-    const log = compLog.With("|", this.Log.namespace, "List");
+  public static async List(pLog: Logger): Promise<IProductItem[]> {
+    const log = pLog.With(...this.Log, "List");
 
     const list = await this.WithTimeCache<
       {
@@ -89,14 +90,14 @@ export abstract class AdminProductGet extends AdminNet {
     return prod.Category;
   }
 
-  private static readonly variants = this.Log.With("Variants");
-
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 1.0.1
    */
-  public static async Variants(prodId: number): Promise<IVariantItem[]> {
+  public static async Variants(prodId: number, pLog: Logger): Promise<IVariantItem[]> {
+    const log = pLog.With(...this.Log, "Variants");
+
     const list = await this.WithTimeCache<
       {
         VariantId: number;
@@ -110,7 +111,7 @@ export abstract class AdminProductGet extends AdminNet {
       const vari = await ProductEntity.Variant(meta.VariantId);
 
       if (!vari) {
-        this.variants.warn(`Variant ${meta} Not Found. Product : ${prodId}`);
+        log.warn(`Variant ${meta} Not Found. Product : ${prodId}`);
         continue;
       }
 
@@ -120,7 +121,7 @@ export abstract class AdminProductGet extends AdminNet {
         const type = await ProductEntity.Type(typeId);
 
         if (!type) {
-          this.variants.warn(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);
+          log.warn(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);
           continue;
         }
 
