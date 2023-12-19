@@ -1,6 +1,8 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
+import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -20,23 +22,26 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 interface IOrderAppend {
   OrderId: number;
   Refresh: () => void;
+  ParentLog: Logger;
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.0
+ * @version 0.4.1
  */
-export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
+export function OrderAppend({ OrderId, Refresh, ParentLog }: IOrderAppend) {
+  const log = useConst(() => ParentLog.With("Append"));
+
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: append } = Hub.Order.Post.useAppend({
     manual: true,
@@ -80,7 +85,9 @@ export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
     }
   });
 
-  const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId));
+  const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId), {
+    onError: log.error
+  });
 
   switch (order?.Status) {
     case "Cancelled":

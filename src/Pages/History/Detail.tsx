@@ -166,7 +166,7 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number; ParentLog
 
           <OrderComment Comments={data?.Comments} />
 
-          <OrderAppend OrderId={OrderId} Refresh={run} />
+          <OrderAppend OrderId={OrderId} Refresh={run} ParentLog={log} />
 
           <OrderAction OrderId={OrderId} Refresh={run} />
         </div>
