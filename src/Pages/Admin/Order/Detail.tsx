@@ -1,10 +1,12 @@
 import { Button, Field, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
+import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { OrderComment } from "~/Pages/History/Comment";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -28,9 +30,11 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.3.1
  */
-export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
+export function AdminOrderDetail({ OrderId, ParentLog }: { OrderId: number; ParentLog: Logger }) {
+  const log = useConst(() => ParentLog.With("Detail"));
+
   const style = useStyles();
   const [open, { setTrue, setFalse }] = useBoolean();
 
@@ -38,13 +42,14 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const curr = parseInt(Paths.at(2)!);
 
   const { data, run: runDetail } = useRequest(() => AdminHub.Order.Get.Detail(OrderId), {
-    manual: true
+    manual: true,
+    onError: log.error
   });
 
   const { data: order, run: runOrder } = useRequest(() => AdminHub.Order.Get.Order(OrderId), {
     onError(e) {
       Nav("Admin", "Order");
-      console.error(e);
+      log.error(e);
     },
     manual: true
   });
@@ -96,7 +101,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
           <AdminOrderList Items={data?.ShopCart} />
         </Field>
 
-        <Shipment OrderId={OrderId} Refresh={run} />
+        <Shipment OrderId={OrderId} TrackingNumber={order?.TrackingNumber} Refresh={run} ParentLog={log} />
 
         <OrderComment Comments={data?.Comments} />
 

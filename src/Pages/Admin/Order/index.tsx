@@ -75,7 +75,7 @@ const columns: TableColumnDefinition<IAdminOrderItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().twoc}>
-          <AdminOrderDetail OrderId={item.Id} />
+          <AdminOrderDetail OrderId={item.Id} ParentLog={log} />
         </DataGridCell>
       )
     },
@@ -88,7 +88,9 @@ const columns: TableColumnDefinition<IAdminOrderItem>[] = [
  * @version 0.2.0
  */
 export function AdminOrder() {
-  const { data } = useRequest(() => AdminHub.Order.Get.List());
+  const { data } = useRequest(() => AdminHub.Order.Get.List(), {
+    onError: log.error
+  });
 
   return (
     <DelegateDataGrid Items={data || []} Columns={columns} />
