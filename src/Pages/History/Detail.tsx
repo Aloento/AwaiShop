@@ -91,7 +91,7 @@ export interface IOrderDetail {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.4
+ * @version 0.3.5
  */
 export function OrderDetail({ OrderId, ParentLog }: { OrderId: number; ParentLog: Logger }) {
   const log = useConst(() => ParentLog.With("Detail"));
@@ -166,9 +166,9 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number; ParentLog
 
           <OrderComment Comments={data?.Comments} />
 
-          <OrderAppend OrderId={OrderId} Refresh={run} ParentLog={log} />
+          <OrderAppend OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
 
-          <OrderAction OrderId={OrderId} Refresh={run} />
+          <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
         </div>
       </DrawerBody>
     </Drawer>

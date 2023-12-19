@@ -1,6 +1,5 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
-import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
@@ -26,6 +25,7 @@ const useStyles = makeStyles({
  */
 interface IOrderAppend {
   OrderId: number;
+  Status?: string;
   Refresh: () => void;
   ParentLog: Logger;
 }
@@ -33,9 +33,9 @@ interface IOrderAppend {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.1
+ * @version 0.4.2
  */
-export function OrderAppend({ OrderId, Refresh, ParentLog }: IOrderAppend) {
+export function OrderAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppend) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();
@@ -85,11 +85,7 @@ export function OrderAppend({ OrderId, Refresh, ParentLog }: IOrderAppend) {
     }
   });
 
-  const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId), {
-    onError: log.error
-  });
-
-  switch (order?.Status) {
+  switch (Status) {
     case "Cancelled":
     case "Finished":
       return null;
@@ -102,9 +98,9 @@ export function OrderAppend({ OrderId, Refresh, ParentLog }: IOrderAppend) {
 
     <div className={style.body}>
       {
-        !(order?.Status === "Finished" || order?.Status === "Returning") &&
+        !(Status === "Finished" || Status === "Returning") &&
         <Button onClick={() => cancel(OrderId, cmt!)}>
-          {order?.Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason
+          {Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason
         </Button>
       }
 

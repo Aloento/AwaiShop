@@ -1,6 +1,7 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
+import { useConst } from "@fluentui/react-hooks";
 import { useRouter } from "~/Components/Router";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -20,22 +21,26 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 interface IOrderAction {
   OrderId: number;
+  Status?: string;
   Refresh: () => void;
+  ParentLog: Logger;
 }
 
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.1.2
  */
-export function OrderAction({ OrderId, Refresh }: IOrderAction) {
+export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderAction) {
+  const log = useConst(() => ParentLog.With("Action"));
+
   const style = useStyles();
   const { Fresh } = useRouter();
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: received } = Hub.Order.Post.useReceived({
     manual: true,
@@ -79,9 +84,7 @@ export function OrderAction({ OrderId, Refresh }: IOrderAction) {
     }
   });
 
-  const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId));
-
-  switch (order?.Status) {
+  switch (Status) {
     case "Pending":
     case "Processing":
     // case "Shipping":
@@ -95,14 +98,14 @@ export function OrderAction({ OrderId, Refresh }: IOrderAction) {
     <Field label="Action" size="large">
       <div className={style.body}>
         {
-          order?.Status === "Cancelled" &&
+          Status === "Cancelled" &&
           <Button appearance="subtle" onClick={() => remove(OrderId)}>
             Delete Order
           </Button>
         }
 
         {
-          order?.Status === "Shipping" &&
+          Status === "Shipping" &&
           <Button appearance="subtle" onClick={() => received(OrderId)}>
             I Received Order
           </Button>
