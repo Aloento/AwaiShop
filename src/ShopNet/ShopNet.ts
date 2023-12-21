@@ -7,9 +7,12 @@ import { SignalR } from "./SignalR";
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 export abstract class ShopNet extends SignalR {
+  /** "|", "ShopNet" */
+  protected static readonly Log = ["|", "ShopNet"];
+
   /**
    * @author Aloento
    * @since 1.0.0

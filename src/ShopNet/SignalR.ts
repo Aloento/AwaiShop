@@ -2,8 +2,17 @@ import { HubConnectionState } from "@microsoft/signalr";
 import dayjs, { Dayjs } from "dayjs";
 import { Subject } from "rxjs";
 import { NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
+import type { Logger } from "~/Helpers/Logger";
+import type { AdminNet } from "./Admin/AdminNet";
 import { MSAL, Shared, type IConcurrency } from "./Database";
-import type { INet } from "./INet";
+import type { ShopNet } from "./ShopNet";
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+type INet = typeof ShopNet | typeof AdminNet;
 
 /**
  * @author Aloento
@@ -12,24 +21,17 @@ import type { INet } from "./INet";
  */
 export abstract class SignalR {
   /**
-   * Catched
-   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.2
+   * @version 0.1.1
    */
-  static async EnsureConnected(this: INet): Promise<void> {
+  protected static async EnsureConnected(this: INet): Promise<void> {
     if (this.Hub.state === HubConnectionState.Connected)
       return Promise.resolve();
 
     if (this.Hub.state === HubConnectionState.Disconnected
       || this.Hub.state === HubConnectionState.Disconnecting)
-      try {
-        await this.Hub.start();
-      } catch (error) {
-        this.Log.throw();
-        throw error;
-      }
+      await this.Hub.start();
 
     return new Promise<void>(resolve => {
       const interval = setInterval(() => {
@@ -42,34 +44,23 @@ export abstract class SignalR {
   }
 
   /**
-   * Catched
-   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.1.0
    */
-  static async Invoke<T>(this: INet, methodName: string, ...args: any[]): Promise<T> {
+  protected static async Invoke<T>(this: INet, methodName: string, ...args: any[]): Promise<T> {
     await this.EnsureConnected();
-    try {
-      return await this.Hub.invoke<T>(methodName, ...args);
-    } catch (error) {
-      this.Log.throw();
-      throw error;
-    }
+    return this.Hub.invoke<T>(methodName, ...args);
   }
 
   /**
-   * Catched
-   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.2
+   * @version 0.2.1
    */
   protected static EnsureLogin(this: INet) {
-    if (!MSAL.getActiveAccount()) {
-      this.Log.throw();
+    if (!MSAL.getActiveAccount())
       throw new NotLoginError();
-    }
   }
 
   /**
@@ -77,13 +68,11 @@ export abstract class SignalR {
    * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.1.0
    */
   protected static EnsureTrue(this: INet, res: boolean | null | undefined): asserts res is true {
-    if (!res) {
-      this.Log.throw();
+    if (!res)
       throw new NotTrueError();
-    }
   }
 
   /**
@@ -145,9 +134,9 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.1
+   * @version 0.2.2
    */
-  protected static async FindCover(this: INet, photos: number[], prodId?: number): Promise<string | void> {
+  protected static async FindCover(this: INet, photos: number[], prodId: number, logger: Logger): Promise<string | void> {
     const list = [];
 
     for (const photoId of photos) {
@@ -159,23 +148,21 @@ export abstract class SignalR {
         if (photo.Cover)
           return photo.ObjectId;
       } else
-        this.Log.warn(`Photo ${photoId} not found in Product ${prodId}`);
+        logger?.warn(`Photo ${photoId} not found in Product ${prodId}`);
     }
 
     if (list.length > 0) {
-      this.Log.warn(`Product ${prodId} has no cover photo, using first photo instead`);
+      logger?.warn(`Product ${prodId} has no cover photo, using first photo instead`);
       return list.sort((a, b) => a.Order - b.Order)[0].ObjectId;
     }
   }
 
   /**
-   * Catched
-   * 
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.1.2
    */
-  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>) {
+  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, pLog: Logger) {
     const chunkSize = 30 * 1024;
     const chunks = Math.ceil(file.size / chunkSize);
     let index = 0;
@@ -186,17 +173,14 @@ export abstract class SignalR {
       const chunk = file.slice(start, end);
 
       const reader = new FileReader();
-      const buffer = await new Promise<Uint8Array>(resolve => {
-        reader.onload = () => resolve(new Uint8Array(reader.result as ArrayBuffer));
-        reader.onerror = () => {
-          this.Log.throw();
-          throw reader.error;
-        };
+      const buffer = await new Promise<Uint8Array>((res, rej) => {
+        reader.onload = () => res(new Uint8Array(reader.result as ArrayBuffer));
+        reader.onerror = () => rej(reader.error);
         reader.readAsArrayBuffer(chunk);
       });
 
       subject.next(buffer);
-      this.Log.debug(`Sent chunk ${index + 1}/${chunks}`);
+      pLog?.debug(`Sent chunk ${index + 1}/${chunks}`);
       index++;
     }
 

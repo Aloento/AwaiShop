@@ -1,4 +1,5 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -26,14 +27,16 @@ interface IAdminOrderAction {
   Refresh: () => void;
 }
 
+const log = new Logger("Admin", "Order", "Detail", "Action");
+
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 export function AdminOrderAction({ OrderId, Status, Refresh }: IAdminOrderAction) {
   const style = useStyles();
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: accept } = AdminHub.Order.Post.useAccept({
     manual: true,

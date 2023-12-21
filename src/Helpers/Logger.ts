@@ -55,7 +55,7 @@ type level = "error" | "warn" | "info" | "debug" | "throw";
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 1.0.0
+ * @version 1.0.1
  */
 export class Logger {
   public readonly namespace;
@@ -67,7 +67,7 @@ export class Logger {
   public readonly throw;
 
   public constructor(...namespace: string[]) {
-    this.namespace = namespace.join(":");
+    this.namespace = namespace.join(" > ");
 
     this.error = console.error.bind(this,
       this.baseColor(
@@ -102,9 +102,22 @@ export class Logger {
     );
   }
 
+  public With(...names: string[]): Logger {
+    return new Logger(this.namespace, ...names);
+  }
+
   private baseColor(color: ANSI, level: level): string {
     return `\x1b[${color};${ANSI.black};1m ${level.toUpperCase()} `
       + `\x1b[0m\x1b[${ANSI.black_bg_hl};${ANSI.white_hl}m ${dayjs().format("YY-M-D H:m:s")} `
       + `\x1b[1m\x1b[${ANSI.balck_bg};${ANSI.white_hl}m ${this.namespace} `;
   }
+}
+
+/**
+ * @author Aloento
+ * @since 1.0.0
+ * @version 0.1.0
+ */
+export interface ICompLog {
+  ParentLog: Logger
 }

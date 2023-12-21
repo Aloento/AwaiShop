@@ -1,5 +1,6 @@
 import { Field, Label, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -29,6 +30,8 @@ interface IOrderInfo {
   Admin?: true;
 }
 
+const log = new Logger("Order", "Info");
+
 /**
  * @author Aloento
  * @since 0.5.0
@@ -38,10 +41,11 @@ export function OrderInfo({ OrderId, Order, Admin }: IOrderInfo) {
   const style = useStyles();
 
   const { data: admin } = useRequest(() => AdminHub.User.Get.OrderUser(OrderId), {
-    manual: !Admin
+    manual: !Admin,
+    onError: log.error
   });
 
-  const { data: me } = Hub.User.Get.useMe({
+  const { data: me } = Hub.User.Get.useMe(log, {
     manual: Admin
   });
 

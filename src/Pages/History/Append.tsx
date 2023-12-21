@@ -1,6 +1,7 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
+import { useConst } from "@fluentui/react-hooks";
 import { useState } from "react";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
@@ -20,23 +21,27 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 interface IOrderAppend {
   OrderId: number;
+  Status?: string;
   Refresh: () => void;
+  ParentLog: Logger;
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.0
+ * @version 0.4.2
  */
-export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
+export function OrderAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppend) {
+  const log = useConst(() => ParentLog.With("Append"));
+
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
-  const { dispatch, dispatchToast } = useErrorToast();
+  const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: append } = Hub.Order.Post.useAppend({
     manual: true,
@@ -80,9 +85,7 @@ export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
     }
   });
 
-  const { data: order } = useRequest(() => Hub.Order.Get.Order(OrderId));
-
-  switch (order?.Status) {
+  switch (Status) {
     case "Cancelled":
     case "Finished":
       return null;
@@ -95,9 +98,9 @@ export function OrderAppend({ OrderId, Refresh }: IOrderAppend) {
 
     <div className={style.body}>
       {
-        !(order?.Status === "Finished" || order?.Status === "Returning") &&
+        !(Status === "Finished" || Status === "Returning") &&
         <Button onClick={() => cancel(OrderId, cmt!)}>
-          {order?.Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason
+          {Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason
         </Button>
       }
 
