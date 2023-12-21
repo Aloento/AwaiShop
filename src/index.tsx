@@ -3,6 +3,7 @@ import { FluentProvider, Toaster, webLightTheme } from "@fluentui/react-componen
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "./Components/Router";
 import { ShopCartContext } from "./Components/ShopCart/Context";
+import { Dic } from "./Helpers/Dic";
 import { Layout } from "./Pages";
 import { MSAL } from "./ShopNet/Database";
 
@@ -11,7 +12,7 @@ import { MSAL } from "./ShopNet/Database";
  * @since 0.1.0
  * @version 0.4.0
  */
-ReactDOM.createRoot(document.getElementById("AwaiShop")!).render(
+ReactDOM.createRoot(document.getElementById(Dic.Name)!).render(
   <FluentProvider theme={webLightTheme}>
     <BrowserRouter>
       <MsalProvider instance={MSAL}>

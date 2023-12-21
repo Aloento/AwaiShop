@@ -9,6 +9,7 @@ import { Product } from "~/Pages/Product";
 import { Footer } from "../Components/Footer";
 import { useRouter } from "../Components/Router";
 import { TopNavBar } from "../Components/TopNavBar";
+import { NotFound } from "./404";
 
 /**
  * @author Aloento
@@ -41,7 +42,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.2.2 MusiLand
- * @version 0.3.1
+ * @version 0.3.2
  */
 export function Layout() {
   const style = useStyle();
@@ -67,7 +68,7 @@ export function Layout() {
         return <Gallery />;
 
       default:
-        return <div>404</div>;
+        return <NotFound />;
     }
   }, [path]);
 
