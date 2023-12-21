@@ -2,6 +2,7 @@ import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
+import { Logger } from "~/Helpers/Logger";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -10,6 +11,9 @@ import { AdminNet } from "../AdminNet";
  * @version 0.1.0
  */
 export abstract class AdminProductPost extends AdminNet {
+  /** "Product", "Post" */
+  protected static override readonly Log = [...super.Log, "Product", "Post"];
+
   /**
    * @author Aloento
    * @since 0.5.0
@@ -37,8 +41,8 @@ export abstract class AdminProductPost extends AdminNet {
    * @since 0.5.0
    * @version 1.0.3
    */
-  public static usePhoto(options: Options<true, [number, File]>) {
-    const log = useConst(() => this.Log.With("Product", "Post", "Photo"));
+  public static usePhoto(pLog: Logger, options: Options<true, [number, File]>) {
+    const log = useConst(() => pLog.With(...this.Log, "Photo"));
 
     return useRequest(async (prodId, file) => {
       if (!file.type.startsWith("image/"))

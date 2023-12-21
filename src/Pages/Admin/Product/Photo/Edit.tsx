@@ -1,8 +1,7 @@
 import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Image, Input, Toast, ToastTitle, makeStyles, tokens } from "@fluentui/react-components";
-import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { useState } from "react";
-import { ICompLog } from "~/Helpers/Logger";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -35,19 +34,19 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.1.0
  */
-interface IAdminProductPhotoEdit extends ICompLog {
+interface IAdminProductPhotoEdit {
   Photo: IPhotoItem;
   Refresh: () => void;
 }
+
+const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit");
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.3.2
  */
-export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh, ParentLog }: IAdminProductPhotoEdit) {
-  const log = useConst(() => ParentLog.With("Edit"));
-
+export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: IAdminProductPhotoEdit) {
   const style = useStyles();
   const [cap, setCap] = useState(Caption || "");
 

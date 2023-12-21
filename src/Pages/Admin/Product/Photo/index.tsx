@@ -94,7 +94,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
             onClick={() => run(item.Id, false)}
           />
 
-          <AdminProductPhotoEdit Photo={item} Refresh={refreshCarousel} ParentLog={log} />
+          <AdminProductPhotoEdit Photo={item} Refresh={refreshCarousel} />
         </DataGridCell>
       )
     },
@@ -121,7 +121,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run: newPhoto } = AdminHub.Product.Post.usePhoto({
+  const { run: newPhoto } = AdminHub.Product.Post.usePhoto(log, {
     manual: true,
     onError(e, params) {
       dispatch({
