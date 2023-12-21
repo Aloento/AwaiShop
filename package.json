@@ -18,7 +18,7 @@
     "@azure/msal-browser": "^3.6.0",
     "@azure/msal-common": "^14.5.0",
     "@azure/msal-react": "^2.0.8",
-    "@fluentui/react-components": "^9.43.0",
+    "@fluentui/react-components": "^9.43.2",
     "@fluentui/react-hooks": "^8.6.34",
     "@fluentui/react-icons": "^2.0.224",
     "@griffel/react": "^1.5.19",
