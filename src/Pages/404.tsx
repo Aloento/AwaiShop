@@ -18,6 +18,6 @@ export function NotFound() {
       <meta name="robots" content="noindex, nofollow" />
     </Helmet>
 
-    <Spinner size="huge" />
+    <Spinner size="huge" label="Redirecting..." />
   </>;
 }

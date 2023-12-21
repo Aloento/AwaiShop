@@ -1,4 +1,4 @@
-import { makeStyles, tokens } from "@fluentui/react-components";
+import { Spinner, makeStyles, tokens } from "@fluentui/react-components";
 import { useMemo } from "react";
 import { NewUser } from "~/Components/NewUser";
 import { ColFlex, NavH, NavW } from "~/Helpers/Styles";
@@ -42,7 +42,7 @@ const useStyle = makeStyles({
 /**
  * @author Aloento
  * @since 0.2.2 MusiLand
- * @version 0.3.2
+ * @version 0.4.0
  */
 export function Layout() {
   const style = useStyle();
@@ -61,7 +61,10 @@ export function Layout() {
         return <History />;
 
       case "Login":
-        return <div>Login Redirecting...</div>;
+        return <Spinner size="huge" label="Login Redirecting..." />;
+
+      case "Reload":
+        return <Spinner size="huge" label="Reloading..." />;
 
       case "":
       case undefined:
