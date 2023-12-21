@@ -1,9 +1,8 @@
 import { Button, Field, Input, Toast, ToastTitle } from "@fluentui/react-components";
-import { useConst } from "@fluentui/react-hooks";
 import { EditRegular, SendRegular } from "@fluentui/react-icons";
 import { useBoolean } from "ahooks";
 import { useState } from "react";
-import { ICompLog } from "~/Helpers/Logger";
+import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
 
@@ -12,20 +11,20 @@ import { AdminHub } from "~/ShopNet/Admin";
  * @since 1.0.0
  * @version 0.1.0
  */
-interface IShipment extends ICompLog {
+interface IShipment {
   OrderId: number;
   TrackingNumber?: string;
   Refresh: () => void;
 }
+
+const log = new Logger("Admin", "Order", "Detail", "Shipment");
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.2.3
  */
-export function Shipment({ OrderId, TrackingNumber, Refresh, ParentLog }: IShipment) {
-  const log = useConst(() => ParentLog.With("Shipment"));
-
+export function Shipment({ OrderId, TrackingNumber, Refresh }: IShipment) {
   const [edit, { setTrue, setFalse }] = useBoolean();
   const [track, setTrack] = useState(TrackingNumber);
 

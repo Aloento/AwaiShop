@@ -1,12 +1,11 @@
 import { Button, Field, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
-import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
-import { ICompLog } from "~/Helpers/Logger";
+import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { OrderComment } from "~/Pages/History/Comment";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -27,14 +26,14 @@ const useStyles = makeStyles({
   }
 });
 
+const log = new Logger("Admin", "Order", "Detail");
+
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.3.1
  */
-export function AdminOrderDetail({ OrderId, ParentLog }: { OrderId: number; } & ICompLog) {
-  const log = useConst(() => ParentLog.With("Detail"));
-
+export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const style = useStyles();
   const [open, { setTrue, setFalse }] = useBoolean();
 
@@ -101,13 +100,13 @@ export function AdminOrderDetail({ OrderId, ParentLog }: { OrderId: number; } & 
           <AdminOrderList Items={data?.ShopCart} />
         </Field>
 
-        <Shipment OrderId={OrderId} TrackingNumber={order?.TrackingNumber} Refresh={run} ParentLog={log} />
+        <Shipment OrderId={OrderId} TrackingNumber={order?.TrackingNumber} Refresh={run} />
 
         <OrderComment Comments={data?.Comments} />
 
-        <AdminOrderAppend OrderId={OrderId} Refresh={run} ParentLog={log} />
+        <AdminOrderAppend OrderId={OrderId} Refresh={run} />
 
-        <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
+        <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} />
       </DrawerBody>
     </Drawer>
   </>

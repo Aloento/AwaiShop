@@ -75,7 +75,7 @@ const columns: TableColumnDefinition<IAdminOrderItem>[] = [
     renderCell(item) {
       return (
         <DataGridCell className={useStyles().twoc}>
-          <AdminOrderDetail OrderId={item.Id} ParentLog={log} />
+          <AdminOrderDetail OrderId={item.Id} />
         </DataGridCell>
       )
     },
