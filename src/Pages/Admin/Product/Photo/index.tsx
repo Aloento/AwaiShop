@@ -94,7 +94,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
             onClick={() => run(item.Id, false)}
           />
 
-          <AdminProductPhotoEdit Photo={item} Refresh={refreshCarousel} />
+          <AdminProductPhotoEdit Photo={item} Refresh={refreshCarousel} ParentLog={log} />
         </DataGridCell>
       )
     },

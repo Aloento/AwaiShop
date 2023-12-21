@@ -162,7 +162,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.2
    */
-  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, logger: Logger) {
+  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, pLog: Logger) {
     const chunkSize = 30 * 1024;
     const chunks = Math.ceil(file.size / chunkSize);
     let index = 0;
@@ -180,7 +180,7 @@ export abstract class SignalR {
       });
 
       subject.next(buffer);
-      logger?.debug(`Sent chunk ${index + 1}/${chunks}`);
+      pLog?.debug(`Sent chunk ${index + 1}/${chunks}`);
       index++;
     }
 
