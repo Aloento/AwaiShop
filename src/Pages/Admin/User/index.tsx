@@ -59,7 +59,7 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "Admin";
     },
     renderCell(item) {
-      return <AdminUserGrant UserId={item.Id} Admin={item.Admin} Refresh={refreshUser} ParentLog={log} />
+      return <AdminUserGrant UserId={item.Id} Admin={item.Admin} Refresh={refreshUser} />
     },
   }),
   createTableColumn<IUserItem>({
@@ -68,7 +68,7 @@ const columns: TableColumnDefinition<IUserItem>[] = [
       return "Delete";
     },
     renderCell(item) {
-      return <AdminUserDelete UserId={item.Id} Refresh={refreshUser} ParentLog={log} />
+      return <AdminUserDelete UserId={item.Id} Refresh={refreshUser} />
     },
   })
 ]

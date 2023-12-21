@@ -88,7 +88,7 @@ const columns: TableColumnDefinition<IAdminOrderItem>[] = [
  * @version 0.2.0
  */
 export function AdminOrder() {
-  const { data } = useRequest(() => AdminHub.Order.Get.List(), {
+  const { data } = useRequest(() => AdminHub.Order.Get.List(log), {
     onError: log.error
   });
 

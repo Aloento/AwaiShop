@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { ICartItem } from "~/Components/ShopCart";
+import { Logger } from "~/Helpers/Logger";
 import { IAdminOrderItem } from "~/Pages/Admin/Order";
 import { IComment } from "~/Pages/History/Comment";
 import { IOrderDetail } from "~/Pages/History/Detail";
@@ -15,17 +16,17 @@ import { AdminOrderEntity } from "./Entity";
  * @version 0.1.1
  */
 export abstract class AdminOrderGet extends AdminNet {
-  protected static override readonly Log = super.Log.With("Order", "Get");
-
-  private static readonly list = this.Log.With("List");
+  /** "Order", "Get" */
+  protected static override readonly Log = [...super.Log, "Order", "Get"];
 
   /**
    * @author Aloento
    * @since 0.5.0
    * @version 0.1.1
    */
-  public static async List(): Promise<IAdminOrderItem[]> {
+  public static async List(pLog: Logger): Promise<IAdminOrderItem[]> {
     this.EnsureLogin();
+    const log = pLog.With(...this.Log, "List");
 
     const list = await this.WithTimeCache<
       {
@@ -41,7 +42,7 @@ export abstract class AdminOrderGet extends AdminNet {
       const order = await AdminOrderEntity.Order(meta.OrderId);
 
       if (!order) {
-        this.list.warn(`[Mismatch] Order ${meta.OrderId} not found`);
+        log.warn(`[Mismatch] Order ${meta.OrderId} not found`);
         continue;
       }
 
@@ -51,7 +52,7 @@ export abstract class AdminOrderGet extends AdminNet {
         const prod = await ProductEntity.Product(prodId);
 
         if (!prod) {
-          this.list.warn(`[Mismatch] Product ${prodId} not found`);
+          log.warn(`[Mismatch] Product ${prodId} not found`);
           continue;
         }
 
@@ -61,7 +62,7 @@ export abstract class AdminOrderGet extends AdminNet {
       const user = await AdminUserEntity.User(order.UserId);
 
       if (!user) {
-        this.list.error(`[Mismatch] User ${order.UserId} not found`);
+        log.error(`[Mismatch] User ${order.UserId} not found`);
         continue;
       }
 
@@ -79,15 +80,14 @@ export abstract class AdminOrderGet extends AdminNet {
     return items.sort((a, b) => b.OrderDate.getTime() - a.OrderDate.getTime());
   }
 
-  private static readonly detail = this.Log.With("Detail");
-
   /**
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.1
    */
-  public static async Detail(orderId: number): Promise<IOrderDetail> {
+  public static async Detail(orderId: number, pLog: Logger): Promise<IOrderDetail> {
     this.EnsureLogin();
+    const log = pLog.With(...this.Log, "Detail");
 
     const meta = await this.WithTimeCache<
       {
@@ -110,14 +110,14 @@ export abstract class AdminOrderGet extends AdminNet {
         const type = await ProductEntity.Type(typeId);
 
         if (!type) {
-          this.detail.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
+          log.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
           continue;
         }
 
         const vari = await ProductEntity.Variant(type.VariantId);
 
         if (!vari) {
-          this.detail.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
+          log.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
           continue;
         }
 
@@ -128,15 +128,15 @@ export abstract class AdminOrderGet extends AdminNet {
       const prod = await ProductEntity.Product(prodId);
 
       if (!prod) {
-        this.detail.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);
+        log.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);
         continue;
       }
 
       const list = await ProductGet.PhotoList(prodId);
-      const cover = await this.FindCover(list, prodId, this.detail);
+      const cover = await this.FindCover(list, prodId, log);
 
       if (!cover)
-        this.detail.warn(`Product ${prodId} has no photo`);
+        log.warn(`Product ${prodId} has no photo`);
 
       items.push({
         Id: index++,
@@ -154,7 +154,7 @@ export abstract class AdminOrderGet extends AdminNet {
       const cmt = await AdminOrderEntity.Comment(cmtId);
 
       if (!cmt) {
-        this.detail.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
+        log.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
         continue;
       }
 
@@ -166,7 +166,7 @@ export abstract class AdminOrderGet extends AdminNet {
         if (user)
           name = user.Name;
         else
-          this.detail.warn(`[Mismatch] User ${cmt.UserId} not found. Order : ${orderId}`);
+          log.warn(`[Mismatch] User ${cmt.UserId} not found. Order : ${orderId}`);
       }
 
       comments.push({

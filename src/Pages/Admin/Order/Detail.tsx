@@ -40,7 +40,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
   const { Nav, Paths } = useRouter();
   const curr = parseInt(Paths.at(2)!);
 
-  const { data, run: runDetail } = useRequest(() => AdminHub.Order.Get.Detail(OrderId), {
+  const { data, run: runDetail } = useRequest(() => AdminHub.Order.Get.Detail(OrderId, log), {
     manual: true,
     onError: log.error
   });

@@ -24,8 +24,8 @@ export abstract class OrderGet extends ShopNet {
    * @version 1.0.1
    */
   public static async List(pLog: Logger): Promise<IOrderItem[]> {
-    const log = pLog.With(...this.Log, "List");
     this.EnsureLogin();
+    const log = pLog.With(...this.Log, "List");
 
     const list = await this.WithTimeCache<
       {
@@ -77,8 +77,8 @@ export abstract class OrderGet extends ShopNet {
    * @version 1.0.1
    */
   public static async Detail(orderId: number, pLog: Logger): Promise<IOrderDetail> {
-    const log = pLog.With(...this.Log, "Detail");
     this.EnsureLogin();
+    const log = pLog.With(...this.Log, "Detail");
 
     const meta = await this.WithTimeCache<
       {
