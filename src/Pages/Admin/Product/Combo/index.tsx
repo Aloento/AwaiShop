@@ -108,7 +108,7 @@ const columns: TableColumnDefinition<IDetailComboItem>[] = [
         <DataGridCell className={useStyles().seven}>
           <AdminProductComboDetail {...item} />
 
-          <AdminProductComboDelete ComboId={item.Id} Refresh={item.Refresh} ParentLog={log} />
+          <AdminProductComboDelete ComboId={item.Id} Refresh={item.Refresh} />
         </DataGridCell>
       )
     }
@@ -128,9 +128,12 @@ export function AdminProductCombo({ ProdId }: { ProdId: number }) {
   return <>
     <div className={useStyles().body}>
       <Subtitle1>Combo</Subtitle1>
-      <AdminProductNewCombo ProdId={ProdId} Refresh={run} ParentLog={log} />
+      <AdminProductNewCombo ProdId={ProdId} Refresh={run} />
     </div>
 
-    <DelegateDataGrid Items={data?.map(x => ({ ProdId, Refresh: run, ...x, ParentLog: log })) || []} Columns={columns} />
+    <DelegateDataGrid
+      Items={data?.map(x => ({ ProdId, Refresh: run, ...x })) || []}
+      Columns={columns}
+    />
   </>
 }

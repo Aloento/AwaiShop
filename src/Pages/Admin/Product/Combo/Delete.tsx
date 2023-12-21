@@ -1,18 +1,17 @@
 import { Button, Toast, ToastTitle } from "@fluentui/react-components";
-import { useConst } from "@fluentui/react-hooks";
 import { DeleteRegular } from "@fluentui/react-icons";
-import { ICompLog } from "~/Helpers/Logger";
+import { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
+
+const log = new Logger("Admin", "Product", "Detail", "Combo", "Delete");
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.2.2
  */
-export function AdminProductComboDelete({ ComboId, Refresh, ParentLog }: { ComboId: number; Refresh: () => void } & ICompLog) {
-  const log = useConst(() => ParentLog.With("Delete"));
-
+export function AdminProductComboDelete({ ComboId, Refresh }: { ComboId: number; Refresh: () => void }) {
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Delete.useCombo({

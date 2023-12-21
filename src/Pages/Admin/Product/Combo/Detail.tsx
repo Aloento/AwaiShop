@@ -1,11 +1,10 @@
 import { Button, Combobox, DataGridCell, DataGridHeaderCell, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Label, Option, SpinButton, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
-import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, EditRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { isInteger } from "lodash-es";
 import { useState } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
-import { ICompLog } from "~/Helpers/Logger";
+import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { AdminHub } from "~/ShopNet/Admin";
@@ -80,19 +79,19 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 0.1.0
  */
-export interface IDetailComboItem extends IComboItem, ICompLog {
+export interface IDetailComboItem extends IComboItem {
   ProdId: number;
   Refresh: () => void;
 }
+
+const log = new Logger("Admin", "Product", "Detail", "Combo", "Detail");
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.2.2
  */
-export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh, ParentLog }: IDetailComboItem) {
-  const log = useConst(() => ParentLog.With("Detail"));
-
+export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: IDetailComboItem) {
   const [open, { toggle }] = useBoolean();
   const [combo, setCombo] = useState(Combo);
   const [stock, setStock] = useState(Stock);
