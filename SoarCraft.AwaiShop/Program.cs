@@ -41,7 +41,8 @@ builder.Services.AddDbContext<ShopContext>(x => {
     if (Shared.Dev) {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
-        x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), opt => opt.EnableRetryOnFailure());
+        x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+            opt => opt.EnableRetryOnFailure());
     } else
         x.UseSqlServer(Environment.GetEnvironmentVariable("SQLAZURECONNSTR_Zero"), opt => opt.EnableRetryOnFailure());
 });
@@ -51,7 +52,7 @@ if (Shared.Dev)
 
 builder.Services.AddSignalR(x => {
     x.HandshakeTimeout = TimeSpan.FromSeconds(5);
-    x.SupportedProtocols = new[] { "messagepack" };
+    x.SupportedProtocols = ["messagepack"];
     x.EnableDetailedErrors = Shared.Dev;
     x.MaximumParallelInvocationsPerClient = sbyte.MaxValue / 2;
 }).AddMessagePackProtocol(x => {
@@ -67,6 +68,10 @@ var app = builder.Build();
 if (Shared.Dev) {
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
+
+#if false
+    await app.SeedData();
+#endif
 }
 
 app.UseHttpsRedirection();
