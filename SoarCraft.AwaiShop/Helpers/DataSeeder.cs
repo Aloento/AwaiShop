@@ -279,6 +279,8 @@ internal static class DataSeeder {
 
         #endregion
 
+        await context.SaveChangesAsync();
+
         throw new("Seed Success");
     }
 }
