@@ -1,6 +1,6 @@
 ﻿namespace SoarCraft.AwaiShop.Helpers;
 
-using SoarCraft.AwaiShop.Entities;
+using Entities;
 
 /**
  * <remarks>
