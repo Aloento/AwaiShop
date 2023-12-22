@@ -6,7 +6,6 @@ using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
 using SoarCraft.AwaiShop;
 using SoarCraft.AwaiShop.AdminHub;
-using SoarCraft.AwaiShop.Helpers;
 using SoarCraft.AwaiShop.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,7 +68,7 @@ if (Shared.Dev) {
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
 
-#if true
+#if false
     await app.SeedData();
 #endif
 }
