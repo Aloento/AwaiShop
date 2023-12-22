@@ -24,7 +24,7 @@ public class Product : Concurrency, IArchive {
 
     public virtual Category? Category { get; set; }
 
-    public virtual ICollection<Photo> Photos { get; }
+    public virtual ICollection<Photo> Photos { get; init; }
 
     public string? Description { get; set; }
 
