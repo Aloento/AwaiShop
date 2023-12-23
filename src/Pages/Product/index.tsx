@@ -67,7 +67,7 @@ const log = new Logger("Product");
  * @since 0.1.0
  * @version 0.1.5
  */
-export function Product() {
+function Product() {
   const style = useStyle();
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
@@ -131,3 +131,6 @@ export function Product() {
     </RadioGroupContext>
   )
 }
+
+/** @deprecated */
+export default Product;

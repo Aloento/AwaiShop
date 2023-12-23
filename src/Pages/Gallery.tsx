@@ -52,7 +52,7 @@ const log1 = new Logger("Gallery");
  * @since 0.1.0
  * @version 0.1.3
  */
-export function Gallery() {
+function Gallery() {
   const style = useStyles();
   const { data } = useRequest(() => Hub.Gallery.Get.Categories(), {
     onError: log1.error
@@ -123,3 +123,6 @@ function GalleryCard({ Id }: { Id: number }) {
     </Card>
   )
 }
+
+/** @deprecated */
+export default Gallery;
