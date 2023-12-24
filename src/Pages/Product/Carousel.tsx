@@ -19,7 +19,7 @@ const useStyle = makeStyles({
   },
 });
 
-const img = "https://placehold.co/400?text=Loading...";
+const img = "https://placehold.co/1000?text=Loading...";
 
 const log = new Logger("Product", "Carousel");
 
