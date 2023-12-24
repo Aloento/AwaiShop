@@ -1,6 +1,6 @@
-import { Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { SkeletonItem, Title3, ToggleButton, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
@@ -34,34 +34,34 @@ const log = new Logger("Product", "RadioGroup");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.0
+ * @version 0.4.0
  */
 export function ProductRadioList({ ProdId }: { ProdId: number }) {
-  const { data } = useRequest(() => Hub.Product.Get.Combo(ProdId, log), {
-    onError: log.error
-  });
-
   const { Update } = useRadioGroup();
   const [variants, setVariants] = useState<Record<string, Set<string>>>({});
 
-  useEffect(() => {
-    if (!data) return;
+  const { loading } = useRequest(() => Hub.Product.Get.Combo(ProdId, log), {
+    onError: log.error,
+    onSuccess(data) {
+      const variant: Record<string, Set<string>> = {};
+      const cur: Record<string, string> = {};
 
-    const variant: Record<string, Set<string>> = {};
-    const cur: Record<string, string> = {};
+      for (const i of data)
+        for (const [vari, type] of Object.entries(i.Combo))
+          if (variant.hasOwnProperty(vari))
+            variant[vari].add(type);
+          else {
+            variant[vari] = new Set([type]);
+            cur[vari] = type;
+          }
 
-    for (const i of data)
-      for (const [vari, type] of Object.entries(i.Combo))
-        if (variant.hasOwnProperty(vari))
-          variant[vari].add(type);
-        else {
-          variant[vari] = new Set([type]);
-          cur[vari] = type;
-        }
+      Update(cur);
+      setVariants(variant);
+    }
+  });
 
-    Update(cur);
-    setVariants(variant);
-  }, [data]);
+  if (loading)
+    return <SkeletonItem size={72} />;
 
   return Object.keys(variants).map((val, i) => <VariRadioGroup key={i} Variant={val} Types={variants[val]} />);
 }

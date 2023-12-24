@@ -9,7 +9,7 @@ import { AdminUser } from "./User";
  * @since 0.1.0
  * @version 0.1.0
  */
-export function Admin() {
+function Admin() {
   const { Paths } = useRouter();
   const path = Paths.at(1);
 
@@ -26,3 +26,6 @@ export function Admin() {
     }
   }, [path])
 }
+
+/** @deprecated */
+export default Admin;
