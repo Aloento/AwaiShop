@@ -1,4 +1,4 @@
-import { Body1, Card, CardFooter, CardPreview, Link, Title3, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1, Card, CardFooter, CardPreview, Link, Skeleton, SkeletonItem, Title3, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { random } from "lodash-es";
 import { GuidImage } from "~/Helpers/GuidImage";
@@ -50,13 +50,21 @@ const log1 = new Logger("Gallery");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.3
+ * @version 0.2.0
  */
 function Gallery() {
   const style = useStyles();
-  const { data } = useRequest(() => Hub.Gallery.Get.Categories(), {
+  const { data, loading } = useRequest(() => Hub.Gallery.Get.Categories(), {
     onError: log1.error
   });
+
+  if (loading)
+    return (
+      <Skeleton className={style.main}>
+        <SkeletonItem appearance="translucent" size={32} />
+        <SkeletonItem size={128} />
+      </Skeleton>
+    );
 
   return (
     <div className={style.main}>
