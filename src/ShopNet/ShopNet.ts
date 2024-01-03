@@ -21,10 +21,8 @@ export abstract class ShopNet extends SignalR {
   public static readonly Hub = new HubConnectionBuilder()
     .withUrl(import.meta.env.DEV ? "https://localhost/Hub" : "http://awaishop.aloen.to:3389/Hub",
       {
-        ...import.meta.env.DEV ? {
-          skipNegotiation: true,
-          transport: HttpTransportType.WebSockets,
-        } : {},
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets,
         logMessageContent: import.meta.env.DEV,
         async accessTokenFactory() {
           const token = await AccessToken();
