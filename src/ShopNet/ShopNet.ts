@@ -19,7 +19,7 @@ export abstract class ShopNet extends SignalR {
    * @version 0.1.2
    */
   public static readonly Hub = new HubConnectionBuilder()
-    .withUrl(import.meta.env.DEV ? "https://localhost/Hub" : "http://awaishop.aloen.to:8080/Hub",
+    .withUrl(import.meta.env.DEV ? "https://localhost/Hub" : "http://awaishop.aloen.to:3389/Hub",
       {
         ...import.meta.env.DEV ? {
           skipNegotiation: true,

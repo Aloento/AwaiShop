@@ -19,7 +19,7 @@ export abstract class AdminNet extends SignalR {
    * @version 0.1.2
    */
   public static readonly Hub = new HubConnectionBuilder()
-    .withUrl(import.meta.env.DEV ? "https://localhost/AdminHub" : "http://awaishop.aloen.to:8080/AdminHub",
+    .withUrl(import.meta.env.DEV ? "https://localhost/AdminHub" : "http://awaishop.aloen.to:3389/AdminHub",
       {
         ...import.meta.env.DEV ? {
           skipNegotiation: true,
