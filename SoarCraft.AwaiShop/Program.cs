@@ -42,8 +42,12 @@ builder.Services.AddDbContext<ShopContext>(x => {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
         x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    } else
-        x.UseNpgsql(Environment.GetEnvironmentVariable("SQLCONNSTR"));
+    } else {
+        var str = Environment.GetEnvironmentVariable("SQLCONNSTR");
+        if (string.IsNullOrWhiteSpace(str))
+            throw new ArgumentNullException("DB Connection");
+        x.UseNpgsql(str);
+    }
 });
 
 if (Shared.Dev)
