@@ -41,10 +41,13 @@ builder.Services.AddDbContext<ShopContext>(x => {
     if (Shared.Dev) {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
-        x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-            opt => opt.EnableRetryOnFailure());
-    } else
-        x.UseSqlServer(Environment.GetEnvironmentVariable("SQLAZURECONNSTR_Zero"), opt => opt.EnableRetryOnFailure());
+        x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    } else {
+        var str = Environment.GetEnvironmentVariable("SQLCONNSTR");
+        if (string.IsNullOrWhiteSpace(str))
+            throw new ArgumentNullException("DB Connection");
+        x.UseNpgsql(str);
+    }
 });
 
 if (Shared.Dev)
@@ -70,7 +73,7 @@ if (Shared.Dev) {
     app.UseMigrationsEndPoint();
 
 #if false
-    await app.SeedData();
+    await SoarCraft.AwaiShop.Helpers.DataSeeder.SeedData(app);
 #endif
 }
 

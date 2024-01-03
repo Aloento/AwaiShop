@@ -1,4 +1,4 @@
-name: Static Web Apps
+name: AwaiShop
 
 on:
   push:
@@ -9,9 +9,16 @@ jobs:
   build_deploy:
     runs-on: ubuntu-latest
     name: Build and Deploy
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+          dotnet-quality: preview
 
       - uses: actions/setup-node@v3
         with:
@@ -23,20 +30,20 @@ jobs:
           version: "latest"
           run_install: false
 
-      - name: Get pnpm store directory
-        shell: bash
+      - name: Get pnpm store
+        id: pnpm-cache
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
 
       - uses: actions/cache@v3
         name: Setup pnpm cache
         with:
-          path: ${{ env.STORE_PATH }}
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Build
+      - name: Install React
         run: pnpm install && pnpm build
 
       - name: Pages Deploy
@@ -46,3 +53,13 @@ jobs:
           publish_dir: ./dist
           publish_branch: gh-pages
           cname: Awai.Aloen.to
+
+      - name: Build C#
+        run: dotnet publish SoarCraft.AwaiShop/SoarCraft.AwaiShop.csproj -c Release -o AwaiShop -r linux-x64 --self-contained true
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./AwaiShop
+          publish_branch: Infra

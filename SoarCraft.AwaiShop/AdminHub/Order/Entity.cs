@@ -10,7 +10,7 @@ internal partial class AdminHub {
      * @version 0.1.1
      * </remarks>
      */
-    public async Task<dynamic> OrderEntity(uint key, byte[]? version) {
+    public async Task<dynamic> OrderEntity(uint key, uint? version) {
         if (version is not null) {
             var noChange = await this.Db.Orders
                 .AnyAsync(x => x.OrderId == key && x.Version == version);
@@ -37,7 +37,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<dynamic?> CommentEntity(uint key, byte[]? version) {
+    public async Task<dynamic?> CommentEntity(uint key, uint? version) {
         if (version is not null) {
             var noChange = await this.Db.Comments
                 .AnyAsync(x => x.CommentId == key && x.Version == version);

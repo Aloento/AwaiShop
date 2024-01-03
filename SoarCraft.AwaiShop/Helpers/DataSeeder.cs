@@ -10,7 +10,7 @@ using Entities;
  * </remarks>
  */
 internal static class DataSeeder {
-    public static async Task SeedData(this IApplicationBuilder host) {
+    public static async Task SeedData(IApplicationBuilder host) {
         await using var scope = host.ApplicationServices.CreateAsyncScope();
         await using var context = scope.ServiceProvider.GetRequiredService<ShopContext>();
 
