@@ -3,6 +3,7 @@
 namespace SoarCraft.AwaiShop.Models;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +27,8 @@ public class Product : Concurrency, IArchive {
 
     public virtual ICollection<Photo> Photos { get; init; }
 
+    [Column(TypeName = "json")]
+    [StringLength(ushort.MaxValue)]
     public string? Description { get; set; }
 
     public bool? IsArchived { get; set; }

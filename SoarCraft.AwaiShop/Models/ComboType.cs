@@ -2,7 +2,6 @@
 namespace SoarCraft.AwaiShop.Models;
 
 using Entities;
-using Microsoft.EntityFrameworkCore;
 
 /**
  * <remarks>
@@ -18,6 +17,5 @@ public class ComboType : Concurrency {
 
     public uint TypeId { get; set; }
 
-    [DeleteBehavior(DeleteBehavior.ClientSetNull)]
     public virtual Type Type { get; set; }
 }

@@ -10,7 +10,7 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<dynamic?> ProductEntity(uint key, byte[]? version) {
+    public async Task<dynamic?> ProductEntity(uint key, uint? version) {
         if (version is not null) {
             var noChange = await this.Db.Products
                 .AnyAsync(x => x.ProductId == key && x.Version == version);
@@ -36,7 +36,7 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<dynamic?> PhotoEntity(uint key, byte[]? version) {
+    public async Task<dynamic?> PhotoEntity(uint key, uint? version) {
         if (version is not null) {
             var noChange = await this.Db.Photos
                 .AnyAsync(x => x.PhotoId == key && x.Version == version);
@@ -63,7 +63,7 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<dynamic?> TypeEntity(uint key, byte[]? version) {
+    public async Task<dynamic?> TypeEntity(uint key, uint? version) {
         if (version is not null) {
             var noChange = await this.Db.Types
                 .AnyAsync(x => x.TypeId == key && x.Version == version);
@@ -88,7 +88,7 @@ internal partial class ShopHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<dynamic?> VariantEntity(uint key, byte[]? version) {
+    public async Task<dynamic?> VariantEntity(uint key, uint? version) {
         if (version is not null) {
             var noChange = await this.Db.Variants
                 .AnyAsync(x => x.VariantId == key && x.Version == version);
