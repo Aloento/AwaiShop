@@ -1499,7 +1499,7 @@ packages:
       '@swc/helpers': 0.5.3
       '@types/react': 18.2.46
       '@types/react-dom': 18.2.18
-      keyborg: 2.3.0
+      keyborg: 2.4.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       tabster: 5.2.0
@@ -2451,8 +2451,8 @@ packages:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: false
 
-  /keyborg@2.3.0:
-    resolution: {integrity: sha512-TU7VDxohtY7Rf4rTuCwa8QrHjya4eqKiSThI3lHF/wcBpm29gAui/vy0wY8l3ahcFEJ9tZhV+iduXPo6EkNQXw==}
+  /keyborg@2.4.0:
+    resolution: {integrity: sha512-EixFnyCc6m27NkFwyT5GNNQl+9wiTMePtAvVuKXZpc0CZLLJfJFB3zXGFBGnwtvEXymbJoPWoErzwTpiEQ+Msg==}
     dev: false
 
   /lexical@0.12.5:
@@ -2509,8 +2509,8 @@ packages:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
     dev: true
 
-  /postcss@8.4.32:
-    resolution: {integrity: sha512-D/kj5JNu6oo2EIy+XL/26JEDTlIbB8hw85G8StOE6L74RQAVVP5rej6wxCNqyMbR4RkPfqvezVbPw81Ngd6Kcw==}
+  /postcss@8.4.33:
+    resolution: {integrity: sha512-Kkpbhhdjw2qQs2O2DGX+8m5OVqEcbB9HRBvuYM9pgrjEFUg30A9LmXNlTAUj4S9kgtGyrMbTzVjH7E+s5Re2yg==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
@@ -2711,7 +2711,7 @@ packages:
   /tabster@5.2.0:
     resolution: {integrity: sha512-cSi3a0gGeM9Co/gTKHlhTFfiitwVjcA+kP9lJux0U7QaRrZox1yYrfbwZhJXM7N0fux7BgvCYaOxME5k0EQ0tA==}
     dependencies:
-      keyborg: 2.3.0
+      keyborg: 2.4.0
       tslib: 2.6.2
     dev: false
 
@@ -2794,7 +2794,7 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.19.11
-      postcss: 8.4.32
+      postcss: 8.4.33
       rollup: 4.9.2
     optionalDependencies:
       fsevents: 2.3.3
