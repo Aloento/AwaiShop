@@ -37,17 +37,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddDbContext<ShopContext>(x => {
     x.UseLazyLoadingProxies();
+    string? connectionString;
 
     if (Shared.Dev) {
         x.EnableSensitiveDataLogging();
         x.EnableDetailedErrors();
-        x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    } else {
-        var str = Environment.GetEnvironmentVariable("SQLCONNSTR");
-        if (string.IsNullOrWhiteSpace(str))
-            throw new ArgumentNullException("DB Connection");
-        x.UseNpgsql(str);
-    }
+        connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    } else
+        connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR");
+
+    if (string.IsNullOrWhiteSpace(connectionString))
+        throw new ArgumentNullException(nameof(connectionString));
+
+    x.UseNpgsql(connectionString);
 });
 
 if (Shared.Dev)
