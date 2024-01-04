@@ -1,5 +1,7 @@
 import { Skeleton, SkeletonItem, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
+import { Helmet } from "react-helmet";
+import { Dic } from "~/Helpers/Dic";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
@@ -50,6 +52,10 @@ function Gallery() {
 
   return (
     <div className={style.main}>
+      <Helmet>
+        <title>Gallery - {Dic.Name}</title>
+      </Helmet>
+
       {
         data?.map((x, i) => <GalleryCategory key={i} Category={x} />)
       }

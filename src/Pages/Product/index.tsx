@@ -1,8 +1,10 @@
 import { Divider, LargeTitle, SpinButton, Title3, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
+import { Dic } from "~/Helpers/Dic";
 import { Logger } from "~/Helpers/Logger";
 import { BaseCard, Col, ColFlex, Flex } from "~/Helpers/Styles";
 import { useLimit } from "~/Helpers/useLimit";
@@ -87,6 +89,10 @@ function Product() {
 
   return (
     <RadioGroupContext>
+      <Helmet>
+        <title>{`${data?.Name} - ${Dic.Name}`}</title>
+      </Helmet>
+
       <div className={style.main}>
         <div className={style.info}>
           <ProductCarousel Id={id} />

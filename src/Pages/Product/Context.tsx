@@ -31,7 +31,7 @@ export function useRadioGroup() {
  * @since 0.5.0
  * @version 0.1.0
  */
-export function RadioGroupContext({ children }: { children: JSX.Element }) {
+export function RadioGroupContext({ children }: { children: React.ReactNode }) {
   const [curr, setCurr] = useState({});
 
   return (
