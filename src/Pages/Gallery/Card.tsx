@@ -28,7 +28,7 @@ const log = new Logger("Gallery", "Category", "Card");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.3
+ * @version 0.1.4
  */
 export function GalleryCard({ Id }: { Id: number }) {
   const style = useStyles();
@@ -43,7 +43,7 @@ export function GalleryCard({ Id }: { Id: number }) {
       </CardPreview>
 
       <CardFooter>
-        <Link href={`/Product/${Id}`}>{data?.Name}</Link>
+        <Link href={`/Product/${Id}`}>{data?.Name || "Loading..."}</Link>
       </CardFooter>
     </Card>
   )
