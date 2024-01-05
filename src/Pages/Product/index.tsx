@@ -13,7 +13,7 @@ import { IComboItem } from "../Admin/Product/Combo";
 import { ProductAddCart } from "./AddCart";
 import { ProductCarousel } from "./Carousel";
 import { RadioGroupContext } from "./Context";
-import { ProductRadioList } from "./RadioGroup";
+import { ProductRadioList } from "./RadioList";
 
 /**
  * @author Aloento
