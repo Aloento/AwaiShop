@@ -34,52 +34,50 @@ const log = new Logger("Product", "RadioGroup");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.0
+ * @version 0.5.0
  */
 export function ProductRadioList({ ProdId }: { ProdId: number }) {
-  const { Update } = useRadioGroup();
-  const [variants, setVariants] = useState<Record<string, Set<string>>>({});
+  const { Update, SetAll } = useRadioGroup();
+  const [variants, setVariants] = useState<[string, string[]][]>([]);
 
   const { loading } = useRequest(() => Hub.Product.Get.Combo(ProdId, log), {
     onError: log.error,
     onSuccess(data) {
       const variant: Record<string, Set<string>> = {};
-      const cur: Record<string, string> = {};
 
       for (const i of data)
         for (const [vari, type] of Object.entries(i.Combo))
           if (variant.hasOwnProperty(vari))
             variant[vari].add(type);
-          else {
+          else
             variant[vari] = new Set([type]);
-            cur[vari] = type;
-          }
 
-      Update(cur);
-      setVariants(variant);
+      SetAll(data);
+      Update(data[0].Combo);
+      setVariants(Object.entries(variant).map(([val, type]) => [val, Array.from(type)]));
     }
   });
 
   if (loading)
     return <SkeletonItem size={72} />;
 
-  return Object.keys(variants).map((val, i) => <VariRadioGroup key={i} Variant={val} Types={variants[val]} />);
+  return variants.map(([val, type], i) => <VariRadioGroup key={i} Variant={val} Types={type} />);
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 interface IVariRadioGroup {
   Variant: string;
-  Types: Set<string>;
+  Types: string[];
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
   const style = useStyle();
@@ -92,7 +90,7 @@ function VariRadioGroup({ Variant, Types }: IVariRadioGroup) {
       </Title3>
 
       <div className={style.radio}>
-        {Array.from(Types).map((val, i) =>
+        {Types.map((val, i) =>
           <ToggleButton
             key={i}
             appearance="outline"

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { IComboItem } from "../Admin/Product/Combo";
 
 /**
  * @author Aloento
@@ -6,8 +7,12 @@ import { createContext, useContext, useState } from "react";
  * @version 0.1.0
  */
 interface Context {
+  /** Current Selected Combination */
   Current: Record<string, string>;
   Update: (val: Record<string, string>) => void;
+
+  All: IComboItem[];
+  SetAll: (val: IComboItem[]) => void;
 }
 
 /**
@@ -29,15 +34,18 @@ export function useRadioGroup() {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function RadioGroupContext({ children }: { children: React.ReactNode }) {
   const [curr, setCurr] = useState({});
+  const [all, setAll] = useState<IComboItem[]>([]);
 
   return (
     <RadioGroup.Provider value={{
       Current: curr,
       Update: setCurr,
+      All: all,
+      SetAll: setAll
     }}>
       {children}
     </RadioGroup.Provider>
