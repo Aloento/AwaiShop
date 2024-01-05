@@ -49,7 +49,7 @@ export function ProductQuantity({ Id }: { Id: number; }) {
         </Title3>
 
         <Subtitle1 className={style.fore}>
-          {Combo?.Stock} in stock
+          {Combo?.Stock || 0} in stock
         </Subtitle1>
       </div>
 

@@ -75,7 +75,7 @@ function Product() {
   return (
     <RadioGroupContext>
       <Helmet>
-        <title>{`${data?.Name} - ${Dic.Name}`}</title>
+        <title>{data?.Name || ""} - {Dic.Name}</title>
       </Helmet>
 
       <div className={style.main}>
