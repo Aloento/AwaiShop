@@ -1,18 +1,15 @@
-import { Divider, LargeTitle, SpinButton, Title3, makeStyles, tokens } from "@fluentui/react-components";
+import { Divider, LargeTitle, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { useState } from "react";
 import { Helmet } from "react-helmet";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useRouter } from "~/Components/Router";
 import { Dic } from "~/Helpers/Dic";
 import { Logger } from "~/Helpers/Logger";
 import { BaseCard, Col, ColFlex, Flex } from "~/Helpers/Styles";
-import { useLimit } from "~/Helpers/useLimit";
 import { Hub } from "~/ShopNet";
 import { IComboItem } from "../Admin/Product/Combo";
-import { ProductAddCart } from "./AddCart";
 import { ProductCarousel } from "./Carousel";
 import { RadioGroupContext } from "./Context";
+import { ProductQuantity } from "./Quantity";
 import { ProductRadioList } from "./RadioList";
 
 /**
@@ -40,16 +37,7 @@ const useStyle = makeStyles({
   },
   fore: {
     color: tokens.colorBrandForeground1
-  },
-  quan: {
-    ...ColFlex,
-    rowGap: tokens.spacingVerticalS,
-  },
-  add: {
-    ...Flex,
-    justifyContent: "space-between",
-    columnGap: tokens.spacingHorizontalM
-  },
+  }
 })
 
 /**
@@ -84,9 +72,6 @@ function Product() {
     }
   });
 
-  const [_, max] = useLimit(id);
-  const [quantity, setQuantity] = useState(1);
-
   return (
     <RadioGroupContext>
       <Helmet>
@@ -108,27 +93,7 @@ function Product() {
 
             <Divider />
 
-            <div className={style.quan}>
-              <Title3 className={style.fore}>
-                QUANTITY
-              </Title3>
-
-              <div className={style.add}>
-                <SpinButton
-                  appearance="underline"
-                  value={quantity}
-                  min={1}
-                  max={max}
-                  onChange={(_, val) => setQuantity(val.value!)}
-                />
-
-                <ProductAddCart
-                  ProdId={id}
-                  Quantity={quantity}
-                />
-              </div>
-            </div>
-
+            <ProductQuantity Id={id} />
           </div>
         </div>
 

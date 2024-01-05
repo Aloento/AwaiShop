@@ -31,12 +31,12 @@ export function ProductRadioList({ ProdId }: { ProdId: number }) {
 
       SetAll(data);
       Update(data[0].Combo);
-      setVariants(Object.entries(variant).map(([val, type]) => [val, Array.from(type)]));
+      setVariants(Object.entries(variant).map(([vari, type]) => [vari, Array.from(type)]));
     }
   });
 
   if (loading)
     return <SkeletonItem size={72} />;
 
-  return variants.map(([val, type], i) => <ProductRadioGroup key={i} Variant={val} Types={type} />);
+  return variants.map(([vari, type], i) => <ProductRadioGroup key={i} Variant={vari} Types={type} />);
 }

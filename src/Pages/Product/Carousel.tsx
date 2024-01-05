@@ -2,6 +2,7 @@ import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Logger } from "~/Helpers/Logger";
 import { Cover } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
