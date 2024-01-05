@@ -55,7 +55,7 @@ const log = new Logger("Product");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.5
+ * @version 0.2.0
  */
 function Product() {
   const style = useStyle();
@@ -84,7 +84,7 @@ function Product() {
 
           <div className={style.detail}>
             <LargeTitle className={style.fore}>
-              {data?.Name}
+              {data?.Name || "Loading..."}
             </LargeTitle>
 
             <Divider />
