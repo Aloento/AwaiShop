@@ -2,13 +2,17 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/
 import { Avatar, Link, Menu, MenuGroupHeader, MenuItem, MenuList, MenuPopover, MenuTrigger } from "@fluentui/react-components";
 import { useBoolean } from "ahooks";
 import { useEffect } from "react";
+import { Logger } from "~/Helpers/Logger";
+import { Hub } from "~/ShopNet";
 import { OnNewUserSubject } from "./NewUser";
 import { Setting } from "./Setting";
+
+const log = new Logger("Avatar", "Menu");
 
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.3.2
  */
 export function AvatarMenu() {
   const [isMenu, { toggle: toggleMenu }] = useBoolean();
@@ -21,19 +25,22 @@ export function AvatarMenu() {
     OnNewUserSubject.subscribe(x => setMount(!x));
   }, []);
 
+  const { data } = Hub.User.Get.useMe(log);
+
   const claim = instance.getActiveAccount();
+  const name = claim?.name || claim?.username;
 
   return <>
     <Menu open={isMenu} onOpenChange={toggleMenu}>
       <MenuTrigger>
-        <Avatar size={36} active={isMenu ? "active" : "unset"} />
+        <Avatar size={36} active={isMenu ? "active" : "unset"} name={name} />
       </MenuTrigger>
 
       <MenuPopover>
         <MenuList>
 
           <AuthenticatedTemplate>
-            <MenuGroupHeader>Hi {claim?.name || claim?.username}</MenuGroupHeader>
+            <MenuGroupHeader>Hi {name}</MenuGroupHeader>
           </AuthenticatedTemplate>
 
           <UnauthenticatedTemplate>
@@ -47,9 +54,12 @@ export function AvatarMenu() {
               <MenuItem>History</MenuItem>
             </Link>
 
-            <Link appearance="subtle" href="/Admin">
-              <MenuItem>Admin</MenuItem>
-            </Link>
+            {
+              data?.Admin &&
+              <Link appearance="subtle" href="/Admin">
+                <MenuItem>Admin</MenuItem>
+              </Link>
+            }
 
             <MenuItem onClick={toggleModal}>Setting</MenuItem>
 
