@@ -8,7 +8,7 @@ import { Setting } from "./Setting";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 export function AvatarMenu() {
   const [isMenu, { toggle: toggleMenu }] = useBoolean();
@@ -22,18 +22,19 @@ export function AvatarMenu() {
   }, []);
 
   const claim = instance.getActiveAccount();
+  const name = claim?.name || claim?.username;
 
   return <>
     <Menu open={isMenu} onOpenChange={toggleMenu}>
       <MenuTrigger>
-        <Avatar size={36} active={isMenu ? "active" : "unset"} />
+        <Avatar size={36} active={isMenu ? "active" : "unset"} name={name} />
       </MenuTrigger>
 
       <MenuPopover>
         <MenuList>
 
           <AuthenticatedTemplate>
-            <MenuGroupHeader>Hi {claim?.name || claim?.username}</MenuGroupHeader>
+            <MenuGroupHeader>Hi {name}</MenuGroupHeader>
           </AuthenticatedTemplate>
 
           <UnauthenticatedTemplate>
