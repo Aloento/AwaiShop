@@ -126,7 +126,7 @@ internal partial class AdminHub {
 
         var has = await this.Db.Variants.AnyAsync(x =>
             x.ProductId == prodId &&
-            EF.Functions.Like(x.Name, name));
+            EF.Functions.ILike(x.Name, name));
 
         if (has)
             throw new HubException($"Variant {name} already exist");
@@ -161,7 +161,7 @@ internal partial class AdminHub {
 
         var has = await this.Db.Types.AnyAsync(x =>
             x.VariantId == variantId &&
-            EF.Functions.Like(x.Name, name));
+            EF.Functions.ILike(x.Name, name));
 
         if (has)
             throw new HubException($"Type {name} already exist");

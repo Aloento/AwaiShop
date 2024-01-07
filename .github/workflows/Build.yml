@@ -43,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install React
+      - name: Build React
         run: pnpm install && pnpm build
 
       - name: Pages Deploy
