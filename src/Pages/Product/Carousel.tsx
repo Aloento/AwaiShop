@@ -37,7 +37,7 @@ export function ProductCarousel({ Id }: { Id: number; }) {
     async onSuccess(data) {
       setImgs(Array<[string, string?]>(data.length).fill([img]));
 
-      for (let i = 0; i < data.length; i++) {
+      for (let i = 0; i < data.length; i++)
         Hub.Storage.GetBySlice(data[i].Cover, log).then(slice => {
           setImgs(x => {
             const n = [...x];
@@ -45,7 +45,6 @@ export function ProductCarousel({ Id }: { Id: number; }) {
             return n;
           });
         });
-      }
     },
     onError: log.error
   });
