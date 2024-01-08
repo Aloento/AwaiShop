@@ -3,6 +3,7 @@ import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
+import { CurrentEditor } from "~/Lexical/Utils";
 import { AdminNet } from "../AdminNet";
 
 /**
@@ -85,5 +86,24 @@ export abstract class AdminProductPost extends AdminNet {
    */
   public static useCombo(options: Options<number, [number, Record<string, string>, number]>) {
     return useRequest((prodId, combo, stock) => this.Invoke("ProductPostCombo", prodId, combo, stock), options);
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.2.0
+   * @version 0.1.0
+   */
+  public static useDescription(options: Options<true, [number]>) {
+    return useRequest(async prodId => {
+      const state = CurrentEditor?.getEditorState();
+      let json: string | undefined;
+
+      if (state && !state.isEmpty())
+        json = JSON.stringify(state.toJSON());
+
+      const res = await this.Invoke<true>("ProductPostDescription", prodId, json);
+      this.EnsureTrue(res);
+      return res;
+    }, options);
   }
 }

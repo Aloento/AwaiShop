@@ -258,7 +258,7 @@ const useStyle = makeStyles({
     marginLeft: "16px",
     listStylePosition: "inside"
   },
-  listItem: { ...shorthands.margin(0, "32px") },
+  listItem: { ...shorthands.margin(0, "8px") },
   tokenComment: { color: "slategray" },
   tokenPunctuation: { color: "#999" },
   tokenProperty: { color: "#905" },

@@ -126,7 +126,7 @@ internal partial class AdminHub {
 
         var has = await this.Db.Variants.AnyAsync(x =>
             x.ProductId == prodId &&
-            EF.Functions.Like(x.Name, name));
+            EF.Functions.ILike(x.Name, name));
 
         if (has)
             throw new HubException($"Variant {name} already exist");
@@ -161,7 +161,7 @@ internal partial class AdminHub {
 
         var has = await this.Db.Types.AnyAsync(x =>
             x.VariantId == variantId &&
-            EF.Functions.Like(x.Name, name));
+            EF.Functions.ILike(x.Name, name));
 
         if (has)
             throw new HubException($"Type {name} already exist");
@@ -229,5 +229,23 @@ internal partial class AdminHub {
 
         await this.Db.SaveChangesAsync();
         return temp.Entity.ComboId;
+    }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 1.2.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async Task<bool> ProductPostDescription(uint prodId, string? desc) {
+        desc = desc?.Normalize().Trim();
+
+        var row = await this.Db.Products
+            .Where(x => x.ProductId == prodId)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(p => p.Description, desc));
+
+        return row > 0;
     }
 }

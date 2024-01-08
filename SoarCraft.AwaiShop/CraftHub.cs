@@ -1,6 +1,5 @@
 ﻿namespace SoarCraft.AwaiShop;
 
-using System;
 using System.Security.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR;

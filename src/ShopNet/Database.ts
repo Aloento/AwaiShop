@@ -95,8 +95,8 @@ MSAL.setActiveAccount(MSAL.getAllAccounts()[0])
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.2.0
+ * @version 0.1.0
  */
 export interface IConcurrency {
-  Version: Uint8Array;
+  Version: number;
 }

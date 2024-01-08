@@ -15,7 +15,7 @@ export abstract class ProductEntity extends ShopNet {
   public static Product(key: number): Promise<({
     Name: string;
     Category?: string;
-    Description?: object;
+    Description?: string;
   } & IConcurrency) | void> {
     return this.WithVersionCache(key, "ProductEntity");
   }
