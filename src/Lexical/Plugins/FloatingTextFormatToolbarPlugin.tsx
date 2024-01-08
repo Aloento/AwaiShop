@@ -18,9 +18,9 @@ import {
 } from "lexical";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BaseCard } from "~/Helpers/Styles";
-import { getDOMRangeRect } from "../../Utils/getDOMRangeRect";
-import { getSelectedNode } from "../../Utils/getSelectedNode";
-import { setFloatingElemPosition } from "../../Utils/setFloatingElemPosition";
+import { getDOMRangeRect } from "../Utils/getDOMRangeRect";
+import { getSelectedNode } from "../Utils/getSelectedNode";
+import { setFloatingElemPosition } from "../Utils/setFloatingElemPosition";
 
 interface ITextFormatFloatingToolbar {
   editor: LexicalEditor;

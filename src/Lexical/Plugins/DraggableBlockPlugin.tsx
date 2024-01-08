@@ -18,9 +18,9 @@ import {
   useRef,
   useState
 } from "react";
-import { isHTMLElement } from "../../Utils/guard";
-import { Point } from "../../Utils/point";
-import { Rect } from "../../Utils/rect";
+import { isHTMLElement } from "../Utils/guard";
+import { Point } from "../Utils/point";
+import { Rect } from "../Utils/rect";
 
 let prevIndex = Infinity;
 

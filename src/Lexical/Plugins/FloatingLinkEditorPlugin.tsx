@@ -18,9 +18,9 @@ import {
 } from "lexical";
 import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import { BaseCard, Col, Flex } from "~/Helpers/Styles";
-import { getSelectedNode } from "../../Utils/getSelectedNode";
-import { setFloatingElemPosition } from "../../Utils/setFloatingElemPosition";
-import { sanitizeUrl } from "../../Utils/url";
+import { getSelectedNode } from "../Utils/getSelectedNode";
+import { setFloatingElemPosition } from "../Utils/setFloatingElemPosition";
+import { sanitizeUrl } from "../Utils/url";
 
 interface IFloatingLinkEditor {
   editor: LexicalEditor;
