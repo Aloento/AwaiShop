@@ -35,7 +35,7 @@ export function ProductLexicalRender({ ProdId }: { ProdId: number }) {
     <Skeleton className={mergeClasses(style.lex, style.skel)}>
       {Array.from({ length: random(3, 9) }).map((_, i) => <SkeletonItem key={i} size={20} />)}
     </Skeleton>
-    :
+    : data &&
     <div className={style.lex}>
       <Lexical Display State={data} />
     </div>

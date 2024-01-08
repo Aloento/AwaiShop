@@ -5,7 +5,6 @@ import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import type { IProductInfo } from "~/Pages/Gallery";
 import { ShopNet } from "../ShopNet";
 import { ProductEntity } from "./Entity";
-import demo from "./demo.json";
 
 /**
  * @author Aloento
@@ -126,11 +125,11 @@ export abstract class ProductGet extends ShopNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.1.0
+   * @version 0.1.1
    */
-  public static async Lexical(id: number): Promise<string> {
-    // await this.EnsureConnected();
-    return JSON.stringify(demo.editorState);
+  public static async Lexical(id: number): Promise<string | undefined> {
+    const prod = await ProductEntity.Product(id);
+    return prod?.Description;
   }
 
   /**
