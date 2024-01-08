@@ -6,7 +6,7 @@ import { LexicalContext, type ILexical } from "./Context/Setting";
 import { LexEditor } from "./Editor";
 import { LexicalNodes } from "./Nodes/LexicalNodes";
 import { TableContext } from "./Plugins/TablePlugin";
-import { useLexEditorTheme } from "./Themes/LexEditorTheme";
+import { useLexEditorTheme } from "./Theme";
 
 /**
  * Lexical Editor

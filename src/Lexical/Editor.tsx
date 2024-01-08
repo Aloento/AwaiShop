@@ -26,7 +26,7 @@ import { MarkdownShortcutPlugin } from "./Plugins/MarkdownShortcutPlugin";
 import { TabFocusPlugin } from "./Plugins/TabFocusPlugin";
 import { TablePlugin } from "./Plugins/TablePlugin";
 import { ToolbarPlugin } from "./Plugins/ToolbarPlugin";
-import { useLexEditorTheme } from "./Themes/LexEditorTheme";
+import { useLexEditorTheme } from "./Theme";
 import { LexContentEditable } from "./UI/ContentEditable";
 import { Placeholder } from "./UI/Placeholder";
 import { SetCurrentEditor } from "./Utils";
