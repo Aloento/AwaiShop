@@ -29,7 +29,7 @@ export function ProductLexicalRender({ ProdId }: { ProdId: number }) {
   const style = useStyle();
   const { data, loading } = useRequest(() => Hub.Product.Get.Lexical(ProdId));
 
-  if (!loading && !data)
+  if (loading || !data)
     return null;
 
   return (

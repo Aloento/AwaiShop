@@ -230,4 +230,22 @@ internal partial class AdminHub {
         await this.Db.SaveChangesAsync();
         return temp.Entity.ComboId;
     }
+
+    /**
+     * <remarks>
+     * @author Aloento
+     * @since 1.2.0
+     * @version 0.1.0
+     * </remarks>
+     */
+    public async Task<bool> ProductPostDescription(uint prodId, string? desc) {
+        desc = desc?.Normalize().Trim();
+
+        var row = await this.Db.Products
+            .Where(x => x.ProductId == prodId)
+            .ExecuteUpdateAsync(x =>
+                x.SetProperty(p => p.Description, desc));
+
+        return row > 0;
+    }
 }

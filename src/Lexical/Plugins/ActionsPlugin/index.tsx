@@ -15,7 +15,7 @@ const useStyle = makeStyles({
     position: "absolute",
     ...shorthands.padding("10px"),
     bottom: 0,
-    right: 0
+    left: 0
   }
 });
 

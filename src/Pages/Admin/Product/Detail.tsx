@@ -8,6 +8,7 @@ import { ColFlex } from "~/Helpers/Styles";
 import { AdminProductCategory } from "./Category";
 import { AdminProductCombo } from "./Combo";
 import { AdminProductDelete } from "./Delete";
+import { AdminProductLexical } from "./Lexical";
 import { AdminProductName } from "./Name";
 import { AdminProductPhoto } from "./Photo";
 import { AdminProductVariant } from "./Variant";
@@ -80,8 +81,7 @@ export function AdminProductDetail({ ProdId }: { ProdId: number }) {
         <AdminProductVariant ProdId={ProdId} />
         <AdminProductCombo ProdId={ProdId} />
 
-        Rich Text Editor is temporarily unavailable.
-
+        <AdminProductLexical ProdId={ProdId} />
         <AdminProductDelete ProdId={ProdId} />
       </DrawerBody>
     </Drawer>
