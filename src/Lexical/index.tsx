@@ -15,7 +15,7 @@ import { useLexEditorTheme } from "./Themes/LexEditorTheme";
  * @since MusiLand 0.5.0
  * @version 0.1.0
  */
-export function Lexical({
+function Lexical({
   Namespace = Dic.Name,
   Plugin = LexRichTextPreset,
   Editable = true,
@@ -51,3 +51,6 @@ export function Lexical({
     </LexicalComposer>
   );
 }
+
+/** @deprecated */
+export default Lexical;

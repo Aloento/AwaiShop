@@ -2,7 +2,7 @@ import { Skeleton, SkeletonItem, makeStyles, mergeClasses, shorthands, tokens } 
 import { useRequest } from "ahooks";
 import { random } from "lodash-es";
 import { BaseCard, ColFlex } from "~/Helpers/Styles";
-import { Lexical } from "~/Lexical";
+import { Lexical } from "~/Lexical/Lazy";
 import { Hub } from "~/ShopNet";
 
 /**
