@@ -140,7 +140,7 @@ export function AdminProductNewCombo({ ProdId, Refresh }: { ProdId: number; Refr
                   setCombo({ ...combo });
                 },
                 ...x
-              })) || []}
+              }))}
               Columns={columns}
             />
 

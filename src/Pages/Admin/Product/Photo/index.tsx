@@ -165,6 +165,6 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
       </Button>
     </div>
 
-    <DelegateDataGrid Items={data || []} Columns={columns} />
+    <DelegateDataGrid Items={data} Columns={columns} />
   </>
 }

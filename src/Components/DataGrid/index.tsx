@@ -9,7 +9,7 @@ import { IDataGrid } from "./Delegate";
 export function DefaultDataGrid<T extends { Id: TableRowId; }>({ Items, Columns, NoHeader }: IDataGrid<T>) {
   return (
     <DataGrid
-      items={Items}
+      items={Items || []}
       columns={Columns}
       getRowId={(item: T) => item.Id}
     >
@@ -38,7 +38,7 @@ export function DefaultDataGrid<T extends { Id: TableRowId; }>({ Items, Columns,
         )}
       </DataGridBody>
 
-      {!Items.length && <SkeletonItem size={48} />}
+      {!Items && <SkeletonItem size={48} />}
     </DataGrid>
   )
 }

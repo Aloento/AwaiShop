@@ -152,7 +152,7 @@ export function AdminProductComboDetail({ Id, ProdId, Combo, Stock, Refresh }: I
                   setCombo({ ...combo });
                 },
                 ...x
-              })) || []}
+              }))}
               Columns={columns}
             />
 

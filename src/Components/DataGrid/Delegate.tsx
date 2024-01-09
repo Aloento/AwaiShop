@@ -3,10 +3,10 @@ import { DataGrid, DataGridBody, DataGridHeader, DataGridRow, SkeletonItem, Tabl
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export interface IDataGrid<T extends { Id: TableRowId; }> {
-  Items: T[];
+  Items: T[] | undefined;
   Columns: TableColumnDefinition<T>[];
   NoHeader?: true;
 }
@@ -19,7 +19,7 @@ export interface IDataGrid<T extends { Id: TableRowId; }> {
 export function DelegateDataGrid<T extends { Id: TableRowId; }>({ Items, Columns, NoHeader }: IDataGrid<T>) {
   return (
     <DataGrid
-      items={Items}
+      items={Items || []}
       columns={Columns}
       getRowId={(item: T) => item.Id}
     >
@@ -40,7 +40,7 @@ export function DelegateDataGrid<T extends { Id: TableRowId; }>({ Items, Columns
         )}
       </DataGridBody>
 
-      {!Items.length && <SkeletonItem size={48} />}
+      {!Items && <SkeletonItem size={48} />}
     </DataGrid>
   );
 }

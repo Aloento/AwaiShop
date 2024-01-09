@@ -93,6 +93,6 @@ export function AdminOrder() {
   });
 
   return (
-    <DelegateDataGrid Items={data || []} Columns={columns} />
+    <DelegateDataGrid Items={data} Columns={columns} />
   )
 }

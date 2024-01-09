@@ -32,7 +32,7 @@ function History() {
   });
 
   return (
-    <DelegateDataGrid Items={data || []} Columns={useConst(() => HistoryColumns(log))} />
+    <DelegateDataGrid Items={data} Columns={useConst(() => HistoryColumns(log))} />
   )
 }
 

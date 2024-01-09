@@ -130,6 +130,6 @@ export function AdminProduct() {
   });
 
   return (
-    <DelegateDataGrid Items={data || []} Columns={columns} />
+    <DelegateDataGrid Items={data} Columns={columns} />
   )
 }
