@@ -18,7 +18,7 @@ import { ProductRadioList } from "./RadioList";
  * @since 0.1.0
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   main: ColFlex,
   info: {
     ...Flex,
@@ -62,7 +62,7 @@ const log = new Logger("Product");
  * @version 0.3.0
  */
 function Product() {
-  const style = useStyle();
+  const style = useStyles();
   const { Nav, Paths } = useRouter();
   const id = parseInt(Paths.at(1)!);
 

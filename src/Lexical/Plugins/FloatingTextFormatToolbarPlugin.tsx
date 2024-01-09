@@ -126,7 +126,7 @@ function TextFormatFloatingToolbar({
     isLink && "link"
   ] as string[];
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <Toolbar
@@ -210,7 +210,7 @@ function TextFormatFloatingToolbar({
   );
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   toolbar: {
     ...BaseCard,
     ...shorthands.padding("4px"),

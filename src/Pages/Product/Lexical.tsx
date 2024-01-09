@@ -9,7 +9,7 @@ import { Hub } from "~/ShopNet";
  * @since 0.5.0
  * @version 0.1.1
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   lex: {
     ...BaseCard,
     ...shorthands.padding(tokens.spacingHorizontalXL)
@@ -26,7 +26,7 @@ const useStyle = makeStyles({
  * @version 0.2.0
  */
 export function ProductLexicalRender({ ProdId }: { ProdId: number }) {
-  const style = useStyle();
+  const style = useStyles();
   const { data, loading } = useRequest(() => Hub.Product.Get.Lexical(ProdId));
 
   if (loading || !data)

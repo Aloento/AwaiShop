@@ -31,7 +31,7 @@ import { LexContentEditable } from "./UI/ContentEditable";
 import { Placeholder } from "./UI/Placeholder";
 import { SetCurrentEditor } from "./Utils";
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   shell: {
     lineHeight: "1.7"
   },
@@ -78,7 +78,7 @@ export function LexEditor(): JSX.Element {
 
   const placeholder = <Placeholder children={ph || "Let's say something awesome...."} />
   const [anchor, setAnchor] = useState<HTMLDivElement>();
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <div className={mergeClasses("LexEditor_Shell", style.shell)}>

@@ -298,7 +298,7 @@ function DraggableBlockMenu({ editor, anchor }: { editor: LexicalEditor; anchor:
     hideTargetLine(targetLineRef.current);
   }
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <Portal mountNode={anchor}>
@@ -316,7 +316,7 @@ function DraggableBlockMenu({ editor, anchor }: { editor: LexicalEditor; anchor:
   );
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   meun: {
     ...shorthands.borderRadius("4px"),
     ...shorthands.padding("2px", "1px"),

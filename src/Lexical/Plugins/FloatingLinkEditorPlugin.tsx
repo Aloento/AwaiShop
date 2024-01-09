@@ -150,7 +150,7 @@ function FloatingLinkEditor({ editor, isLink, setIsLink, anchor }: IFloatingLink
       inputRef.current.focus();
   }, [isEditMode]);
 
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <div ref={editorRef} style={{ transition: "opacity 0.5s" }} className={style.editor}>
@@ -195,7 +195,7 @@ const box = {
   ...shorthands.padding("4px", "12px"),
 }
 
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   editor: {
     ...BaseCard,
     ...Col,
