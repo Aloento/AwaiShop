@@ -79,15 +79,21 @@ export abstract class SignalR {
    * @version 0.1.0
    */
   protected static async UpdateCache<T extends IConcurrency>(
-    this: INet, data: T, key: string | number, methodName: string, admin?: boolean
+    this: INet, data: T, key: string | number, methodName: string, admin?: boolean, exp?: Dayjs
   ) {
     const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
-    const find = await Shared.Get<T & { QueryExp: number }>(index);
+    const find = await Shared.Get<T & { QueryExp?: number }>(index);
 
     if (!find)
       return;
 
-
+    if (find.QueryExp)
+      await Shared.Set<T & { QueryExp: number }>(index, {
+        ...data,
+        QueryExp: dayjs().add(1, "m").unix()
+      }, null);
+    else
+      await Shared.Set<T>(index, data, exp || null);
   }
 
   /**
