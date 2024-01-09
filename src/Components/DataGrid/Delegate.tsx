@@ -1,4 +1,4 @@
-import { DataGrid, DataGridBody, DataGridHeader, DataGridRow, TableColumnDefinition, TableRowId } from "@fluentui/react-components";
+import { DataGrid, DataGridBody, DataGridHeader, DataGridRow, SkeletonItem, TableColumnDefinition, TableRowId } from "@fluentui/react-components";
 
 /**
  * @author Aloento
@@ -14,7 +14,7 @@ export interface IDataGrid<T extends { Id: TableRowId; }> {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function DelegateDataGrid<T extends { Id: TableRowId; }>({ Items, Columns, NoHeader }: IDataGrid<T>) {
   return (
@@ -39,6 +39,8 @@ export function DelegateDataGrid<T extends { Id: TableRowId; }>({ Items, Columns
           </DataGridRow>
         )}
       </DataGridBody>
+
+      {!Items.length && <SkeletonItem size={48} />}
     </DataGrid>
   );
 }
