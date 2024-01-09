@@ -64,6 +64,6 @@ const columns: TableColumnDefinition<ICartItem>[] = [
  */
 export function AdminOrderList({ Items }: { Items?: ICartItem[] }) {
   return (
-    <DelegateDataGrid Items={Items || []} Columns={columns} />
+    <DelegateDataGrid Items={Items} Columns={columns} />
   )
 }

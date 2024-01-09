@@ -37,7 +37,7 @@ function Admin() {
     return <Spinner size="huge" label="Authenticating..." />;
 
   if (!data?.Admin)
-    return Nav("/");
+    return Nav("/")!;
 
   return content;
 }

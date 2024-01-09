@@ -160,7 +160,7 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
           <OrderInfo OrderId={OrderId} Order={order} />
 
           <DelegateDataGrid
-            Items={data?.ShopCart || []}
+            Items={data?.ShopCart}
             Columns={[MakeCoverCol(44, log), ...columns]}
           />
 

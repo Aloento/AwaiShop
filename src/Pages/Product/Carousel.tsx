@@ -12,7 +12,7 @@ import { Hub } from "~/ShopNet";
  * @since 0.1.0
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   img: {
     aspectRatio: "1",
     ...Cover,
@@ -30,7 +30,7 @@ const log = new Logger("Product", "Carousel");
  * @version 0.3.0
  */
 export function ProductCarousel({ Id }: { Id: number; }) {
-  const style = useStyle();
+  const style = useStyles();
   const [imgs, setImgs] = useState<[string, string?][]>([[img]]);
 
   useRequest(() => Hub.Product.Get.Carousel(Id, log), {

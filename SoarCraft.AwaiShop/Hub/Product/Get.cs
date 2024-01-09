@@ -10,7 +10,7 @@ internal partial class ShopHub {
      * @version 0.2.0
      * </remarks>
      */
-    public Task<byte> ProdGetLimit(uint _) => Task.FromResult<byte>(1);
+    public Task<byte> ProdGetLimit(uint _) => Task.FromResult<byte>(3);
 
     /**
      * <remarks>

@@ -12,7 +12,7 @@ import { ShopCart } from "./ShopCart";
  * @since 0.1.0 MusiLand
  * @version 0.1.0
  */
-const useStyle = makeStyles({
+const useStyles = makeStyles({
   navBox: {
     position: "fixed",
     top: 0,
@@ -47,7 +47,7 @@ const useStyle = makeStyles({
  * @version 0.1.2
  */
 export function TopNavBar() {
-  const style = useStyle();
+  const style = useStyles();
 
   return (
     <Portal>

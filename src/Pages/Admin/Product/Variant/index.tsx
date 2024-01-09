@@ -149,6 +149,6 @@ export function AdminProductVariant({ ProdId }: { ProdId: number }) {
       <AdminProductNewVariant ProdId={ProdId} Refresh={run} />
     </div>
 
-    <DelegateDataGrid Items={data || []} Columns={columns} />
+    <DelegateDataGrid Items={data} Columns={columns} />
   </>
 }

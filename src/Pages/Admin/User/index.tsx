@@ -92,6 +92,6 @@ export function AdminUser() {
   refreshUser = run;
 
   return (
-    <DefaultDataGrid Items={data || []} Columns={columns} />
+    <DefaultDataGrid Items={data} Columns={columns} />
   )
 }
