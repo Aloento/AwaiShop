@@ -17,7 +17,7 @@ export abstract class ProductEntity extends ShopNet {
     Category?: string;
     Description?: string;
   } & IConcurrency) | void> {
-    return this.WithVersionCache(key, "ProductEntity");
+    return this.GetVersionCache(key, "ProductEntity");
   }
 
   /**
@@ -31,7 +31,7 @@ export abstract class ProductEntity extends ShopNet {
     Order: number;
     ObjectId: string;
   } & IConcurrency) | void> {
-    return this.WithVersionCache(key, "PhotoEntity");
+    return this.GetVersionCache(key, "PhotoEntity");
   }
 
   /**
@@ -43,7 +43,7 @@ export abstract class ProductEntity extends ShopNet {
     Name: string;
     VariantId: number;
   } & IConcurrency) | void> {
-    return this.WithVersionCache(key, "TypeEntity");
+    return this.GetVersionCache(key, "TypeEntity");
   }
 
   /**
@@ -55,6 +55,6 @@ export abstract class ProductEntity extends ShopNet {
     Name: string;
     ProductId: number;
   } & IConcurrency) | void> {
-    return this.WithVersionCache(key, "VariantEntity");
+    return this.GetVersionCache(key, "VariantEntity");
   }
 }

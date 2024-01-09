@@ -23,7 +23,7 @@ export abstract class AdminProductGet extends AdminNet {
   public static async List(pLog: Logger): Promise<IProductItem[]> {
     const log = pLog.With(...this.Log, "List");
 
-    const list = await this.WithTimeCache<
+    const list = await this.GetTimeCache<
       {
         ProductId: number;
         Variant: number;
@@ -98,7 +98,7 @@ export abstract class AdminProductGet extends AdminNet {
   public static async Variants(prodId: number, pLog: Logger): Promise<IVariantItem[]> {
     const log = pLog.With(...this.Log, "Variants");
 
-    const list = await this.WithTimeCache<
+    const list = await this.GetTimeCache<
       {
         VariantId: number;
         Types: number[];

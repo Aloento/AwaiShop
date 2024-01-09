@@ -41,10 +41,10 @@ export abstract class AdminNet extends SignalR {
    * @since 1.0.0
    * @version 0.1.0
    */
-  protected static override WithVersionCache<T extends IConcurrency>(
+  protected static override GetVersionCache<T extends IConcurrency>(
     key: string | number, methodName: string
   ): Promise<T | void> {
-    return super.WithVersionCache(key, methodName, true);
+    return super.GetVersionCache(key, methodName, true);
   }
 
   /**
@@ -52,9 +52,9 @@ export abstract class AdminNet extends SignalR {
    * @since 1.0.0
    * @version 0.1.0
    */
-  protected static override WithTimeCache<T>(
+  protected static override GetTimeCache<T>(
     key: string | number, methodName: string, exp: Dayjs, ...args: any[]
   ): Promise<T> {
-    return super.WithTimeCache(`Admin_${key}`, methodName, exp, ...args);
+    return super.GetTimeCache(`Admin_${key}`, methodName, exp, ...args);
   }
 }

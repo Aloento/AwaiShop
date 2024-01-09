@@ -38,7 +38,7 @@ export abstract class UserGet extends ShopNet {
 
     return useRequest(() => {
       this.EnsureLogin();
-      return this.WithVersionCache<IuseMe>(0, "UserGetMe");
+      return this.GetVersionCache<IuseMe>(0, "UserGetMe");
     }, {
       ...options,
       onError: (e, req) => {

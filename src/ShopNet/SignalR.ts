@@ -75,10 +75,27 @@ export abstract class SignalR {
 
   /**
    * @author Aloento
+   * @since 1.2.0
+   * @version 0.1.0
+   */
+  protected static async UpdateCache<T extends IConcurrency>(
+    this: INet, data: T, key: string | number, methodName: string, admin?: boolean
+  ) {
+    const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
+    const find = await Shared.Get<T & { QueryExp: number }>(index);
+
+    if (!find)
+      return;
+
+
+  }
+
+  /**
+   * @author Aloento
    * @since 1.0.0
    * @version 0.2.1
    */
-  protected static async WithVersionCache<T extends IConcurrency>(
+  protected static async GetVersionCache<T extends IConcurrency>(
     this: INet, key: string | number, methodName: string, admin?: boolean
   ): Promise<T | void> {
     const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
@@ -114,7 +131,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.1
    */
-  protected static async WithTimeCache<T>(
+  protected static async GetTimeCache<T>(
     this: INet, key: string | number, methodName: string, exp: Dayjs, ...args: any[]
   ): Promise<T> {
     const res = await Shared.GetOrSet(

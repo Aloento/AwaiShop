@@ -28,7 +28,7 @@ export abstract class AdminOrderGet extends AdminNet {
     this.EnsureLogin();
     const log = pLog.With(...this.Log, "List");
 
-    const list = await this.WithTimeCache<
+    const list = await this.GetTimeCache<
       {
         OrderId: number;
         Products: number[];
@@ -89,7 +89,7 @@ export abstract class AdminOrderGet extends AdminNet {
     this.EnsureLogin();
     const log = pLog.With(...this.Log, "Detail");
 
-    const meta = await this.WithTimeCache<
+    const meta = await this.GetTimeCache<
       {
         Items: {
           Types: number[];
