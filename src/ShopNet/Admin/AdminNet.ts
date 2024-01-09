@@ -7,7 +7,7 @@ import { SignalR } from "../SignalR";
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.1
+ * @version 0.1.2
  */
 export abstract class AdminNet extends SignalR {
   /** "|", "AdminNet" */
@@ -35,6 +35,17 @@ export abstract class AdminNet extends SignalR {
     .withHubProtocol(new MessagePackHubProtocol())
     .configureLogging(import.meta.env.DEV ? LogLevel.Debug : LogLevel.Information)
     .build();
+
+  /**
+   * @author Aloento
+   * @since 1.3.0
+   * @version 0.1.0
+   */
+  protected static override UpdateCache<T>(
+    action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs
+  ) {
+    return super.UpdateCache(action, key, methodName, exp, true);
+  }
 
   /**
    * @author Aloento

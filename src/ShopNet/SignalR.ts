@@ -75,17 +75,19 @@ export abstract class SignalR {
 
   /**
    * @author Aloento
-   * @since 1.2.0
+   * @since 1.3.0
    * @version 0.1.0
    */
-  protected static async UpdateCache<T extends IConcurrency>(
-    this: INet, data: T, key: string | number, methodName: string, admin?: boolean, exp?: Dayjs
+  protected static async UpdateCache<T>(
+    this: INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs, admin?: boolean
   ) {
     const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
     const find = await Shared.Get<T & { QueryExp?: number }>(index);
 
     if (!find)
       return;
+
+    const data = action(find);
 
     if (find.QueryExp)
       await Shared.Set<T & { QueryExp: number }>(index, {
