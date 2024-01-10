@@ -135,7 +135,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
  */
 export function AdminProduct() {
   const admin = AdminHub.Product.Get;
-  const user = Hub.Product.Get;
+  const hub = Hub.Product.Get;
 
   const [map, setMap] = useState<Record<number, IProductItem>>({});
 
@@ -143,14 +143,14 @@ export function AdminProduct() {
     const sub = admin.List(log).subscribe({
       async next(idList) {
         for (const id of idList) {
-          const prod = await user.Product(id);
+          const prod = await hub.Product(id);
 
           if (!prod) {
             log.warn(`Product ${id} Not Found`);
             continue;
           }
 
-          const [_, cover] = await user.PhotoList(id, log);
+          const [_, cover] = await hub.PhotoList(id, log);
 
           if (!cover)
             log.warn(`Product ${id} has no photo`);
