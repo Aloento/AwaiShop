@@ -172,6 +172,6 @@ export function AdminProduct() {
   }, []);
 
   return (
-    <DelegateDataGrid Items={Object.values(map)} Columns={columns} />
+    <DelegateDataGrid Items={Object.values(map).reverse()} Columns={columns} />
   )
 }

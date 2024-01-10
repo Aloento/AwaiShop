@@ -137,9 +137,32 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 1.0.0
    */
-  public static PhotoList(prodId: number): Promise<number[]> {
-    return this.GetTimeCache(prodId, "ProductGetPhotoList", dayjs().add(1, "m"), prodId);
+  public static async PhotoList(prodId: number, logger: Logger): Promise<[Awaited<ReturnType<typeof this.Photo>>[], string]> {
+    const ids = await this.GetTimeCache<number[]>(prodId, "ProductGetPhotoList", dayjs().add(1, "m"), prodId);
+    let list = [];
+    let cover = "";
+
+    for (const photoId of ids) {
+      const photo = await this.Photo(photoId);
+
+      if (photo) {
+        list.push(photo);
+
+        if (photo.Cover)
+          cover = photo.ObjectId;
+      } else
+        logger.warn(`Photo ${photoId} not found in Product ${prodId}`);
+    }
+
+    list = list.sort((a, b) => a.Order - b.Order);
+
+    if (!cover && list.length > 0) {
+      logger.warn(`Product ${prodId} has no cover photo, using first photo instead`);
+      return [list, list[0].ObjectId];
+    }
+
+    return [list, cover];
   }
 }

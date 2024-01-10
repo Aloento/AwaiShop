@@ -159,33 +159,6 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.2
-   * @deprecated
-   */
-  public static async FindCover(this: INet, photos: number[], prodId: number, logger: Logger): Promise<string | void> {
-    const list = [];
-
-    for (const photoId of photos) {
-      const photo = await (await import("./Product/Data")).ProductData.Photo(photoId);
-
-      if (photo) {
-        list.push(photo);
-
-        if (photo.Cover)
-          return photo.ObjectId;
-      } else
-        logger?.warn(`Photo ${photoId} not found in Product ${prodId}`);
-    }
-
-    if (list.length > 0) {
-      logger?.warn(`Product ${prodId} has no cover photo, using first photo instead`);
-      return list.sort((a, b) => a.Order - b.Order)[0].ObjectId;
-    }
-  }
-
-  /**
-   * @author Aloento
-   * @since 1.0.0
    * @version 0.1.2
    */
   protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, pLog: Logger) {
