@@ -139,10 +139,10 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.2
+   * @version 0.1.1
    */
   protected static async GetTimeCache<T>(
-    this: INet, key: string | number, methodName: string, exp = dayjs().add(1, "m"), ...args: any[]
+    this: INet, key: string | number, methodName: string, exp: Dayjs, ...args: any[]
   ): Promise<T> {
     const res = await Shared.GetOrSet(
       `${methodName}_${key}`,
@@ -160,8 +160,9 @@ export abstract class SignalR {
    * @author Aloento
    * @since 1.0.0
    * @version 0.2.2
+   * @deprecated
    */
-  protected static async FindCover(this: INet, photos: number[], prodId: number, logger: Logger): Promise<string | void> {
+  public static async FindCover(this: INet, photos: number[], prodId: number, logger: Logger): Promise<string | void> {
     const list = [];
 
     for (const photoId of photos) {

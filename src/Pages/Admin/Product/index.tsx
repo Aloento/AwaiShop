@@ -1,7 +1,8 @@
 import { Body1Strong, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
+import { useEffect, useState } from "react";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Logger } from "~/Helpers/Logger";
+import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 import { DelegateDataGrid } from "../../../Components/DataGrid/Delegate";
 import { AdminProductDetail } from "./Detail";
@@ -9,13 +10,21 @@ import { AdminProductDetail } from "./Detail";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
-export interface IProductItem {
+export interface IProductItem extends Partial<IProductCount> {
   Id: number;
   Cover: string;
   Name: string;
   Category: string;
+}
+
+/**
+ * @author Aloento
+ * @since 1.3.0
+ * @version 0.1.0
+ */
+export interface IProductCount {
   Variant: number;
   Combo: number;
   Stock: number;
@@ -122,14 +131,47 @@ const columns: TableColumnDefinition<IProductItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.1
+ * @version 1.0.0
  */
 export function AdminProduct() {
-  const { data } = useRequest(() => AdminHub.Product.Get.List(log), {
-    onError: log.error
-  });
+  const admin = AdminHub.Product.Get;
+  const user = Hub.Product.Get;
+
+  const [map, setMap] = useState<Record<number, IProductItem>>({});
+
+  useEffect(() => {
+    const sub = admin.List(log).subscribe({
+      async next(idList) {
+        for (const id of idList) {
+          const prod = await user.Product(id);
+
+          if (!prod) {
+            log.warn(`Product ${id} Not Found`);
+            continue;
+          }
+
+          const photos = await user.PhotoList(id);
+          const cover = await admin.FindCover(photos, id, log);
+
+          if (!cover)
+            log.warn(`Product ${id} has no photo`);
+
+          map[id] = {
+            Id: id,
+            Cover: cover || "",
+            Name: prod.Name,
+            Category: prod.Category || "Pending"
+          };
+
+          setMap({ ...map });
+        }
+      },
+    });
+
+    return () => sub.unsubscribe();
+  }, []);
 
   return (
-    <DelegateDataGrid Items={data} Columns={columns} />
+    <DelegateDataGrid Items={Object.values(map)} Columns={columns} />
   )
 }

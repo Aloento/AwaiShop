@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
+import { Observable } from "rxjs";
 import type { Logger } from "~/Helpers/Logger";
-import { IProductItem } from "~/Pages/Admin/Product";
+import { IProductCount } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
 import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminProductData } from "./Data";
@@ -17,42 +18,25 @@ export abstract class AdminProductGet extends AdminProductData {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.5.0
+   * @version 2.0.0
    */
-  public static async List(pLog: Logger): Promise<IProductItem[]> {
+  public static List(pLog: Logger): Observable<number[]> {
     const log = pLog.With(...this.Log, "List");
 
-    const idList = await this.GetTimeCache<number[]>("", "ProductGetList");
-    this.SubList.next(idList);
+    this.GetTimeCache<number[]>("", "ProductGetList", dayjs().add(1, "m"))
+      .then(list => this.SubList.next(list))
+      .catch(log.error);
 
-    const items: IProductItem[] = [];
+    return this.ObsList;
+  }
 
-    for (const id of idList) {
-      const prod = await ProductGet.Product(id);
-
-      if (!prod) {
-        log.warn(`Product ${id} Not Found`);
-        continue;
-      }
-
-      const photos = await ProductGet.PhotoList(id);
-      const cover = await this.FindCover(photos, id, log);
-
-      if (!cover)
-        log.warn(`Product ${id} has no photo`);
-
-      items.push({
-        Id: id,
-        Cover: cover || "",
-        Name: prod.Name,
-        Category: prod.Category || "Pending",
-        Variant: id.Variant,
-        Combo: id.Combo,
-        Stock: id.Stock
-      });
-    }
-
-    return items;
+  /**
+   * @author Aloento
+   * @since 1.3.0
+   * @version 0.1.0
+   */
+  public static Count(prodId: number): Promise<IProductCount> {
+    return this.GetTimeCache<IProductCount>(prodId, "ProductGetCount", dayjs().add(1, "m"), prodId);
   }
 
   /**
