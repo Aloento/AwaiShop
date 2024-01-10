@@ -41,4 +41,5 @@ internal partial class ShopHub {
             .Where(x => x.ProductId == prodId)
             .Select(x => x.PhotoId)
             .ToArrayAsync();
+
 }

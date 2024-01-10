@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 import type { Logger } from "~/Helpers/Logger";
 import { IProductItem } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
-import { ProductData } from "~/ShopNet/Product/Data";
 import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminProductData } from "./Data";
 
@@ -18,7 +17,7 @@ export abstract class AdminProductGet extends AdminProductData {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 1.5.0
    */
   public static async List(pLog: Logger): Promise<IProductItem[]> {
     const log = pLog.With(...this.Log, "List");
@@ -29,7 +28,7 @@ export abstract class AdminProductGet extends AdminProductData {
     const items: IProductItem[] = [];
 
     for (const id of idList) {
-      const prod = await ProductData.Product(id);
+      const prod = await ProductGet.Product(id);
 
       if (!prod) {
         log.warn(`Product ${id} Not Found`);
@@ -62,7 +61,7 @@ export abstract class AdminProductGet extends AdminProductData {
    * @version 1.0.0
    */
   public static async Name(prodId: number): Promise<string> {
-    const prod = await ProductData.Product(prodId);
+    const prod = await ProductGet.Product(prodId);
 
     if (!prod)
       throw new Error(`Product ${prodId} Not Found`);
@@ -76,7 +75,7 @@ export abstract class AdminProductGet extends AdminProductData {
    * @version 1.0.0
    */
   public static async Category(prodId: number): Promise<string | undefined> {
-    const prod = await ProductData.Product(prodId);
+    const prod = await ProductGet.Product(prodId);
 
     if (!prod)
       throw new Error(`Product ${prodId} Not Found`);
@@ -102,7 +101,7 @@ export abstract class AdminProductGet extends AdminProductData {
     const items: IVariantItem[] = [];
 
     for (const meta of list) {
-      const vari = await ProductData.Variant(meta.VariantId);
+      const vari = await ProductGet.Variant(meta.VariantId);
 
       if (!vari) {
         log.warn(`Variant ${meta} Not Found. Product : ${prodId}`);
@@ -112,7 +111,7 @@ export abstract class AdminProductGet extends AdminProductData {
       const types: string[] = [];
 
       for (const typeId of meta.Types) {
-        const type = await ProductData.Type(typeId);
+        const type = await ProductGet.Type(typeId);
 
         if (!type) {
           log.warn(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);

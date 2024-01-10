@@ -22,7 +22,7 @@ export abstract class UserPost extends UserData {
       this.EnsureTrue(res);
       await this.UpdateCache<IUserGetMe>(raw => {
         const res = { ...raw, ...req };
-        this.Me.next(res);
+        this.SubMe.next(res);
         return res;
       }, 0, "UserGetMe");
 

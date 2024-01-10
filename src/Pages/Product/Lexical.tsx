@@ -34,7 +34,7 @@ export function ProductLexicalRender({ ProdId }: { ProdId: number }) {
 
   return (
     <div className={style.lex}>
-      <Lexical Display State={data} />
+      <Lexical Display State={data.Description} />
     </div>
   )
 }

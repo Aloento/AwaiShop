@@ -13,4 +13,5 @@ export abstract class AdminProductData extends AdminNet {
    * @version 0.1.0
    */
   protected static SubList = new BehaviorSubject<number[]>([]);
+  public static ObsList = this.SubList.asObservable();
 }

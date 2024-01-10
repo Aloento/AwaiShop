@@ -25,7 +25,7 @@ export abstract class UserGet extends UserData {
 
     const [data, setData] = useState<IUserGetMe>();
     useEffect(() => {
-      const sub = this.Me.subscribe(val => setData(val));
+      const sub = this.ObsMe.subscribe(val => setData(val));
       return () => sub.unsubscribe();
     }, []);
 
@@ -35,7 +35,7 @@ export abstract class UserGet extends UserData {
     }, {
       ...options,
       onSuccess: (data, params) => {
-        this.Me.next(data);
+        this.SubMe.next(data);
         options?.onSuccess?.(data, params);
       },
       onError(e) {

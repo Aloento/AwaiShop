@@ -123,16 +123,6 @@ export abstract class ProductGet extends ProductData {
 
   /**
    * @author Aloento
-   * @since 0.5.0
-   * @version 0.1.1
-   */
-  public static async Lexical(id: number): Promise<string | undefined> {
-    const prod = await this.Product(id);
-    return prod?.Description;
-  }
-
-  /**
-   * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
    */

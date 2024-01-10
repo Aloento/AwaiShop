@@ -47,7 +47,7 @@ const log = new Logger("Admin", "Product");
  */
 const columns: TableColumnDefinition<IProductItem>[] = [
   MakeCoverCol(50, log),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Product",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Product</DataGridHeaderCell>
@@ -60,7 +60,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       )
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Category",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Category</DataGridHeaderCell>
@@ -73,7 +73,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       )
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Variant",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Variant</DataGridHeaderCell>
@@ -82,7 +82,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       return <DataGridCell>{item.Variant}</DataGridCell>
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Combo",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Combo</DataGridHeaderCell>
@@ -91,7 +91,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       return <DataGridCell>{item.Combo}</DataGridCell>
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Stock",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Stock</DataGridHeaderCell>
@@ -100,7 +100,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       return <DataGridCell>{item.Stock}</DataGridCell>
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Action",
     renderHeaderCell: () => {
       return (

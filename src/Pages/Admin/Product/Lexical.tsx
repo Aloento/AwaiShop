@@ -95,7 +95,7 @@ export function AdminProductLexical({ ProdId }: { ProdId: number }) {
       </DrawerHeader>
 
       <DrawerBody>
-        <Lexical State={data} />
+        <Lexical State={data?.Description} />
       </DrawerBody>
     </Drawer>
   </>

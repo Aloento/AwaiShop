@@ -23,5 +23,6 @@ export abstract class UserData extends ShopNet {
    * @since 1.3.0
    * @version 0.1.0
    */
-  protected static Me = new Subject<IUserGetMe>();
+  protected static SubMe = new Subject<IUserGetMe>();
+  public static ObsMe = this.SubMe.asObservable();
 }

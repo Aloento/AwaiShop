@@ -15,9 +15,19 @@ export abstract class ProductData extends ShopNet {
   public static Product(key: number): Promise<{
     Name: string;
     Category?: string;
-    Description?: string;
   } & IConcurrency> {
     return this.GetVersionCache(key, "ProductEntity");
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static Lexical(key: number): Promise<{
+    Description?: string;
+  } & IConcurrency> {
+    return this.GetVersionCache(key, "LexicalEntity");
   }
 
   /**
