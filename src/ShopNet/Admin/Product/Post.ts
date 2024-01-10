@@ -4,24 +4,29 @@ import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
 import { CurrentEditor } from "~/Lexical/Utils";
-import { AdminNet } from "../AdminNet";
+import { AdminProductData } from "./Data";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export abstract class AdminProductPost extends AdminNet {
+export abstract class AdminProductPost extends AdminProductData {
   /** "Product", "Post" */
   protected static override readonly Log = [...super.Log, "Product", "Post"];
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
   public static useCreate(options: Options<number, [string]>) {
-    return useRequest(name => this.Invoke("ProductPostCreate", name), options);
+    return useRequest(name => this.Invoke("ProductPostCreate", name), {
+      ...options,
+      onSuccess: data => {
+        this.SubList.next([data, ...this.SubList.value]);
+      }
+    });
   }
 
   /**

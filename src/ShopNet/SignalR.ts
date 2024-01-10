@@ -139,10 +139,10 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.1
+   * @version 0.1.2
    */
   protected static async GetTimeCache<T>(
-    this: INet, key: string | number, methodName: string, exp: Dayjs, ...args: any[]
+    this: INet, key: string | number, methodName: string, exp = dayjs().add(1, "m"), ...args: any[]
   ): Promise<T> {
     const res = await Shared.GetOrSet(
       `${methodName}_${key}`,
@@ -165,7 +165,7 @@ export abstract class SignalR {
     const list = [];
 
     for (const photoId of photos) {
-      const photo = await (await import("./Product/Entity")).ProductEntity.Photo(photoId);
+      const photo = await (await import("./Product/Data")).ProductData.Photo(photoId);
 
       if (photo) {
         list.push(photo);

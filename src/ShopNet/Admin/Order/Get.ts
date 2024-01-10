@@ -4,7 +4,7 @@ import { Logger } from "~/Helpers/Logger";
 import { IAdminOrderItem } from "~/Pages/Admin/Order";
 import { IComment } from "~/Pages/History/Comment";
 import { IOrderDetail } from "~/Pages/History/Detail";
-import { ProductEntity } from "~/ShopNet/Product/Entity";
+import { ProductData } from "~/ShopNet/Product/Data";
 import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
 import { AdminUserEntity } from "../User/Entity";
@@ -49,7 +49,7 @@ export abstract class AdminOrderGet extends AdminNet {
       const prodNames: string[] = [];
 
       for (const prodId of meta.Products) {
-        const prod = await ProductEntity.Product(prodId);
+        const prod = await ProductData.Product(prodId);
 
         if (!prod) {
           log.warn(`[Mismatch] Product ${prodId} not found`);
@@ -107,14 +107,14 @@ export abstract class AdminOrderGet extends AdminNet {
       let prodId = 0;
 
       for (const typeId of combo.Types) {
-        const type = await ProductEntity.Type(typeId);
+        const type = await ProductData.Type(typeId);
 
         if (!type) {
           log.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
           continue;
         }
 
-        const vari = await ProductEntity.Variant(type.VariantId);
+        const vari = await ProductData.Variant(type.VariantId);
 
         if (!vari) {
           log.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
@@ -125,7 +125,7 @@ export abstract class AdminOrderGet extends AdminNet {
         prodId = vari.ProductId;
       }
 
-      const prod = await ProductEntity.Product(prodId);
+      const prod = await ProductData.Product(prodId);
 
       if (!prod) {
         log.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);

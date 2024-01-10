@@ -2,16 +2,16 @@ import dayjs from "dayjs";
 import type { Logger } from "~/Helpers/Logger";
 import { IProductItem } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
-import { ProductEntity } from "~/ShopNet/Product/Entity";
+import { ProductData } from "~/ShopNet/Product/Data";
 import { ProductGet } from "~/ShopNet/Product/Get";
-import { AdminNet } from "../AdminNet";
+import { AdminProductData } from "./Data";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.1
  */
-export abstract class AdminProductGet extends AdminNet {
+export abstract class AdminProductGet extends AdminProductData {
   /** "Product", "Get" */
   protected static override readonly Log = [...super.Log, "Product", "Get"];
 
@@ -23,39 +23,33 @@ export abstract class AdminProductGet extends AdminNet {
   public static async List(pLog: Logger): Promise<IProductItem[]> {
     const log = pLog.With(...this.Log, "List");
 
-    const list = await this.GetTimeCache<
-      {
-        ProductId: number;
-        Variant: number;
-        Combo: number;
-        Stock: number;
-      }[]
-    >("", "ProductGetList", dayjs().add(1, "m"));
+    const idList = await this.GetTimeCache<number[]>("", "ProductGetList");
+    this.SubList.next(idList);
 
     const items: IProductItem[] = [];
 
-    for (const meta of list) {
-      const prod = await ProductEntity.Product(meta.ProductId);
+    for (const id of idList) {
+      const prod = await ProductData.Product(id);
 
       if (!prod) {
-        log.warn(`Product ${meta.ProductId} Not Found`);
+        log.warn(`Product ${id} Not Found`);
         continue;
       }
 
-      const photos = await ProductGet.PhotoList(meta.ProductId);
-      const cover = await this.FindCover(photos, meta.ProductId, log);
+      const photos = await ProductGet.PhotoList(id);
+      const cover = await this.FindCover(photos, id, log);
 
       if (!cover)
-        log.warn(`Product ${meta.ProductId} has no photo`);
+        log.warn(`Product ${id} has no photo`);
 
       items.push({
-        Id: meta.ProductId,
+        Id: id,
         Cover: cover || "",
         Name: prod.Name,
         Category: prod.Category || "Pending",
-        Variant: meta.Variant,
-        Combo: meta.Combo,
-        Stock: meta.Stock
+        Variant: id.Variant,
+        Combo: id.Combo,
+        Stock: id.Stock
       });
     }
 
@@ -68,7 +62,7 @@ export abstract class AdminProductGet extends AdminNet {
    * @version 1.0.0
    */
   public static async Name(prodId: number): Promise<string> {
-    const prod = await ProductEntity.Product(prodId);
+    const prod = await ProductData.Product(prodId);
 
     if (!prod)
       throw new Error(`Product ${prodId} Not Found`);
@@ -82,7 +76,7 @@ export abstract class AdminProductGet extends AdminNet {
    * @version 1.0.0
    */
   public static async Category(prodId: number): Promise<string | undefined> {
-    const prod = await ProductEntity.Product(prodId);
+    const prod = await ProductData.Product(prodId);
 
     if (!prod)
       throw new Error(`Product ${prodId} Not Found`);
@@ -108,7 +102,7 @@ export abstract class AdminProductGet extends AdminNet {
     const items: IVariantItem[] = [];
 
     for (const meta of list) {
-      const vari = await ProductEntity.Variant(meta.VariantId);
+      const vari = await ProductData.Variant(meta.VariantId);
 
       if (!vari) {
         log.warn(`Variant ${meta} Not Found. Product : ${prodId}`);
@@ -118,7 +112,7 @@ export abstract class AdminProductGet extends AdminNet {
       const types: string[] = [];
 
       for (const typeId of meta.Types) {
-        const type = await ProductEntity.Type(typeId);
+        const type = await ProductData.Type(typeId);
 
         if (!type) {
           log.warn(`Type ${typeId} Not Found. Variant : ${meta.VariantId}, Product : ${prodId}`);

@@ -3,15 +3,14 @@ import type { Logger } from "~/Helpers/Logger";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
 import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
 import type { IProductInfo } from "~/Pages/Gallery";
-import { ShopNet } from "../ShopNet";
-import { ProductEntity } from "./Entity";
+import { ProductData } from "./Data";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.2.0
  */
-export abstract class ProductGet extends ShopNet {
+export abstract class ProductGet extends ProductData {
   /** "Product", "Get" */
   protected static override readonly Log = [...super.Log, "Product", "Get"];
 
@@ -23,7 +22,7 @@ export abstract class ProductGet extends ShopNet {
   public static async Basic(prodId: number, pLog: Logger): Promise<IProductInfo> {
     const log = pLog.With(...this.Log, "Basic");
 
-    const res = await ProductEntity.Product(prodId);
+    const res = await this.Product(prodId);
     if (!res)
       throw new Error(`Product ${prodId} Not Found`);
 
@@ -67,14 +66,14 @@ export abstract class ProductGet extends ShopNet {
       const variType: Record<string, string> = {};
 
       for (const typeId of combo.Types) {
-        const type = await ProductEntity.Type(typeId);
+        const type = await this.Type(typeId);
 
         if (!type) {
           log.error(`[Mismatch] Type ${typeId} not found. Combo ${combo.ComboId} : Product ${prodId}`);
           continue;
         }
 
-        const vari = await ProductEntity.Variant(type.VariantId);
+        const vari = await this.Variant(type.VariantId);
 
         if (!vari) {
           log.error(`[Mismatch] Variant ${type.VariantId} not found. Combo ${combo.ComboId} : Type ${typeId} : Product ${prodId}`);
@@ -107,7 +106,7 @@ export abstract class ProductGet extends ShopNet {
 
     for (let i = 0; i < list.length; i++) {
       const id = list[i];
-      const p = await ProductEntity.Photo(id);
+      const p = await this.Photo(id);
 
       if (p)
         photos.push({
@@ -128,7 +127,7 @@ export abstract class ProductGet extends ShopNet {
    * @version 0.1.1
    */
   public static async Lexical(id: number): Promise<string | undefined> {
-    const prod = await ProductEntity.Product(id);
+    const prod = await this.Product(id);
     return prod?.Description;
   }
 

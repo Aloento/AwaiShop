@@ -7,29 +7,13 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 1.0.0
+     * @version 2.0.0
      * </remarks>
      */
-    public async Task<dynamic[]> ProductGetList() =>
-        await this.Db.Products
-            .Select(x => new {
-                x.ProductId,
-                Variant = x.Variants.Count,
-                Combo = x.Combos.Count,
-                Stock = x.Combos.Sum(s => s.Stock)
-            })
+    public Task<uint[]> ProductGetList() =>
+        this.Db.Products
+            .Select(x => x.ProductId)
             .ToArrayAsync();
-
-    /**
-     * <remarks>
-     * @author Aloento
-     * @since 1.2.0
-     * @version 1.0.0
-     * </remarks>
-     */
-    public async Task<dynamic?> ProductGetCount(uint prodId) {
-        throw new NotImplementedException();
-    }
 
     /**
      * <remarks>

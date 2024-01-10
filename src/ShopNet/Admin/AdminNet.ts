@@ -1,6 +1,6 @@
 import { HttpTransportType, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessagePackHubProtocol } from "@microsoft/signalr-protocol-msgpack";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { AccessToken, IConcurrency } from "../Database";
 import { SignalR } from "../SignalR";
 
@@ -54,17 +54,17 @@ export abstract class AdminNet extends SignalR {
    */
   protected static override GetVersionCache<T extends IConcurrency>(
     key: string | number, methodName: string
-  ): Promise<T | void> {
+  ): Promise<T> {
     return super.GetVersionCache(key, methodName, true);
   }
 
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.1.0
+   * @version 0.1.1
    */
   protected static override GetTimeCache<T>(
-    key: string | number, methodName: string, exp: Dayjs, ...args: any[]
+    key: string | number, methodName: string, exp = dayjs().add(1, "m"), ...args: any[]
   ): Promise<T> {
     return super.GetTimeCache(`Admin_${key}`, methodName, exp, ...args);
   }
