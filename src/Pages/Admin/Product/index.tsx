@@ -150,15 +150,14 @@ export function AdminProduct() {
             continue;
           }
 
-          const photos = await user.PhotoList(id);
-          const cover = await admin.FindCover(photos, id, log);
+          const [_, cover] = await user.PhotoList(id, log);
 
           if (!cover)
             log.warn(`Product ${id} has no photo`);
 
           map[id] = {
             Id: id,
-            Cover: cover || "",
+            Cover: cover,
             Name: prod.Name,
             Category: prod.Category || "Pending"
           };
