@@ -1,8 +1,7 @@
 import dayjs from "dayjs";
 import type { Logger } from "~/Helpers/Logger";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
-import { IPhotoItem } from "~/Pages/Admin/Product/Photo";
-import type { IProductInfo } from "~/Pages/Gallery";
+import type { IGallery } from "~/Pages/Gallery";
 import { ProductData } from "./Data";
 
 /**
@@ -17,17 +16,16 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 1.1.0
    */
-  public static async Basic(prodId: number, pLog: Logger): Promise<IProductInfo> {
+  public static async Basic(prodId: number, pLog: Logger): Promise<IGallery> {
     const log = pLog.With(...this.Log, "Basic");
 
     const res = await this.Product(prodId);
     if (!res)
       throw new Error(`Product ${prodId} Not Found`);
 
-    const list = await this.PhotoList(prodId);
-    const cover = await this.FindCover(list, prodId, log);
+    const [_, cover] = await this.PhotoList(prodId, pLog);
 
     if (cover)
       return {
@@ -95,34 +93,6 @@ export abstract class ProductGet extends ProductData {
 
   /**
    * @author Aloento
-   * @since 0.5.0
-   * @version 1.0.1
-   */
-  public static async Carousel(prodId: number, pLog: Logger): Promise<IPhotoItem[]> {
-    const log = pLog.With(...this.Log, "Carousel");
-
-    const list = await this.PhotoList(prodId);
-    const photos: IPhotoItem[] = [];
-
-    for (let i = 0; i < list.length; i++) {
-      const id = list[i];
-      const p = await this.Photo(id);
-
-      if (p)
-        photos.push({
-          Id: p.Order,
-          Cover: p.ObjectId,
-          Caption: p.Caption,
-        });
-      else
-        log.warn(`Photo ${id} not found in Product ${prodId}`);
-    }
-
-    return photos.sort((a, b) => a.Id - b.Id);
-  }
-
-  /**
-   * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
    */
@@ -139,7 +109,9 @@ export abstract class ProductGet extends ProductData {
    * @since 1.0.0
    * @version 1.0.0
    */
-  public static async PhotoList(prodId: number, logger: Logger): Promise<[Awaited<ReturnType<typeof this.Photo>>[], string]> {
+  public static async PhotoList(prodId: number, pLog: Logger): Promise<[Awaited<ReturnType<typeof this.Photo>>[], string]> {
+    const log = pLog.With(...this.Log, "PhotoList");
+
     const ids = await this.GetTimeCache<number[]>(prodId, "ProductGetPhotoList", dayjs().add(1, "m"), prodId);
     let list = [];
     let cover = "";
@@ -153,13 +125,13 @@ export abstract class ProductGet extends ProductData {
         if (photo.Cover)
           cover = photo.ObjectId;
       } else
-        logger.warn(`Photo ${photoId} not found in Product ${prodId}`);
+        log.warn(`Photo ${photoId} not found in Product ${prodId}`);
     }
 
     list = list.sort((a, b) => a.Order - b.Order);
 
     if (!cover && list.length > 0) {
-      logger.warn(`Product ${prodId} has no cover photo, using first photo instead`);
+      log.warn(`Product ${prodId} has no cover photo, using first photo instead`);
       return [list, list[0].ObjectId];
     }
 
