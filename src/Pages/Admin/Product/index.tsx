@@ -12,7 +12,7 @@ import { AdminProductDetail } from "./Detail";
  * @since 0.1.0
  * @version 0.2.0
  */
-export interface IProductItem extends Partial<IProductCount> {
+interface IProductItem extends Partial<IProductCount> {
   Id: number;
   Cover: string;
   Name: string;
@@ -163,6 +163,17 @@ export function AdminProduct() {
           };
 
           setMap({ ...map });
+
+          admin.Count(id)
+            .then(res => {
+              map[id] = {
+                ...map[id],
+                ...res
+              };
+
+              setMap({ ...map });
+            })
+            .catch(log.error);
         }
       },
     });
