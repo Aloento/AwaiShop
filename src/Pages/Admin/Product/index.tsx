@@ -170,7 +170,8 @@ export function AdminProduct() {
     return () => sub.unsubscribe();
   }, []);
 
+  const list = Object.values(map).reverse();
   return (
-    <DelegateDataGrid Items={Object.values(map).reverse()} Columns={columns} />
+    <DelegateDataGrid Items={list.length ? list : undefined} Columns={columns} />
   )
 }

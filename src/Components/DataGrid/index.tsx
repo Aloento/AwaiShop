@@ -4,14 +4,12 @@ import { IDataGrid } from "./Delegate";
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.2
+ * @version 0.1.1
  */
 export function DefaultDataGrid<T extends { Id: TableRowId; }>({ Items, Columns, NoHeader }: IDataGrid<T>) {
-  const has = Items?.length;
-
   return (
     <DataGrid
-      items={has ? Items : []}
+      items={Items || []}
       columns={Columns}
       getRowId={(item: T) => item.Id}
     >
@@ -40,7 +38,7 @@ export function DefaultDataGrid<T extends { Id: TableRowId; }>({ Items, Columns,
         )}
       </DataGridBody>
 
-      {!has && <SkeletonItem size={48} />}
+      {!Items && <SkeletonItem size={48} />}
     </DataGrid>
   )
 }

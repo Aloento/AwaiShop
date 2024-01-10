@@ -98,7 +98,7 @@ export abstract class AdminProductPost extends AdminProductData {
    * @since 1.2.0
    * @version 0.1.0
    */
-  public static useDescription(options: Options<true, [number]>) {
+  public static useLexical(options: Options<true, [number]>) {
     return useRequest(async prodId => {
       const state = CurrentEditor?.getEditorState();
       let json: string | undefined;

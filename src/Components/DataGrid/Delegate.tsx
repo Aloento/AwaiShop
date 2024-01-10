@@ -14,14 +14,12 @@ export interface IDataGrid<T extends { Id: TableRowId; }> {
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.2.2
+ * @version 0.2.1
  */
 export function DelegateDataGrid<T extends { Id: TableRowId; }>({ Items, Columns, NoHeader }: IDataGrid<T>) {
-  const has = Items?.length;
-
   return (
     <DataGrid
-      items={has ? Items : []}
+      items={Items || []}
       columns={Columns}
       getRowId={(item: T) => item.Id}
     >
@@ -42,7 +40,7 @@ export function DelegateDataGrid<T extends { Id: TableRowId; }>({ Items, Columns
         )}
       </DataGridBody>
 
-      {!has && <SkeletonItem size={48} />}
+      {!Items && <SkeletonItem size={48} />}
     </DataGrid>
   );
 }

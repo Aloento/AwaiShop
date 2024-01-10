@@ -38,7 +38,7 @@ export function AdminProductLexical({ ProdId }: { ProdId: number }) {
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run } = AdminHub.Product.Post.useDescription({
+  const { run } = AdminHub.Product.Post.useLexical({
     manual: true,
     onError(e, req) {
       dispatch({
