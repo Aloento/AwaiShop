@@ -23,8 +23,9 @@ export abstract class AdminProductPost extends AdminProductData {
   public static useCreate(options: Options<number, [string]>) {
     return useRequest(name => this.Invoke("ProductPostCreate", name), {
       ...options,
-      onSuccess: data => {
+      onSuccess: (data, params) => {
         this.SubList.next([data, ...this.SubList.value]);
+        options.onSuccess?.(data, params);
       }
     });
   }

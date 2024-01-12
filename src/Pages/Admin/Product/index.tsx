@@ -143,7 +143,7 @@ export function AdminProduct() {
     const sub = admin.List(log).subscribe({
       async next(idList) {
         for (const id of idList) {
-          const prod = await hub.Product(id);
+          const prod = await hub.Product(id).catch(log.error);
 
           if (!prod) {
             log.warn(`Product ${id} Not Found`);

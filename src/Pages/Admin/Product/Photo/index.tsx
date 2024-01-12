@@ -123,7 +123,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
       const map = raw.map(x => ({
         Id: x.Order,
         Cover: x.ObjectId,
-        Caption: x.Caption
+        Caption: x.Caption || "No Caption"
       }));
 
       setList(map);
