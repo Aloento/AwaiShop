@@ -1,33 +1,29 @@
+import { useConst } from "@fluentui/react-hooks";
 import dayjs from "dayjs";
-import { Observable } from "rxjs";
 import type { Logger } from "~/Helpers/Logger";
 import { IProductCount } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
 import { ProductGet } from "~/ShopNet/Product/Get";
-import { AdminProductData } from "./Data";
+import { AdminNet } from "../AdminNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.1
  */
-export abstract class AdminProductGet extends AdminProductData {
+export abstract class AdminProductGet extends AdminNet {
   /** "Product", "Get" */
   protected static override readonly Log = [...super.Log, "Product", "Get"];
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 2.0.0
+   * @version 3.0.0
    */
-  public static useList(pLog: Logger): Observable<number[]> {
-    const log = pLog.With(...this.Log, "List");
-
-    this.GetTimeCache<number[]>("", "ProductGetList", dayjs().add(1, "m"))
-      .then(list => this.SubList.next(list))
-      .catch(log.error);
-
-    return this.ObsList;
+  public static useList(pLog: Logger): number[] | void {
+    const log = useConst(() => pLog.With(...this.Log, "List"));
+    const res = this.useTimeCache<number[]>("", "ProductGetList", () => dayjs().add(1, "m"), log);
+    return res;
   }
 
   /**

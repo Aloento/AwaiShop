@@ -90,6 +90,7 @@ export abstract class SignalR {
   protected static async UpdateCache<T>(
     this: INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs
   ) {
+    debugger;
     const index = this.Index(key, methodName);
     const find = await Shared.Get<T & { QueryExp?: number }>(index);
 
@@ -141,6 +142,26 @@ export abstract class SignalR {
       ...res,
       QueryExp: dayjs().add(1, "m").unix()
     }, null);
+
+    return res;
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.3.0
+   * @version 0.1.0
+   */
+  protected static useTimeCache<T>(
+    this: INet, key: string | number, methodName: string, exp: () => Dayjs | null, pLog: Logger, ...args: any[]
+  ): T | void {
+    const res = Shared.useGetOrSet(
+      this.Index(key, methodName),
+      async () => {
+        const db = await this.Invoke<T>(methodName, ...args).catch(pLog.error);
+        return db;
+      },
+      exp
+    );
 
     return res;
   }

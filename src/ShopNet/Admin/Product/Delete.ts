@@ -1,13 +1,14 @@
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
-import { AdminProductData } from "./Data";
+import dayjs from "dayjs";
+import { AdminNet } from "../AdminNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export abstract class AdminProductDelete extends AdminProductData {
+export abstract class AdminProductDelete extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
@@ -70,7 +71,7 @@ export abstract class AdminProductDelete extends AdminProductData {
       const res = await this.Invoke<boolean>("ProductDeleteProduct", prodId);
       this.EnsureTrue(res);
 
-      this.SubList.next(this.SubList.value.filter(x => x !== prodId));
+      this.UpdateCache<number[]>(x => x.filter(x => x !== prodId), "", "ProductGetList", dayjs().add(1, "m"));
       return res;
     }, options);
   }

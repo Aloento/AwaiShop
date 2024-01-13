@@ -1,5 +1,6 @@
 import { Body1Strong, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { useEffect, useState } from "react";
+import { useAsyncEffect } from "ahooks";
+import { useState } from "react";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Logger } from "~/Helpers/Logger";
 import { Hub } from "~/ShopNet";
@@ -131,57 +132,55 @@ const columns: TableColumnDefinition<IProductItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 1.0.1
+ * @version 1.1.0
  */
 export function AdminProduct() {
   const admin = AdminHub.Product.Get;
   const hub = Hub.Product.Get;
 
   const [map, setMap] = useState<Record<number, IProductItem>>({});
+  const rawList = admin.useList(log);
 
-  useEffect(() => {
-    const sub = admin.useList(log).subscribe({
-      async next(idList) {
-        const record: Record<number, IProductItem> = {};
+  useAsyncEffect(async () => {
+    if (!rawList?.length)
+      return;
 
-        for (const id of idList) {
-          const prod = await hub.Product(id).catch(log.error);
+    const record: Record<number, IProductItem> = {};
 
-          if (!prod) {
-            log.warn(`Product ${id} Not Found`);
-            continue;
-          }
+    for (const id of rawList) {
+      const prod = await hub.Product(id).catch(log.error);
 
-          const [_, cover] = await hub.PhotoList(id, log);
+      if (!prod) {
+        log.warn(`Product ${id} Not Found`);
+        continue;
+      }
 
-          if (!cover)
-            log.warn(`Product ${id} has no photo`);
+      const [_, cover] = await hub.PhotoList(id, log);
 
+      if (!cover)
+        log.warn(`Product ${id} has no photo`);
+
+      record[id] = {
+        Id: id,
+        Cover: cover,
+        Name: prod.Name,
+        Category: prod.Category || "Pending"
+      };
+
+      setMap({ ...record });
+
+      admin.Count(id)
+        .then(res => {
           record[id] = {
-            Id: id,
-            Cover: cover,
-            Name: prod.Name,
-            Category: prod.Category || "Pending"
+            ...record[id],
+            ...res
           };
 
           setMap({ ...record });
-
-          admin.Count(id)
-            .then(res => {
-              record[id] = {
-                ...record[id],
-                ...res
-              };
-
-              setMap({ ...record });
-            })
-            .catch(log.error);
-        }
-      },
-    });
-
-    return () => sub.unsubscribe();
-  }, []);
+        })
+        .catch(log.error);
+    }
+  }, [rawList]);
 
   const list = Object.values(map).reverse();
   return (

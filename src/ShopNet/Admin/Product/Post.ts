@@ -1,33 +1,32 @@
 import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
+import dayjs from "dayjs";
 import { Subject } from "rxjs";
 import { Logger } from "~/Helpers/Logger";
 import { CurrentEditor } from "~/Lexical/Utils";
-import { AdminProductData } from "./Data";
+import { AdminNet } from "../AdminNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.1.0
  */
-export abstract class AdminProductPost extends AdminProductData {
+export abstract class AdminProductPost extends AdminNet {
   /** "Product", "Post" */
   protected static override readonly Log = [...super.Log, "Product", "Post"];
 
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 0.3.0
+   * @version 0.4.0
    */
   public static useCreate(options: Options<number, [string]>) {
-    return useRequest(name => this.Invoke("ProductPostCreate", name), {
-      ...options,
-      onSuccess: (data, params) => {
-        this.SubList.next([data, ...this.SubList.value]);
-        options.onSuccess?.(data, params);
-      }
-    });
+    return useRequest(async name => {
+      const res = await this.Invoke<number>("ProductPostCreate", name);
+      this.UpdateCache<number[]>(x => [res, ...x], "", "ProductGetList", dayjs().add(1, "m"))
+      return res;
+    }, options);
   }
 
   /**
