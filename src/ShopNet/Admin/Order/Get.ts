@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IAdminOrderItem } from "~/Pages/Admin/Order";
@@ -34,7 +33,7 @@ export abstract class AdminOrderGet extends AdminNet {
         Products: number[];
         Quantity: number;
       }[]
-    >("", "OrderGetList", dayjs().add(1, "m"));
+    >("", "OrderGetList", (x) => x.add(1, "m"));
 
     const items: IAdminOrderItem[] = [];
 
@@ -97,7 +96,7 @@ export abstract class AdminOrderGet extends AdminNet {
         }[],
         Comments: number[];
       }
-    >(orderId, "OrderGetDetail", dayjs().add(1, "m"), orderId);
+    >(orderId, "OrderGetDetail", (x) => x.add(1, "m"), orderId);
 
     const items: ICartItem[] = [];
     let index = 0;
@@ -132,8 +131,7 @@ export abstract class AdminOrderGet extends AdminNet {
         continue;
       }
 
-      const list = await ProductGet.PhotoList(prodId);
-      const cover = await this.FindCover(list, prodId, log);
+      const [_, cover] = await ProductGet.PhotoList(prodId, log);
 
       if (!cover)
         log.warn(`Product ${prodId} has no photo`);

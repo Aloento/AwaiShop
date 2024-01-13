@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from "~/Pages/History";
@@ -33,7 +32,7 @@ export abstract class OrderGet extends ShopNet {
         Products: number[];
         Quantity: number;
       }[]
-    >("", "OrderGetList", dayjs().add(1, "m"));
+    >("", "OrderGetList", (x) => x.add(1, "m"));
 
     const items: IOrderItem[] = [];
 
@@ -88,7 +87,7 @@ export abstract class OrderGet extends ShopNet {
         }[],
         Comments: number[];
       }
-    >(orderId, "OrderGetDetail", dayjs().add(1, "m"), orderId);
+    >(orderId, "OrderGetDetail", (x) => x.add(1, "m"), orderId);
 
     const items: ICartItem[] = [];
     let index = 0;
@@ -123,8 +122,7 @@ export abstract class OrderGet extends ShopNet {
         continue;
       }
 
-      const list = await ProductGet.PhotoList(prodId);
-      const cover = await this.FindCover(list, prodId, log);
+      const [_, cover] = await ProductGet.PhotoList(prodId, log);
 
       if (!cover)
         log.warn(`Product ${prodId} has no photo`);

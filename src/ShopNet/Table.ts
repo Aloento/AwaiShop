@@ -1,6 +1,5 @@
 import dayjs, { Dayjs } from "dayjs";
 import Dexie from "dexie";
-import { useLiveQuery } from "dexie-react-hooks";
 
 /**
  * @author Aloento
@@ -28,28 +27,15 @@ export class Table {
 
   /**
    * @author Aloento
-   * @since 1.3.0
-   * @version 0.1.0
-   */
-  public useGet<T>(key: string): T | undefined {
-    const res = useLiveQuery(() => this.Sto.get(key)) as ITable<T> | undefined;
-
-    if (!res)
-      return res;
-
-    return res.Val;
-  }
-
-  /**
-   * @author Aloento
    * @since 0.1.0 MusiLand
-   * @version 0.2.0
+   * @version 0.2.1
+   * @liveSafe
    */
   public async Get<T>(key: string, expire?: (x?: ITable<T>) => Promise<boolean>): Promise<T | null> {
     const find = await this.Sto.get(key) as ITable<T> | undefined;
 
     if (find) {
-      if ((expire && await expire(find)) ||
+      if ((expire && await Promise.resolve(expire(find))) ||
         (typeof find.Exp === "number" && find.Exp < dayjs().unix())) {
         await this.Sto.delete(key);
         return null;
@@ -63,30 +49,9 @@ export class Table {
 
   /**
    * @author Aloento
-   * @since 1.3.0
-   * @version 0.1.0
-   */
-  public useGetOrSet<T>(
-    key: string,
-    fac: () => Promise<T>,
-    exp?: () => (Dayjs | null)
-  ): T | undefined {
-    const res = useLiveQuery(async () => {
-      const find = await this.Sto.get(key) as ITable<T> | undefined;
-      if (find) return find.Val;
-
-      // Calling non-Dexie API:s from querier
-      const val = await Promise.resolve(this.Set<T>(key, await fac(), exp?.()));
-      return val;
-    });
-
-    return res;
-  }
-
-  /**
-   * @author Aloento
    * @since 0.1.0 MusiLand
    * @version 0.2.0
+   * @liveSafe
    */
   public async GetOrSet<T>(
     key: string,
@@ -96,13 +61,14 @@ export class Table {
   ): Promise<T> {
     const res = await this.Get<T>(key, expire);
     if (res) return res;
-    return this.Set<T>(key, await fac(), exp);
+    return this.Set<T>(key, await Promise.resolve(fac()), exp);
   }
 
   /**
    * @author Aloento
    * @since 0.1.0 MusiLand
    * @version 0.2.1
+   * @liveSafe
    */
   public async Set<T>(id: string, val: T, exp?: Dayjs | null): Promise<T> {
     if (!val)

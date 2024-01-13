@@ -1,5 +1,5 @@
 import { useConst } from "@fluentui/react-hooks";
-import dayjs from "dayjs";
+import { useLiveQuery } from "dexie-react-hooks";
 import type { Logger } from "~/Helpers/Logger";
 import { IProductCount } from "~/Pages/Admin/Product";
 import { IVariantItem } from "~/Pages/Admin/Product/Variant";
@@ -22,7 +22,12 @@ export abstract class AdminProductGet extends AdminNet {
    */
   public static useList(pLog: Logger): number[] | void {
     const log = useConst(() => pLog.With(...this.Log, "List"));
-    const res = this.useTimeCache<number[]>("", "ProductGetList", () => dayjs().add(1, "m"), log);
+
+    const res = useLiveQuery(() =>
+      this.GetTimeCache<number[]>("", "ProductGetList", (x) => x.add(1, "m"))
+        .catch(log.error)
+    );
+
     return res;
   }
 
@@ -32,7 +37,7 @@ export abstract class AdminProductGet extends AdminNet {
    * @version 0.1.0
    */
   public static Count(prodId: number): Promise<IProductCount> {
-    return this.GetTimeCache<IProductCount>(prodId, "ProductGetCount", dayjs().add(1, "m"), prodId);
+    return this.GetTimeCache<IProductCount>(prodId, "ProductGetCount", (x) => x.add(1, "m"), prodId);
   }
 
   /**
@@ -76,7 +81,7 @@ export abstract class AdminProductGet extends AdminNet {
         VariantId: number;
         Types: number[];
       }[]
-    >(prodId, "ProductGetVariants", dayjs().add(1, "m"), prodId);
+    >(prodId, "ProductGetVariants", (x) => x.add(1, "m"), prodId);
 
     const items: IVariantItem[] = [];
 
