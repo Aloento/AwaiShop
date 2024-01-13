@@ -140,7 +140,7 @@ export function AdminProduct() {
   const [map, setMap] = useState<Record<number, IProductItem>>({});
 
   useEffect(() => {
-    const sub = admin.List(log).subscribe({
+    const sub = admin.useList(log).subscribe({
       async next(idList) {
         const record: Record<number, IProductItem> = {};
 

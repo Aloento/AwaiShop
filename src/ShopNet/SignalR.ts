@@ -78,10 +78,19 @@ export abstract class SignalR {
    * @since 1.3.0
    * @version 0.1.0
    */
+  public static Index(key: string | number, methodName: string): string {
+    return `${methodName}_${key}`;
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.3.0
+   * @version 0.1.0
+   */
   protected static async UpdateCache<T>(
-    this: INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs, admin?: boolean
+    this: INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs
   ) {
-    const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
+    const index = this.Index(key, methodName);
     const find = await Shared.Get<T & { QueryExp?: number }>(index);
 
     if (!find)
@@ -101,12 +110,12 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.3.0
+   * @version 0.3.1
    */
   protected static async GetVersionCache<T extends IConcurrency>(
-    this: INet, key: string | number, methodName: string, admin?: boolean
+    this: INet, key: string | number, methodName: string
   ): Promise<T> {
-    const index = `${methodName}_${admin ? `Admin_${key}` : key}`;
+    const index = this.Index(key, methodName);
     const find = await Shared.Get<T & { QueryExp: number }>(index);
 
     if (find && find.QueryExp > dayjs().unix())
@@ -145,7 +154,7 @@ export abstract class SignalR {
     this: INet, key: string | number, methodName: string, exp: Dayjs, ...args: any[]
   ): Promise<T> {
     const res = await Shared.GetOrSet(
-      `${methodName}_${key}`,
+      this.Index(key, methodName),
       async () => {
         const db = await this.Invoke<T>(methodName, ...args);
         return db;

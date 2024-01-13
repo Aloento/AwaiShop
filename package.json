@@ -41,6 +41,7 @@
     "ahooks": "^3.7.8",
     "dayjs": "^1.11.10",
     "dexie": "^3.2.4",
+    "dexie-react-hooks": "^1.1.7",
     "lexical": "0.10.0",
     "lodash-es": "^4.17.21",
     "react": "^18.2.0",

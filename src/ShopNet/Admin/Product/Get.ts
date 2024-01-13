@@ -20,7 +20,7 @@ export abstract class AdminProductGet extends AdminProductData {
    * @since 0.5.0
    * @version 2.0.0
    */
-  public static List(pLog: Logger): Observable<number[]> {
+  public static useList(pLog: Logger): Observable<number[]> {
     const log = pLog.With(...this.Log, "List");
 
     this.GetTimeCache<number[]>("", "ProductGetList", dayjs().add(1, "m"))
