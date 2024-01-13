@@ -131,7 +131,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 1.0.0
+ * @version 1.0.1
  */
 export function AdminProduct() {
   const admin = AdminHub.Product.Get;
@@ -142,6 +142,8 @@ export function AdminProduct() {
   useEffect(() => {
     const sub = admin.List(log).subscribe({
       async next(idList) {
+        const record: Record<number, IProductItem> = {};
+
         for (const id of idList) {
           const prod = await hub.Product(id).catch(log.error);
 
@@ -155,23 +157,23 @@ export function AdminProduct() {
           if (!cover)
             log.warn(`Product ${id} has no photo`);
 
-          map[id] = {
+          record[id] = {
             Id: id,
             Cover: cover,
             Name: prod.Name,
             Category: prod.Category || "Pending"
           };
 
-          setMap({ ...map });
+          setMap({ ...record });
 
           admin.Count(id)
             .then(res => {
-              map[id] = {
-                ...map[id],
+              record[id] = {
+                ...record[id],
                 ...res
               };
 
-              setMap({ ...map });
+              setMap({ ...record });
             })
             .catch(log.error);
         }
