@@ -20,7 +20,7 @@ const useStyles = makeStyles({
  * @version 0.2.0
  */
 export function AdminProductDelete({ ProdId }: { ProdId: number }) {
-  const { Reload } = useRouter();
+  const { Nav } = useRouter();
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run } = AdminHub.Product.Delete.useProduct({
@@ -40,7 +40,7 @@ export function AdminProductDelete({ ProdId }: { ProdId: number }) {
         { intent: "success" }
       );
 
-      Reload("/Admin");
+      Nav("/Admin");
     }
   });
 
