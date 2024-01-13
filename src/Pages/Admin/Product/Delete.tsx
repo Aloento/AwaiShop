@@ -17,13 +17,13 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminProductDelete({ ProdId }: { ProdId: number }) {
   const { Nav } = useRouter();
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run } = AdminHub.Product.Delete.useProduct({
+  const { run, loading } = AdminHub.Product.Delete.useProduct({
     manual: true,
     onError(e, params) {
       dispatch({
@@ -56,7 +56,11 @@ export function AdminProductDelete({ ProdId }: { ProdId: number }) {
         <PopoverSurface className={style.root}>
           Are You Sure?
 
-          <Button appearance="primary" onClick={() => run(ProdId)}>
+          <Button
+            disabled={loading}
+            appearance="primary"
+            onClick={() => run(ProdId)}
+          >
             Yes
           </Button>
         </PopoverSurface>
