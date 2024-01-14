@@ -17,7 +17,7 @@ interface IProductItem extends Partial<IProductCount> {
   Id: number;
   Cover: string;
   Name: string;
-  Category: string;
+  Category?: string;
 }
 
 /**
@@ -132,7 +132,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 1.1.0
+ * @version 1.1.1
  */
 export function AdminProduct() {
   const admin = AdminHub.Product.Get;
@@ -145,7 +145,17 @@ export function AdminProduct() {
     if (!rawList?.length)
       return;
 
-    const record: Record<number, IProductItem> = {};
+    const record = rawList.reduce((acc, cur) => {
+      acc[cur] = {
+        Id: cur,
+        Cover: "",
+        Name: "Loading..."
+      };
+
+      return acc;
+    }, map);
+
+    setMap({ ...record });
 
     for (const id of rawList) {
       const prod = await hub.Product(id).catch(log.error);
