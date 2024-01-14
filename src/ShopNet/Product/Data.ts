@@ -11,6 +11,7 @@ export abstract class ProductData extends ShopNet {
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static Product(key: number): Promise<{
     Name: string;
@@ -23,6 +24,7 @@ export abstract class ProductData extends ShopNet {
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static Lexical(key: number): Promise<{
     Description?: string;
@@ -34,6 +36,7 @@ export abstract class ProductData extends ShopNet {
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static Photo(key: number): Promise<{
     Cover?: boolean;
@@ -48,6 +51,7 @@ export abstract class ProductData extends ShopNet {
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static Type(key: number): Promise<{
     Name: string;
@@ -60,6 +64,7 @@ export abstract class ProductData extends ShopNet {
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static Variant(key: number): Promise<{
     Name: string;

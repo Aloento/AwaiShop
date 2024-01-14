@@ -16,6 +16,7 @@ export abstract class ProductGet extends ProductData {
    * @author Aloento
    * @since 0.5.0
    * @version 1.1.0
+   * @liveSafe
    */
   public static async Basic(prodId: number, pLog: Logger): Promise<IGallery> {
     const log = pLog.With(...this.Log, "Basic");
@@ -52,6 +53,7 @@ export abstract class ProductGet extends ProductData {
    * @author Aloento
    * @since 0.5.0
    * @version 1.0.1
+   * @liveSafe
    */
   public static async Combo(prodId: number, pLog: Logger): Promise<IComboItem[]> {
     const log = pLog.With(...this.Log, "Combo");
@@ -94,6 +96,7 @@ export abstract class ProductGet extends ProductData {
    * @author Aloento
    * @since 1.0.0
    * @version 0.1.0
+   * @liveSafe
    */
   public static ComboList(prodId: number): Promise<{
     ComboId: number;
@@ -107,6 +110,7 @@ export abstract class ProductGet extends ProductData {
    * @author Aloento
    * @since 1.0.0
    * @version 1.0.0
+   * @liveSafe
    */
   public static async PhotoList(prodId: number, pLog: Logger): Promise<[Awaited<ReturnType<typeof this.Photo>>[], string]> {
     const log = pLog.With(...this.Log, "PhotoList");
