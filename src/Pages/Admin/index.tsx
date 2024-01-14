@@ -31,12 +31,12 @@ function Admin() {
     }
   }, [path]);
 
-  const { data, loading } = Hub.User.Get.useMe(log);
+  const data = Hub.User.Get.useMe(log);
 
-  if (loading)
+  if (!data)
     return <Spinner size="huge" label="Authenticating..." />;
 
-  if (!data?.Admin)
+  if (!data.Admin)
     return Nav("/")!;
 
   return content;

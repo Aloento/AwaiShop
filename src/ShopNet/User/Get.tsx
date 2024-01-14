@@ -1,64 +1,48 @@
-import { Toast, ToastTitle } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
-import { useRequest } from "ahooks";
-import type { Options } from "ahooks/lib/useRequest/src/types";
-import { useEffect, useState } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
+import { IPersona } from "~/Components/ShopCart/Persona";
 import { NotLoginError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
-import { IUserGetMe, UserData } from "./Data";
+import { IConcurrency } from "../Database";
+import { ShopNet } from "../ShopNet";
 
 /**
  * @author Aloento
  * @since 0.5.0
  * @version 0.2.0
  */
-export abstract class UserGet extends UserData {
+export interface IUserGetMe extends IPersona, IConcurrency {
+  Admin?: boolean;
+}
+
+/**
+ * @author Aloento
+ * @since 0.5.0
+ * @version 0.2.0
+ */
+export abstract class UserGet extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.3.0
+   * @version 0.4.0
    */
-  public static useMe(pLog: Logger, options?: Options<IUserGetMe, []>, suppress: boolean = true) {
+  public static useMe(pLog: Logger): IUserGetMe | void {
     const log = useConst(() => pLog.With("|", "Hub", "User", "Get", "Me"));
-    const { dispatch, dispatchToast } = useErrorToast(log);
+    const { dispatch } = useErrorToast(log);
 
-    const [data, setData] = useState<IUserGetMe>();
-    useEffect(() => {
-      const sub = this.ObsMe.subscribe(val => setData(val));
-      return () => sub.unsubscribe();
-    }, []);
-
-    const hook = useRequest(() => {
-      this.EnsureLogin();
-      return this.GetVersionCache<IUserGetMe>(0, "UserGetMe");
-    }, {
-      ...options,
-      onSuccess: (data, params) => {
-        this.SubMe.next(data);
-        options?.onSuccess?.(data, params);
-      },
-      onError(e) {
-        if (e instanceof NotLoginError) {
-          if (suppress)
-            log.debug(e);
-          else
-            dispatchToast(
-              <Toast>
-                <ToastTitle>{e.message}</ToastTitle>
-              </Toast>,
-              { intent: "warning", timeout: 5000 }
-            );
-        } else
+    const res = useLiveQuery(() => this.GetVersionCache<IUserGetMe>(0, "UserGetMe")
+      .catch(e => {
+        if (e instanceof NotLoginError)
+          log.info(e);
+        else
           dispatch({
             Message: "Failed to Get Your Info",
             Error: e,
             Request: ""
-          })
-      }
-    });
+          });
+      }));
 
-    hook.data = data;
-    return hook;
+    return res;
   }
 }
