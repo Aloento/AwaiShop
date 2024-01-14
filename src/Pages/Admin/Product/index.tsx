@@ -1,7 +1,9 @@
 import { Body1Strong, DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
+import { useAsyncEffect } from "ahooks";
+import { useState } from "react";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Logger } from "~/Helpers/Logger";
+import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 import { DelegateDataGrid } from "../../../Components/DataGrid/Delegate";
 import { AdminProductDetail } from "./Detail";
@@ -9,13 +11,21 @@ import { AdminProductDetail } from "./Detail";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  */
-export interface IProductItem {
+interface IProductItem extends Partial<IProductCount> {
   Id: number;
   Cover: string;
   Name: string;
   Category: string;
+}
+
+/**
+ * @author Aloento
+ * @since 1.3.0
+ * @version 0.1.0
+ */
+export interface IProductCount {
   Variant: number;
   Combo: number;
   Stock: number;
@@ -47,7 +57,7 @@ const log = new Logger("Admin", "Product");
  */
 const columns: TableColumnDefinition<IProductItem>[] = [
   MakeCoverCol(50, log),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Product",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Product</DataGridHeaderCell>
@@ -60,7 +70,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       )
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Category",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Category</DataGridHeaderCell>
@@ -73,7 +83,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       )
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Variant",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Variant</DataGridHeaderCell>
@@ -82,7 +92,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       return <DataGridCell>{item.Variant}</DataGridCell>
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Combo",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Combo</DataGridHeaderCell>
@@ -91,7 +101,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       return <DataGridCell>{item.Combo}</DataGridCell>
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Stock",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Stock</DataGridHeaderCell>
@@ -100,7 +110,7 @@ const columns: TableColumnDefinition<IProductItem>[] = [
       return <DataGridCell>{item.Stock}</DataGridCell>
     }
   }),
-  createTableColumn<IProductItem>({
+  createTableColumn({
     columnId: "Action",
     renderHeaderCell: () => {
       return (
@@ -122,14 +132,58 @@ const columns: TableColumnDefinition<IProductItem>[] = [
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.1
+ * @version 1.1.0
  */
 export function AdminProduct() {
-  const { data } = useRequest(() => AdminHub.Product.Get.List(log), {
-    onError: log.error
-  });
+  const admin = AdminHub.Product.Get;
+  const hub = Hub.Product.Get;
 
+  const [map, setMap] = useState<Record<number, IProductItem>>({});
+  const rawList = admin.useList(log);
+
+  useAsyncEffect(async () => {
+    if (!rawList?.length)
+      return;
+
+    const record: Record<number, IProductItem> = {};
+
+    for (const id of rawList) {
+      const prod = await hub.Product(id).catch(log.error);
+
+      if (!prod) {
+        log.warn(`Product ${id} Not Found`);
+        continue;
+      }
+
+      const [_, cover] = await hub.PhotoList(id, log);
+
+      if (!cover)
+        log.warn(`Product ${id} has no photo`);
+
+      record[id] = {
+        Id: id,
+        Cover: cover,
+        Name: prod.Name,
+        Category: prod.Category || "Pending"
+      };
+
+      setMap({ ...record });
+
+      admin.Count(id)
+        .then(res => {
+          record[id] = {
+            ...record[id],
+            ...res
+          };
+
+          setMap({ ...record });
+        })
+        .catch(log.error);
+    }
+  }, [rawList]);
+
+  const list = Object.values(map).reverse();
   return (
-    <DelegateDataGrid Items={data} Columns={columns} />
+    <DelegateDataGrid Items={list.length ? list : undefined} Columns={columns} />
   )
 }

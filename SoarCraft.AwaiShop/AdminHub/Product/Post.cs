@@ -23,7 +23,7 @@ internal partial class AdminHub {
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        if (await this.Db.Products.AnyAsync(x => EF.Functions.Like(x.Name, name)))
+        if (await this.Db.Products.AnyAsync(x => EF.Functions.ILike(x.Name, name)))
             throw new HubException($"Product {name} already exist");
 
         var temp = await this.Db.Products.AddAsync(new() {

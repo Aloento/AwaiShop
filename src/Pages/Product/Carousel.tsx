@@ -33,15 +33,15 @@ export function ProductCarousel({ Id }: { Id: number; }) {
   const style = useStyles();
   const [imgs, setImgs] = useState<[string, string?][]>([[img]]);
 
-  useRequest(() => Hub.Product.Get.Carousel(Id, log), {
-    async onSuccess(data) {
-      setImgs(Array<[string, string?]>(data.length).fill([img]));
+  useRequest(() => Hub.Product.Get.PhotoList(Id, log), {
+    async onSuccess([list]) {
+      setImgs(Array<[string, string?]>(list.length).fill([img]));
 
-      for (let i = 0; i < data.length; i++)
-        Hub.Storage.GetBySlice(data[i].Cover, log).then(slice => {
+      for (let i = 0; i < list.length; i++)
+        Hub.Storage.GetBySlice(list[i].ObjectId, log).then(slice => {
           setImgs(x => {
             const n = [...x];
-            n[i] = [URL.createObjectURL(new Blob(slice)), data[i].Caption];
+            n[i] = [URL.createObjectURL(new Blob(slice)), list[i].Caption];
             return n;
           });
         });
