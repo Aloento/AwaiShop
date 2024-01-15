@@ -1,5 +1,5 @@
 import { DataGridCell, DataGridHeaderCell, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { ICartItem } from "~/Components/ShopCart";
 
 /**

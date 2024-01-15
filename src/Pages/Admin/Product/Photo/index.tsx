@@ -2,7 +2,7 @@ import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinit
 import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-icons";
 import { useRequest } from "ahooks";
 import { useState } from "react";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";

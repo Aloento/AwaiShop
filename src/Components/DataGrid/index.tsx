@@ -1,12 +1,22 @@
-import { DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, SkeletonItem, TableRowId } from "@fluentui/react-components";
-import { IDataGrid } from "./Delegate";
+import { DataGrid, DataGridBody, DataGridHeader, DataGridRow, SkeletonItem, TableColumnDefinition, TableRowId } from "@fluentui/react-components";
 
 /**
  * @author Aloento
- * @since 0.5.0
- * @version 0.1.1
+ * @since 0.1.0
+ * @version 0.2.1
  */
-export function DefaultDataGrid<T extends { Id: TableRowId; }>({ Items, Columns, NoHeader }: IDataGrid<T>) {
+export interface IDataGrid<T extends { Id: TableRowId; }> {
+  Items: T[] | undefined;
+  Columns: TableColumnDefinition<T>[];
+  NoHeader?: true;
+}
+
+/**
+ * @author Aloento
+ * @since 0.1.0
+ * @version 0.2.1
+ */
+export function DelegateDataGrid<T extends { Id: TableRowId; }>({ Items, Columns, NoHeader }: IDataGrid<T>) {
   return (
     <DataGrid
       items={Items || []}
@@ -16,12 +26,8 @@ export function DefaultDataGrid<T extends { Id: TableRowId; }>({ Items, Columns,
       {
         !NoHeader &&
         <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>
-                {renderHeaderCell()}
-              </DataGridHeaderCell>
-            )}
+          <DataGridRow<T>>
+            {({ renderHeaderCell }) => renderHeaderCell()}
           </DataGridRow>
         </DataGridHeader>
       }
@@ -29,16 +35,12 @@ export function DefaultDataGrid<T extends { Id: TableRowId; }>({ Items, Columns,
       <DataGridBody<T>>
         {({ item, rowId }) => (
           <DataGridRow<T> key={rowId}>
-            {({ renderCell }) => (
-              <DataGridCell>
-                {renderCell(item)}
-              </DataGridCell>
-            )}
+            {({ renderCell }) => renderCell(item)}
           </DataGridRow>
         )}
       </DataGridBody>
 
       {!Items && <SkeletonItem size={48} />}
     </DataGrid>
-  )
+  );
 }
