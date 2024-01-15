@@ -4,7 +4,7 @@ import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { ICartItem } from "~/Components/ShopCart";

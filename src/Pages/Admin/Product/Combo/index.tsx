@@ -1,6 +1,6 @@
 import { DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
-import { DelegateDataGrid } from "~/Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "~/Components/DataGrid";
 import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";

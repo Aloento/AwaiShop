@@ -5,7 +5,7 @@ import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Logger } from "~/Helpers/Logger";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import { DelegateDataGrid } from "../../../Components/DataGrid/Delegate";
+import { DelegateDataGrid } from "../../../Components/DataGrid";
 import { AdminProductDetail } from "./Detail";
 
 /**
