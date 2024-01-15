@@ -28,57 +28,43 @@ const log = new Logger("Admin", "User");
 const columns: TableColumnDefinition<IUserItem>[] = [
   createTableColumn<IUserItem>({
     columnId: "Id",
-    renderHeaderCell: () => {
-      return "Id";
-    },
+    renderHeaderCell: () => "Id",
     renderCell(item) {
       return item.Id;
     }
   }),
   createTableColumn<IUserItem>({
     columnId: "Name",
-    renderHeaderCell: () => {
-      return "Real Name";
-    },
+    renderHeaderCell: () => "Real Name",
     renderCell(item) {
       return item.Name;
     }
   }),
   createTableColumn<IUserItem>({
     columnId: "Email",
-    renderHeaderCell: () => {
-      return "E-Mail";
-    },
+    renderHeaderCell: () => "E-Mail",
     renderCell(item) {
       return item.EMail;
     }
   }),
   createTableColumn<IUserItem>({
     columnId: "Admin",
-    renderHeaderCell: () => {
-      return "Admin";
-    },
+    renderHeaderCell: () => "Admin",
     renderCell(item) {
       return <AdminUserGrant UserId={item.Id} Admin={item.Admin} Refresh={refreshUser} />
     },
   }),
   createTableColumn<IUserItem>({
     columnId: "Delete",
-    renderHeaderCell: () => {
-      return "Delete";
-    },
+    renderHeaderCell: () => "Delete",
     renderCell(item) {
       return <AdminUserDelete UserId={item.Id} Refresh={refreshUser} />
     },
   })
 ].map(({ renderHeaderCell, renderCell, ...col }) => ({
   ...col,
-  renderHeaderCell: () => {
-    return <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>;
-  },
-  renderCell: (item: IUserItem) => {
-    return <DataGridCell>{renderCell(item)}</DataGridCell>;
-  }
+  renderHeaderCell: () => <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>,
+  renderCell: (item) => <DataGridCell>{renderCell(item)}</DataGridCell>
 }))
 
 /**
