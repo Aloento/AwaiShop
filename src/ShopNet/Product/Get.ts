@@ -109,18 +109,18 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 1.0.0
+   * @version 1.0.1
    * @liveSafe
    */
   public static async PhotoList(prodId: number, pLog: Logger): Promise<[Awaited<ReturnType<typeof this.Photo>>[], string]> {
     const log = pLog.With(...this.Log, "PhotoList");
 
-    const ids = await this.GetTimeCache<number[]>(prodId, "ProductGetPhotoList", (x) => x.add(1, "m"), prodId);
+    const ids = await this.GetTimeCache<number[]>(prodId, "ProductGetPhotoList", (x) => x.add(1, "m"), prodId).catch(log.error);
     let list = [];
     let cover = "";
 
-    for (const photoId of ids) {
-      const photo = await this.Photo(photoId);
+    for (const photoId of ids || []) {
+      const photo = await this.Photo(photoId).catch(log.error);
 
       if (photo) {
         list.push(photo);
