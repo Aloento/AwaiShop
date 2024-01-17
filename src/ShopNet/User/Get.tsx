@@ -1,9 +1,7 @@
 import { useConst } from "@fluentui/react-hooks";
-import { useBoolean, useMount } from "ahooks";
 import { useLiveQuery } from "dexie-react-hooks";
-import { OnNewUserSubject } from "~/Components/NewUser";
 import { IPersona } from "~/Components/ShopCart/Persona";
-import { NotLoginError } from "~/Helpers/Exceptions";
+import { EmptyResponseError, NotLoginError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
 import { useErrorToast } from "~/Helpers/useToast";
 import { IConcurrency } from "../Database";
@@ -27,26 +25,29 @@ export abstract class UserGet extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.4.1
+   * @version 0.4.2
    */
   public static useMe(pLog: Logger): IUserGetMe | void {
     const log = useConst(() => pLog.With("|", "Hub", "User", "Get", "Me"));
     const { dispatch } = useErrorToast(log);
 
-    const [onNew, { set }] = useBoolean();
-    useMount(() => OnNewUserSubject.subscribe(set));
-
-    const res = useLiveQuery(() => this.GetVersionCache<IUserGetMe>(0, "UserGetMe")
-      .catch(e => {
-        if (onNew || e instanceof NotLoginError)
+    const res = useLiveQuery(async (): Promise<IUserGetMe | void> => {
+      try {
+        this.EnsureLogin();
+        return await this.GetVersionCache<IUserGetMe>(0, "UserGetMe");
+      } catch (e) {
+        if (e instanceof EmptyResponseError)
+          return;
+        else if (e instanceof NotLoginError)
           log.info(e);
         else
           dispatch({
             Message: "Failed to Get Your Info",
-            Error: e,
+            Error: e as Error,
             Request: ""
           });
-      }));
+      }
+    });
 
     return res;
   }
