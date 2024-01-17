@@ -1,5 +1,7 @@
 import { useConst } from "@fluentui/react-hooks";
+import { useBoolean, useMount } from "ahooks";
 import { useLiveQuery } from "dexie-react-hooks";
+import { OnNewUserSubject } from "~/Components/NewUser";
 import { IPersona } from "~/Components/ShopCart/Persona";
 import { NotLoginError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
@@ -25,15 +27,18 @@ export abstract class UserGet extends ShopNet {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.4.0
+   * @version 0.4.1
    */
   public static useMe(pLog: Logger): IUserGetMe | void {
     const log = useConst(() => pLog.With("|", "Hub", "User", "Get", "Me"));
     const { dispatch } = useErrorToast(log);
 
+    const [onNew, { set }] = useBoolean();
+    useMount(() => OnNewUserSubject.subscribe(set));
+
     const res = useLiveQuery(() => this.GetVersionCache<IUserGetMe>(0, "UserGetMe")
       .catch(e => {
-        if (e instanceof NotLoginError)
+        if (onNew || e instanceof NotLoginError)
           log.info(e);
         else
           dispatch({

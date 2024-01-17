@@ -167,10 +167,10 @@ internal partial class AdminHub {
             return await prod.ExecuteDeleteAsync() > 0;
 
         var product = await prod
-                .Include(x => x.Variants)
-                .ThenInclude(x => x.Types)
-                .ThenInclude(x => x.Combos)
-                .SingleAsync();
+            .Include(x => x.Variants)
+            .ThenInclude(x => x.Types)
+            .ThenInclude(x => x.Combos)
+            .SingleAsync();
 
         product.IsArchived = true;
 
