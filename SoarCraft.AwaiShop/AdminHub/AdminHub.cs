@@ -1,6 +1,5 @@
 namespace SoarCraft.AwaiShop.AdminHub;
 
-using System;
 using Helpers;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
