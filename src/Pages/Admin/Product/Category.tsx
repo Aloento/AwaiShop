@@ -119,7 +119,13 @@ export function AdminProductCategory({ ProdId }: { ProdId: number; }) {
       </Combobox>
 
       {edit
-        ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => cate && run(ProdId, cate)} />
+        ? <Button appearance="subtle" icon={<SendRegular />} onClick={() => {
+          if (cate)
+            run(ProdId, cate)
+          else {
+
+          }
+        }} />
         : <Button appearance="subtle" icon={<EditRegular />} onClick={setTrue} />}
     </div>
   );

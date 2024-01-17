@@ -35,7 +35,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 1.0.0
+     * @version 1.1.0
      * </remarks>
      */
     public async Task<bool> ProductPatchCategory(uint prodId, string name) {
@@ -46,23 +46,34 @@ internal partial class AdminHub {
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        var newCate = await this.Db.Categories
-                          .Where(x => x.Name == name)
-                          .SingleOrDefaultAsync()
-                      ?? (await this.Db.Categories.AddAsync(new() {
-                          Name = name
-                      })).Entity;
-
         var prod = await this.Db.Products
-            .Include(x => x.Category)
             .SingleAsync(x => x.ProductId == prodId);
 
-        var inUse = await this.Db.Products
-            .Where(x => x.CategoryId == prod.CategoryId && x.ProductId != prod.ProductId)
-            .AnyAsync();
+        var newCate = await this.Db.Categories
+            .Where(x => x.Name == name)
+            .SingleOrDefaultAsync();
 
-        if (!inUse)
-            this.Db.Categories.Remove(prod.Category!);
+        if (newCate is null)
+            newCate = (await this.Db.Categories.AddAsync(new() {
+                Name = name
+            })).Entity;
+        else {
+            if (prod.CategoryId == newCate.CategoryId)
+                return true;
+
+            if (prod.CategoryId is not null) {
+                var inUse = await this.Db.Products
+                    .Where(x =>
+                        x.CategoryId == prod.CategoryId &&
+                        x.ProductId != prod.ProductId)
+                    .AnyAsync();
+
+                if (!inUse)
+                    await this.Db.Categories
+                         .Where(x => x.CategoryId == prod.CategoryId)
+                         .ExecuteDeleteAsync();
+            }
+        }
 
         prod.Category = newCate;
 
