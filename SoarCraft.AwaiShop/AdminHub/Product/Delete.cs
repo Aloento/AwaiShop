@@ -188,7 +188,7 @@ internal partial class AdminHub {
      * @version 0.1.0
      * </remarks>
      */
-    public async Task<bool> ProductDeleteCategory(uint prodId) {
+    public async Task<bool> ProductDetachCategory(uint prodId) {
         var prod = await this.Db.Products
             .SingleAsync(x => x.ProductId == prodId);
 
