@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Z.EntityFramework.Plus;
 
 internal partial class AdminHub {
     /**
@@ -35,7 +36,7 @@ internal partial class AdminHub {
      * <remarks>
      * @author Aloento
      * @since 0.1.0
-     * @version 1.1.0
+     * @version 1.1.1
      * </remarks>
      */
     public async Task<bool> ProductPatchCategory(uint prodId, string name) {
@@ -46,34 +47,35 @@ internal partial class AdminHub {
         if (!valid.IsValid(name))
             throw new HubException(valid.FormatErrorMessage("Name"));
 
-        var prod = await this.Db.Products
-            .SingleAsync(x => x.ProductId == prodId);
+        Product prod;
+        Category? newCate;
 
-        var newCate = await this.Db.Categories
-            .Where(x => x.Name == name)
-            .SingleOrDefaultAsync();
+        {
+            var defProd = this.Db.Products
+                .DeferredSingle(x => x.ProductId == prodId)
+                .FutureValue();
+
+            var defNewCate = this.Db.Categories
+                .DeferredSingleOrDefault(x => x.Name == name)
+                .FutureValue();
+
+            prod = await defProd.ValueAsync();
+            newCate = await defNewCate.ValueAsync();
+        }
+
+        if (prod.CategoryId is not null)
+            await this.Db.Categories
+                .Where(x =>
+                    x.CategoryId == prod.CategoryId &&
+                    x.Products.Count == 0)
+                .ExecuteDeleteAsync();
 
         if (newCate is null)
             newCate = (await this.Db.Categories.AddAsync(new() {
                 Name = name
             })).Entity;
-        else {
-            if (prod.CategoryId == newCate.CategoryId)
-                return true;
-
-            if (prod.CategoryId is not null) {
-                var inUse = await this.Db.Products
-                    .Where(x =>
-                        x.CategoryId == prod.CategoryId &&
-                        x.ProductId != prod.ProductId)
-                    .AnyAsync();
-
-                if (!inUse)
-                    await this.Db.Categories
-                         .Where(x => x.CategoryId == prod.CategoryId)
-                         .ExecuteDeleteAsync();
-            }
-        }
+        else if (prod.CategoryId == newCate.CategoryId)
+            return true;
 
         prod.Category = newCate;
 
@@ -129,7 +131,6 @@ internal partial class AdminHub {
      * <summary>
      * Include Combos
      * </summary>
-     *
      * <remarks>
      * @author Aloento
      * @since 0.5.0
@@ -247,7 +248,7 @@ internal partial class AdminHub {
 
         if (any) {
             var oldType = await type
-                .Include(x => x.Combos)
+                .IncludeOptimized(x => x.Combos)
                 .SingleAsync();
 
             oldType.IsArchived = true;
@@ -303,7 +304,7 @@ internal partial class AdminHub {
                 .Where(x => x.ProductId == queryCombo
                     .Select(c => c.ProductId)
                     .Single())
-                .Include(x => x.Types)
+                .IncludeOptimized(x => x.Types)
                 .Select(x => new {
                     x.Name,
                     x.Types

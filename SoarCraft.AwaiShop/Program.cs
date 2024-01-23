@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Logging;
 using SoarCraft.AwaiShop;
 using SoarCraft.AwaiShop.AdminHub;
 using SoarCraft.AwaiShop.Hub;
+using Z.EntityFramework.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddDbContext<ShopContext>(x => {
-    x.UseLazyLoadingProxies();
+    EntityFrameworkManager.IsCommunity = true;
     string? connectionString;
 
     if (Shared.Dev) {

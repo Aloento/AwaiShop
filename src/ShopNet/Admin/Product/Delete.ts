@@ -1,7 +1,9 @@
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import dayjs from "dayjs";
+import { ProductData } from "~/ShopNet/Product/Data";
 import { AdminNet } from "../AdminNet";
+import { AdminProductGet } from "./Get";
 
 /**
  * @author Aloento
@@ -71,7 +73,29 @@ export abstract class AdminProductDelete extends AdminNet {
       const res = await this.Invoke<boolean>("ProductDeleteProduct", prodId);
       this.EnsureTrue(res);
 
-      this.UpdateCache<number[]>(x => x.filter(x => x !== prodId), "", "ProductGetList", dayjs().add(1, "m"));
+      this.UpdateCache<Awaited<ReturnType<typeof AdminProductGet.useList>>>(x =>
+        x!.filter(x => x !== prodId), "", "ProductGetList", dayjs().add(1, "m")
+      );
+
+      return res;
+    }, options);
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.0.0
+   * @version 0.1.0
+   */
+  public static useCategory(options: Options<true, [number]>) {
+    return useRequest(async prodId => {
+      const res = await this.Invoke<boolean>("ProductDeleteCategory", prodId);
+      this.EnsureTrue(res);
+
+      this.UpdateCache<Awaited<ReturnType<typeof ProductData.Product>>>(x => {
+        x.Category = undefined;
+        return x;
+      }, prodId, "ProductEntity", dayjs().add(1, "m"));
+
       return res;
     }, options);
   }
