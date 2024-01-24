@@ -45,9 +45,9 @@ const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.3
+ * @version 0.3.4
  */
-export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }: IAdminProductPhotoEdit) {
+export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption, ProductId }, Refresh }: IAdminProductPhotoEdit) {
   const style = useStyles();
   const [cap, setCap] = useState(Caption || "");
 
@@ -166,7 +166,7 @@ export function AdminProductPhotoEdit({ Photo: { Id, Cover, Caption }, Refresh }
                 Replace
               </Button>
 
-              <Button appearance="primary" onClick={() => deletePhoto(Id)}>
+              <Button appearance="primary" onClick={() => deletePhoto(ProductId, Id)}>
                 Delete
               </Button>
             </div>

@@ -1,7 +1,6 @@
 import { Button, DataGridCell, DataGridHeaderCell, Subtitle1, TableColumnDefinition, Toast, ToastTitle, createTableColumn, makeStyles } from "@fluentui/react-components";
 import { AddRegular, ArrowDownRegular, ArrowUpRegular } from "@fluentui/react-icons";
-import { useRequest } from "ahooks";
-import { useState } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { Logger } from "~/Helpers/Logger";
@@ -32,13 +31,15 @@ const log = new Logger("Admin", "Product", "Detail", "Photo");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 export interface IPhotoItem {
+  /** PhotoId */
   Id: number;
   /** ObjectId */
   Cover: string;
   Caption?: string;
+  ProductId: number;
 }
 
 /**
@@ -107,34 +108,39 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
-let refreshCarousel: () => void;
+let refreshCarousel: () => void = () => { };
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.0
+ * @version 0.5.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
-  const [list, setList] = useState<IPhotoItem[]>([]);
+  const list = useLiveQuery<IPhotoItem[]>(async () => {
+    const [raw] = await Hub.Product.Get.PhotoList(ProdId, log);
 
-  const { run } = useRequest(() => Hub.Product.Get.PhotoList(ProdId, log), {
-    onError: log.error,
-    onSuccess([raw]) {
-      const map = raw.map(x => ({
-        Id: x.Order,
-        Cover: x.ObjectId,
-        Caption: x.Caption || "No Caption"
-      }));
+    const map = raw.map(x => ({
+      Id: x.PhotoId,
+      Cover: x.ObjectId,
+      Caption: x.Caption || "No Caption",
+      ProductId: x.ProductId
+    }));
 
-      setList(map);
-    }
+    return map;
   });
-  refreshCarousel = run;
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: newPhoto } = AdminHub.Product.Post.usePhoto(log, {
     manual: true,
+    onBefore([prodId, file]) {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>Uploading Photo {file.name} for Product {prodId}</ToastTitle>
+        </Toast>,
+        { intent: "info" }
+      );
+    },
     onError(e, params) {
       dispatch({
         Message: "Failed Upload Photo",
@@ -149,8 +155,6 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
         </Toast>,
         { intent: "success" }
       );
-
-      run();
     }
   });
 
