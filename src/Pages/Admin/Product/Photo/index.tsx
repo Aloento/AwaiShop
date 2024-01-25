@@ -45,7 +45,7 @@ export interface IPhotoItem {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.2
+ * @version 0.1.3
  */
 const columns: TableColumnDefinition<IPhotoItem>[] = [
   MakeCoverCol(70, log),
@@ -96,7 +96,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
             onClick={() => run(item.Id, false)}
           />
 
-          <AdminProductPhotoEdit Photo={item} Refresh={refreshCarousel} />
+          <AdminProductPhotoEdit {...item} />
         </DataGridCell>
       )
     },
@@ -104,9 +104,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
 ]
 
 /**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
+ * @deprecated
  */
 let refreshCarousel: () => void = () => { };
 
