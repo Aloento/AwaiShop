@@ -1,4 +1,6 @@
-import { Card, CardHeader, CardPreview, Divider, Image, Text, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Card, CardHeader, CardPreview, Divider, Image, Text, makeStyles, tokens } from "@fluentui/react-components";
+import { DismissRegular } from "@fluentui/react-icons";
+import { useBoolean } from "ahooks";
 import { Cover } from "~/Helpers/Styles";
 
 /**
@@ -17,20 +19,30 @@ const useStyles = makeStyles({
   },
   txt: {
     flexBasis: 0
+  },
+  prev: {
+    flexBasis: "46%"
   }
 });
 
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.1.0
+ * @version 0.2.0
  */
 export function Banner() {
   const style = useStyles();
+  const [close, { setTrue }] = useBoolean();
+
+  if (close)
+    return null;
 
   return <>
     <Card orientation="horizontal" size="large" className={style.main}>
-      <CardPreview style={{ flexBasis: "46%" }}>
+      <CardPreview
+        className={style.prev}
+        logo={<Button appearance="subtle" icon={<DismissRegular />} onClick={setTrue} />}
+      >
         <Image className={style.img} src="/banner.jpg" />
       </CardPreview>
 
