@@ -1,4 +1,4 @@
-import { Button, Divider, Image, LargeTitle, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Divider, Image, LargeTitle, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useRefEffect } from "@fluentui/react-hooks";
 import Typed from "typed.js";
 import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
@@ -42,14 +42,14 @@ const useStyles = makeStyles({
     rowGap: tokens.spacingVerticalXL,
   },
   white: {
-    color: "white"
+    color: "white !important"
   }
 });
 
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 1.0.0
+ * @version 1.5.0
  */
 export function Banner() {
   const style = useStyles();
@@ -105,11 +105,35 @@ export function Banner() {
             It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
           </Text>
 
-          <div>
-            <Button appearance="outline" size="large" className={style.white}>
-              Learn More
-            </Button>
-          </div>
+          <Dialog modalType="non-modal">
+            <DialogTrigger disableButtonEnhancement>
+              <div>
+                <Button appearance="outline" size="large" className={style.white}>
+                  Learn More
+                </Button>
+              </div>
+            </DialogTrigger>
+
+            <DialogSurface>
+              <DialogBody>
+
+                <DialogTitle>Welcome to AwaiShop</DialogTitle>
+
+                <DialogContent>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed maximus nec erat vel hendrerit.
+                  Nulla tempus placerat turpis dictum placerat. Suspendisse ut justo diam.
+                  Donec auctor augue feugiat purus mollis, vitae congue erat pretium. Nulla blandit orci ante, a posuere mauris eleifend vel.
+                  Nam dapibus venenatis scelerisque. Nullam nisl turpis, cursus in convallis in, eleifend eget arcu.
+                  Curabitur scelerisque pretium turpis, consectetur congue nulla convallis tincidunt.
+                  Quisque rhoncus lectus a nunc tempor scelerisque. Quisque non augue eget augue ultricies viverra.
+                  Maecenas aliquam nisi orci, id volutpat risus efficitur et. Aliquam ac nunc euismod, interdum mi ac, faucibus enim.
+                  Donec nec finibus metus. Phasellus iaculis elit finibus sem aliquam, ut viverra tortor dapibus.
+                  Phasellus rhoncus, libero sit amet pulvinar tempus, velit lorem venenatis nisi, id ornare quam quam eget orci. In hac habitasse platea dictumst.
+                </DialogContent>
+
+              </DialogBody>
+            </DialogSurface>
+          </Dialog>
         </div>
       </div>
     </div>
