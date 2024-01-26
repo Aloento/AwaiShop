@@ -48,7 +48,8 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-responsive-carousel": "^3.2.23",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typed.js": "^2.1.0"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
