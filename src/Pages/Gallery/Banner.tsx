@@ -1,8 +1,7 @@
-import { Divider, Image, LargeTitle, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { Button, Divider, Image, LargeTitle, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useRefEffect } from "@fluentui/react-hooks";
-import { useBoolean } from "ahooks";
 import Typed from "typed.js";
-import { Cover, Flex } from "~/Helpers/Styles";
+import { ColFlex, Cover, Flex } from "~/Helpers/Styles";
 
 /**
  * @author Aloento
@@ -11,9 +10,7 @@ import { Cover, Flex } from "~/Helpers/Styles";
  */
 const useStyles = makeStyles({
   main: {
-    position: "relative",
-    ...Flex,
-    justifyContent: "flex-end"
+    position: "relative"
   },
   img: {
     ...Cover,
@@ -26,9 +23,26 @@ const useStyles = makeStyles({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: "4px",
     ...shorthands.borderRadius(tokens.borderRadiusXLarge),
     backdropFilter: "blur(1px) brightness(105%)",
+  },
+  info: {
+    ...Flex,
+    position: "absolute",
+    top: 0,
+    ...shorthands.padding(tokens.spacingHorizontalXXXL),
+  },
+  space: {
+    flexBasis: "50%",
+    flexShrink: 0
+  },
+  txt: {
+    ...ColFlex,
+    rowGap: tokens.spacingVerticalXL,
+  },
+  white: {
+    color: "white"
   }
 });
 
@@ -39,7 +53,6 @@ const useStyles = makeStyles({
  */
 export function Banner() {
   const style = useStyles();
-  const [close, { setTrue }] = useBoolean();
 
   const ref = useRefEffect<HTMLSpanElement>((el) => {
     const typed = new Typed(el, {
@@ -54,9 +67,6 @@ export function Banner() {
     return () => typed.destroy();
   });
 
-  if (close)
-    return null;
-
   return <>
     <div className={style.main}>
       <Image className={style.img} src="/banner.jpg" />
@@ -64,32 +74,43 @@ export function Banner() {
         background: 'linear-gradient(to right, transparent, var(--colorBackgroundOverlay))',
       }} />
 
-      <div style={{
-        ...Flex,
-        position: "absolute",
-        top: 0,
-        padding: tokens.spacingHorizontalXXXL,
-      }}>
-        <div>
-          <LargeTitle style={{ color: "white" }}>
-            Play&nbsp;
-          </LargeTitle>
+      <div className={style.info}>
+        <div className={style.space} />
 
-          <Text
-            ref={ref}
-            size={900}
-            weight="semibold"
-            underline
-            style={{ color: "white" }}
-          >
-            ?
+        <div className={style.txt}>
+          <div>
+            <LargeTitle className={style.white}>
+              Play&nbsp;
+            </LargeTitle>
+
+            <Text
+              ref={ref}
+              size={900}
+              weight="semibold"
+              underline
+              className={style.white}
+            >
+              ?
+            </Text>
+
+            <LargeTitle className={style.white}>
+              &nbsp;With SoarCraft
+            </LargeTitle>
+          </div>
+
+          <Text size={500} className={style.white}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
           </Text>
 
-          <LargeTitle style={{ color: "white" }}>
-            &nbsp;With SoarCraft
-          </LargeTitle>
+          <div>
+            <Button appearance="outline" size="large" className={style.white}>
+              Learn More
+            </Button>
+          </div>
         </div>
-
       </div>
     </div>
 
