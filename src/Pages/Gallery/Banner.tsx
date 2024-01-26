@@ -32,6 +32,7 @@ const useStyles = makeStyles({
     position: "absolute",
     top: 0,
     ...shorthands.padding(tokens.spacingHorizontalXXXL),
+    height: "-webkit-fill-available",
   },
   space: {
     flexBasis: "50%",
@@ -39,7 +40,7 @@ const useStyles = makeStyles({
   },
   txt: {
     ...ColFlex,
-    rowGap: tokens.spacingVerticalXL,
+    justifyContent: "space-around"
   },
   white: {
     color: "white !important"
