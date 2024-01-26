@@ -1,7 +1,8 @@
-import { Button, Card, CardHeader, CardPreview, Divider, Image, Text, makeStyles, tokens } from "@fluentui/react-components";
-import { DismissRegular } from "@fluentui/react-icons";
+import { Divider, Image, LargeTitle, Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { useRefEffect } from "@fluentui/react-hooks";
 import { useBoolean } from "ahooks";
-import { Cover } from "~/Helpers/Styles";
+import Typed from "typed.js";
+import { Cover, Flex } from "~/Helpers/Styles";
 
 /**
  * @author Aloento
@@ -10,62 +11,87 @@ import { Cover } from "~/Helpers/Styles";
  */
 const useStyles = makeStyles({
   main: {
-    alignItems: "flex-start",
-    columnGap: tokens.spacingHorizontalXXL
+    position: "relative",
+    ...Flex,
+    justifyContent: "flex-end"
   },
   img: {
     ...Cover,
-    aspectRatio: "16/9",
+    aspectRatio: "42/9",
+    width: "100%",
+    ...shorthands.borderRadius(tokens.borderRadiusXLarge),
   },
-  txt: {
-    flexBasis: 0
-  },
-  prev: {
-    flexBasis: "46%"
+  mask: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    ...shorthands.borderRadius(tokens.borderRadiusXLarge),
+    backdropFilter: "blur(1px) brightness(105%)",
   }
 });
 
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.2.0
+ * @version 1.0.0
  */
 export function Banner() {
   const style = useStyles();
   const [close, { setTrue }] = useBoolean();
 
+  const ref = useRefEffect<HTMLSpanElement>((el) => {
+    const typed = new Typed(el, {
+      strings: ["AwaiShop", "Together", "Dream", "Forever"],
+      typeSpeed: 60,
+      backSpeed: 40,
+      startDelay: 1500,
+      backDelay: 3000,
+      showCursor: false,
+    });
+
+    return () => typed.destroy();
+  });
+
   if (close)
     return null;
 
   return <>
-    <Card orientation="horizontal" size="large" className={style.main}>
-      <CardPreview
-        className={style.prev}
-        logo={<Button appearance="subtle" icon={<DismissRegular />} onClick={setTrue} />}
-      >
-        <Image className={style.img} src="/banner.jpg" />
-      </CardPreview>
+    <div className={style.main}>
+      <Image className={style.img} src="/banner.jpg" />
+      <div className={style.mask} style={{
+        background: 'linear-gradient(to right, transparent, var(--colorBackgroundOverlay))',
+      }} />
 
-      <CardHeader
-        className={style.txt}
-        header={
-          <Text size={500}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non magna nisi.
-            Nunc ut est vel est sodales consequat. Vivamus imperdiet eros luctus, mollis lorem quis, elementum arcu.
-            Ut maximus pharetra volutpat. Etiam lorem risus, pellentesque vitae malesuada vitae, sollicitudin in massa.
-            In nunc nulla, pretium vitae risus in, pulvinar bibendum magna. Duis ornare ullamcorper neque, sed venenatis augue.
-            Vestibulum rutrum sapien et purus condimentum, id ultricies lectus hendrerit.
-            <br />
-            Aenean porttitor, metus ac semper malesuada, nulla leo dapibus dolor, et gravida augue leo ut sem.
-            Morbi vitae ipsum viverra, suscipit turpis a, elementum mi.
-            Cras pharetra ipsum leo, nec rhoncus elit cursus ut.
-            Fusce consectetur lacus quis odio molestie, nec sollicitudin est pretium. Donec cursus sollicitudin porta.
-            Integer tellus mi, iaculis ut massa et, tempor placerat odio. Quisque ac interdum mauris, ac scelerisque odio.
-            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
+      <div style={{
+        ...Flex,
+        position: "absolute",
+        top: 0,
+        padding: tokens.spacingHorizontalXXXL,
+      }}>
+        <div>
+          <LargeTitle style={{ color: "white" }}>
+            Play&nbsp;
+          </LargeTitle>
+
+          <Text
+            ref={ref}
+            size={900}
+            weight="semibold"
+            underline
+            style={{ color: "white" }}
+          >
+            ?
           </Text>
-        }
-      />
-    </Card>
+
+          <LargeTitle style={{ color: "white" }}>
+            &nbsp;With SoarCraft
+          </LargeTitle>
+        </div>
+
+      </div>
+    </div>
 
     <Divider />
   </>;
