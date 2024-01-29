@@ -16,12 +16,15 @@ import { ProductRadioList } from "./RadioList";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.1
+ * @version 0.2.0
  */
 const useStyles = makeStyles({
   info: {
     ...Flex,
-    columnGap: tokens.spacingHorizontalXXXL
+    columnGap: tokens.spacingHorizontalXXXL,
+    "@media screen and (max-width: 600px)": {
+      flexWrap: "wrap",
+    }
   },
   detail: {
     ...BaseCard,
@@ -37,6 +40,9 @@ const useStyles = makeStyles({
     flexBasis: "50%",
     flexShrink: 0,
     rowGap: tokens.spacingVerticalXL,
+    "@media screen and (max-width: 600px)": {
+      flexBasis: "100%",
+    }
   },
   fore: {
     color: tokens.colorBrandForeground1
