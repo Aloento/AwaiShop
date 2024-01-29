@@ -1,4 +1,3 @@
-import griffel from "@griffel/vite-plugin";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { defineConfig, splitVendorChunkPlugin } from "vite";
@@ -7,7 +6,6 @@ import { defineConfig, splitVendorChunkPlugin } from "vite";
 export default defineConfig({
   plugins: [
     react(),
-    griffel(),
     splitVendorChunkPlugin(),
   ],
   resolve: {
