@@ -16,10 +16,9 @@ import { ProductRadioList } from "./RadioList";
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.1.0
+ * @version 0.1.1
  */
 const useStyles = makeStyles({
-  main: ColFlex,
   info: {
     ...Flex,
     columnGap: tokens.spacingHorizontalXXXL
@@ -59,7 +58,7 @@ const log = new Logger("Product");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.3.0
+ * @version 0.3.1
  */
 function Product() {
   const style = useStyles();
@@ -82,27 +81,25 @@ function Product() {
         <title>{data?.Name || ""} - {Dic.Name}</title>
       </Helmet>
 
-      <div className={style.main}>
-        <div className={style.info}>
-          <ProductCarousel Id={id} />
+      <div className={style.info}>
+        <ProductCarousel Id={id} />
 
-          <div className={style.lex}>
-            <div className={style.detail}>
-              <LargeTitle className={style.fore}>
-                {data?.Name || "Loading..."}
-              </LargeTitle>
+        <div className={style.lex}>
+          <div className={style.detail}>
+            <LargeTitle className={style.fore}>
+              {data?.Name || "Loading..."}
+            </LargeTitle>
 
-              <Divider />
+            <Divider />
 
-              <ProductRadioList ProdId={id} />
+            <ProductRadioList ProdId={id} />
 
-              <Divider />
+            <Divider />
 
-              <ProductQuantity Id={id} />
-            </div>
-
-            <ProductLexicalRender ProdId={id} />
+            <ProductQuantity Id={id} />
           </div>
+
+          <ProductLexicalRender ProdId={id} />
         </div>
       </div>
     </RadioGroupContext>
