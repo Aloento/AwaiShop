@@ -115,7 +115,7 @@ internal partial class AdminHub {
                     types,
                     record.Quantity.ToString(),
                     order.Status.ToString(),
-                    order.TrackingNumber,
+                    order.TrackingNumber ?? "/",
                     user.Name
                 ]);
 
