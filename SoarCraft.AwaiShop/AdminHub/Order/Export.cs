@@ -57,6 +57,13 @@ internal partial class AdminHub {
         };
         sheets.Append(sheet);
 
+        var timestamp = new Row();
+        sheetData.AppendChild(timestamp);
+        timestamp.Append(new Cell {
+            DataType = CellValues.String,
+            CellValue = new($"This order sheet was exported on {DateTime.Now:yyyy-MM-dd HH:mm}")
+        });
+
         var headerRow = new Row();
         sheetData.AppendChild(headerRow);
         headerRow.Append(headers.Select(x => new Cell {
