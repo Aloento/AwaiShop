@@ -39,7 +39,7 @@ const log = new Logger("Setting");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.5.0
+ * @version 0.6.0
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
