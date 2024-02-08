@@ -151,6 +151,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.2.0
    * @liveSafe
+   * @deprecated
    */
   protected static async GetTimeCache<T>(
     this: INet, key: string | number, methodName: string, exp: (now: Dayjs) => Dayjs, ...args: any[]
