@@ -5,6 +5,7 @@ import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
+import { AdminHub } from "~/ShopNet/Admin";
 
 /**
  * @author Aloento
@@ -21,21 +22,22 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.1
+ * @version 0.2.0
  */
 interface IOrderAppend {
   OrderId: number;
-  Status?: string;
   Refresh: () => void;
   ParentLog: Logger;
+  Status?: string;
+  Admin?: true;
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.2
+ * @version 1.0.0
  */
-export function CommentAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppend) {
+export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IOrderAppend) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();
@@ -43,7 +45,9 @@ export function CommentAppend({ OrderId, Status, Refresh, ParentLog }: IOrderApp
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run: append } = Hub.Order.Post.useAppend({
+  const hub = (Admin ? AdminHub : Hub).Order.Post as typeof AdminHub.Order.Post & typeof Hub.Order.Post;
+
+  const { run: append } = hub.useAppend({
     manual: true,
     onError(e, req) {
       dispatch({
@@ -64,11 +68,11 @@ export function CommentAppend({ OrderId, Status, Refresh, ParentLog }: IOrderApp
     }
   });
 
-  const { run: cancel } = Hub.Order.Post.useCancel({
+  const { run: cancel } = (Admin ? hub.useClose : hub.useCancel)({
     manual: true,
     onError(e, params) {
       dispatch({
-        Message: "Failed Cancel Order",
+        Message: `Failed ${Admin ? "Close" : "Cancel"} Order`,
         Request: params,
         Error: e
       });
@@ -76,7 +80,7 @@ export function CommentAppend({ OrderId, Status, Refresh, ParentLog }: IOrderApp
     onSuccess() {
       dispatchToast(
         <Toast>
-          <ToastTitle>Order Canceled</ToastTitle>
+          <ToastTitle>Order {Admin ? "Closed" : "Cancelled"}</ToastTitle>
         </Toast>,
         { intent: "success" }
       );
