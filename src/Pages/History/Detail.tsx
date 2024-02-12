@@ -13,7 +13,7 @@ import { ICompLog } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { OrderAction } from "./Action";
-import { OrderAppend } from "./Append";
+import { CommentAppend } from "./Append";
 import { IComment, OrderComment } from "./Comment";
 
 /**
@@ -166,7 +166,7 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
 
           <OrderComment Comments={data?.Comments} />
 
-          <OrderAppend OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
+          <CommentAppend OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
 
           <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
         </div>

@@ -35,7 +35,7 @@ interface IOrderAppend {
  * @since 0.5.0
  * @version 0.4.2
  */
-export function OrderAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppend) {
+export function CommentAppend({ OrderId, Status, Refresh, ParentLog }: IOrderAppend) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();

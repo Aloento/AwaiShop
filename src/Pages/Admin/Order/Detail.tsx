@@ -10,7 +10,7 @@ import { ColFlex } from "~/Helpers/Styles";
 import { OrderComment } from "~/Pages/History/Comment";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminOrderAction } from "./Action";
-import { AdminOrderAppend } from "./Append";
+import { AdminCommentAppend } from "./Append";
 import { AdminOrderList } from "./List";
 import { Shipment } from "./Ship";
 
@@ -104,7 +104,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
 
         <OrderComment Comments={data?.Comments} />
 
-        <AdminOrderAppend OrderId={OrderId} Refresh={run} />
+        <AdminCommentAppend OrderId={OrderId} Refresh={run} />
 
         <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} />
       </DrawerBody>

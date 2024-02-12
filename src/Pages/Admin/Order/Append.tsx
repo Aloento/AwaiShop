@@ -29,7 +29,7 @@ const log = new Logger("Admin", "Order", "Detail", "Append");
  * @since 0.5.0
  * @version 0.2.2
  */
-export function AdminOrderAppend({ OrderId, Refresh }: IAdminOrderAppend) {
+export function AdminCommentAppend({ OrderId, Refresh }: IAdminOrderAppend) {
   const style = useStyles();
   const [cmt, setCmt] = useState<string>();
 
