@@ -104,7 +104,11 @@ export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IO
       {
         !(Status === "Finished" || Status === "Returning") &&
         <Button onClick={() => cancel(OrderId, cmt!)}>
-          {Status === "Shipping" ? "Ask Return" : "Cancel Order"} with Reason
+          {
+            Admin
+              ? "Force Close"
+              : Status === "Shipping" ? "Ask Return" : "Cancel Order"
+          } with Reason
         </Button>
       }
 

@@ -2,7 +2,6 @@ import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from "~/Pages/History";
 import { IComment } from "~/Pages/History/Comment";
-import { IOrderDetail } from "~/Pages/History/Detail";
 import { ProductData } from "../Product/Data";
 import { ProductGet } from "../Product/Get";
 import { OrderEntity } from "./Entity";
@@ -72,26 +71,23 @@ export abstract class OrderGet extends OrderEntity {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.1
+   * @version 1.1.0
    */
-  public static async Detail(orderId: number, pLog: Logger): Promise<IOrderDetail> {
+  public static async Items(orderId: number, pLog: Logger): Promise<ICartItem[]> {
     this.EnsureLogin();
-    const log = pLog.With(...this.Log, "Detail");
+    const log = pLog.With(...this.Log, "Items");
 
     const meta = await this.GetTimeCache<
       {
-        Items: {
-          Types: number[];
-          Quantity: number;
-        }[],
-        Comments: number[];
-      }
-    >(orderId, "OrderGetDetail", (x) => x.add(1, "m"), orderId);
+        Types: number[];
+        Quantity: number;
+      }[]
+    >(orderId, "OrderGetItems", (x) => x.add(1, "m"), orderId);
 
     const items: ICartItem[] = [];
     let index = 0;
 
-    for (const combo of meta.Items) {
+    for (const combo of meta) {
       const variType: Record<string, string> = {};
       let prodId = 0;
 
@@ -136,9 +132,21 @@ export abstract class OrderGet extends OrderEntity {
       });
     }
 
+    return items;
+  }
+
+  /**
+   * @author Aloento
+   * @since 0.5.0
+   * @version 1.1.0
+   */
+  public static async Cmts(orderId: number, pLog: Logger): Promise<IComment[]> {
+    const log = pLog.With(...this.Log, "Cmts");
+
+    const cmts = await this.GetTimeCache<number[]>(orderId, "OrderGetCmts", (x) => x.add(1, "m"), orderId);
     const comments: IComment[] = [];
 
-    for (const cmtId of meta.Comments) {
+    for (const cmtId of cmts) {
       const cmt = await this.Comment(cmtId);
 
       if (!cmt) {
@@ -153,9 +161,6 @@ export abstract class OrderGet extends OrderEntity {
       });
     }
 
-    return {
-      ShopCart: items,
-      Comments: comments.sort((a, b) => a.Time.getTime() - b.Time.getTime())
-    };
+    return comments.sort((a, b) => a.Time.getTime() - b.Time.getTime());
   }
 }

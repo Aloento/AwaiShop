@@ -102,7 +102,7 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
   const { Nav, Paths } = useRouter();
   const curr = parseInt(Paths.at(1)!);
 
-  const { data, run: runDetail } = useRequest(() => Hub.Order.Get.Detail(OrderId, log), {
+  const { data, run: runDetail } = useRequest(() => Hub.Order.Get.Items(OrderId, log), {
     manual: true,
     onError: log.error
   });
