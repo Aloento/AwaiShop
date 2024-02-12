@@ -1,4 +1,7 @@
+import { useConst } from "@fluentui/react-hooks";
 import { HubConnectionState } from "@microsoft/signalr";
+import { useRequest } from "ahooks";
+import { Options } from "ahooks/lib/useRequest/src/types";
 import dayjs, { Dayjs } from "dayjs";
 import { Subject } from "rxjs";
 import { EmptyResponseError, NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
@@ -119,6 +122,7 @@ export abstract class SignalR {
     const index = this.Index(key, methodName);
     const find = await Shared.Get<T & { QueryExp: number }>(index);
 
+    // TODO：导致 LiveQuery 无限刷新
     const update = async () => {
       const res = await Promise.resolve(this.Invoke<T | true | null>(methodName, key, find?.Version));
 
@@ -151,6 +155,30 @@ export abstract class SignalR {
         QueryExp: dayjs().add(5, "s").unix()
       }, dayjs().add(1, "w"));
     }
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.3.0
+   * @version 0.1.0
+   */
+  protected static useSWR<T>(
+    this: INet, key: string | number, methodName: string, options: Options<T, any[]>
+  ) {
+    const index = useConst(() => this.Index(key, methodName));
+
+    const req = useRequest(
+      (...params) => this.Invoke<T>(methodName, ...params),
+      {
+        staleTime: 1000,
+        ...options,
+        cacheKey: index,
+        setCache: (data) => localStorage.setItem(index, JSON.stringify(data)),
+        getCache: () => JSON.parse(localStorage.getItem(index) || "{}"),
+      }
+    );
+
+    return req;
   }
 
   /**

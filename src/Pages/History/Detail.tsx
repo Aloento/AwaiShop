@@ -101,10 +101,7 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
   const { Nav, Paths } = useRouter();
   const curr = parseInt(Paths.at(1)!);
 
-  const { data: cart, run: runItem } = useRequest(() => Hub.Order.Get.Items(OrderId, log), {
-    manual: true,
-    onError: log.error
-  });
+  const cart = Hub.Order.Get.useItems(OrderId, log);
 
   const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
     onError(e) {
@@ -116,7 +113,6 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
 
   function run() {
     runOrder();
-    runItem();
   }
 
   useEffect(() => {
