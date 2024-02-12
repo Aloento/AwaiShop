@@ -20,7 +20,7 @@
     "@azure/msal-react": "^2.0.11",
     "@fluentui/react-components": "^9.46.4",
     "@fluentui/react-hooks": "^8.6.36",
-    "@fluentui/react-icons": "^2.0.226",
+    "@fluentui/react-icons": "^2.0.227",
     "@griffel/react": "^1.5.20",
     "@lexical/clipboard": "0.10.0",
     "@lexical/code": "0.10.0",
