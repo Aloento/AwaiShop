@@ -104,7 +104,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
 
         <OrderComment Comments={data?.Comments} />
 
-        <CommentAppend OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
+        <CommentAppend OrderId={OrderId} Status={order?.Status} Admin Refresh={run} ParentLog={log} />
 
         <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} />
       </DrawerBody>
