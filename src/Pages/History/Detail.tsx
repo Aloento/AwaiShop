@@ -4,6 +4,7 @@ import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
+import { IComment, OrderComment } from "~/Components/Comment";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
@@ -13,8 +14,6 @@ import { ICompLog } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
 import { OrderAction } from "./Action";
-import { CommentAppend } from "./Append";
-import { IComment, OrderComment } from "./Comment";
 
 /**
  * @author Aloento
@@ -91,7 +90,7 @@ export interface IOrderDetail {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.3.5
+ * @version 0.4.0
  */
 export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
   const log = useConst(() => ParentLog.With("Detail"));
@@ -102,7 +101,7 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
   const { Nav, Paths } = useRouter();
   const curr = parseInt(Paths.at(1)!);
 
-  const { data, run: runDetail } = useRequest(() => Hub.Order.Get.Items(OrderId, log), {
+  const { data: cart, run: runItem } = useRequest(() => Hub.Order.Get.Items(OrderId, log), {
     manual: true,
     onError: log.error
   });
@@ -117,7 +116,7 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
 
   function run() {
     runOrder();
-    runDetail();
+    runItem();
   }
 
   useEffect(() => {
@@ -160,13 +159,11 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
           <OrderInfo OrderId={OrderId} Order={order} />
 
           <DelegateDataGrid
-            Items={data?.ShopCart}
+            Items={cart}
             Columns={[MakeCoverCol(44, log), ...columns]}
           />
 
-          <OrderComment Comments={data?.Comments} />
-
-          <CommentAppend OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
+          <OrderComment OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
 
           <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
         </div>

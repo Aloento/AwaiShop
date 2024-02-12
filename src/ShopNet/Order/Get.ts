@@ -1,7 +1,7 @@
+import { IComment } from "~/Components/Comment";
 import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from "~/Pages/History";
-import { IComment } from "~/Pages/History/Comment";
 import { ProductData } from "../Product/Data";
 import { ProductGet } from "../Product/Get";
 import { OrderEntity } from "./Entity";

@@ -1,11 +1,11 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
 import { useState } from "react";
-import { Logger } from "~/Helpers/Logger";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
+import { IOrderComp } from ".";
 
 /**
  * @author Aloento
@@ -22,22 +22,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
- */
-interface IOrderAppend {
-  OrderId: number;
-  Refresh: () => void;
-  ParentLog: Logger;
-  Status?: string;
-  Admin?: true;
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
  * @version 1.0.0
  */
-export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IOrderAppend) {
+export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IOrderComp) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();

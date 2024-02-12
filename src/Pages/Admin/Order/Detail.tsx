@@ -3,11 +3,11 @@ import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/r
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
+import { CommentAppend } from "~/Components/Comment/Append";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
-import { CommentAppend } from "~/Pages/History/Append";
 import { OrderComment } from "~/Pages/History/Comment";
 import { AdminHub } from "~/ShopNet/Admin";
 import { AdminOrderAction } from "./Action";
