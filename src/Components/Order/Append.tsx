@@ -5,7 +5,7 @@ import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import { IOrderComp } from ".";
+import { IOrderComp } from "./Comment";
 
 /**
  * @author Aloento

@@ -1,6 +1,6 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
-import { IOrderComp } from "~/Components/Comment";
+import { IOrderComp } from "~/Components/Order/Comment";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";

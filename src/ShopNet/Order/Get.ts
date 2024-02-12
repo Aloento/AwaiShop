@@ -1,4 +1,4 @@
-import { IComment } from "~/Components/Comment";
+import { IComment } from "~/Components/Order/Comment";
 import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IOrderItem } from "~/Pages/History";

@@ -3,7 +3,7 @@ import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/r
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
-import { CommentAppend } from "~/Components/Comment/Append";
+import { CommentAppend } from "~/Components/Order/Append";
 import { OrderInfo } from "~/Components/OrderInfo";
 import { useRouter } from "~/Components/Router";
 import { Logger } from "~/Helpers/Logger";
