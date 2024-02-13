@@ -24,7 +24,7 @@ const useStyles = makeStyles({
  * @since 0.5.0
  * @version 1.0.0
  */
-export function CommentAppend({ OrderId, Refresh, ParentLog, Status, Admin }: IOrderComp) {
+export function CommentAppend({ OrderId, Refresh, Status, Admin, ParentLog }: IOrderComp) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();

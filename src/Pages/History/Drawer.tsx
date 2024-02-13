@@ -82,20 +82,14 @@ export function OrderDetailDrawer({ OrderId, ParentLog }: { OrderId: number } & 
   const style = useStyles();
   const { Nav } = useRouter();
 
-  const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
+  const { data: order, run } = useRequest(() => Hub.Order.Get.Order(OrderId), {
     onError(e) {
       Nav("History");
       ParentLog.error(e);
-    },
-    manual: true
+    }
   });
 
-  const { data: cart, run: runItems, loading } = Hub.Order.Get.useItems(OrderId, ParentLog);
-
-  const run = () => {
-    runItems();
-    runOrder();
-  };
+  const { data: cart, loading } = Hub.Order.Get.useItems(OrderId, ParentLog);
 
   return (
     <div className={style.body}>
@@ -108,7 +102,7 @@ export function OrderDetailDrawer({ OrderId, ParentLog }: { OrderId: number } & 
 
       {loading && <SkeletonItem size={48} />}
 
-      <OrderComment OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+      <OrderComment OrderId={OrderId} Status={order?.Status} ParentLog={ParentLog} />
 
       <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
     </div>

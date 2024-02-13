@@ -33,11 +33,10 @@ export interface IOrderComp extends ICompLog {
  * @since 1.0.0
  * @version 0.1.0
  */
-export function OrderComment({ OrderId, Refresh, ParentLog, Status, Admin }: IOrderComp) {
+export function OrderComment({ OrderId, Status, Admin, ParentLog }: Omit<IOrderComp, "Refresh">) {
   const log = useConst(() => ParentLog.With("Comment"));
 
   const { data, run } = useRequest(() => Hub.Order.Get.Cmts(OrderId, log), {
-    manual: true,
     onError: log.error
   });
 
