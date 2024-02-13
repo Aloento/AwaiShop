@@ -3,6 +3,7 @@ import { HubConnectionState } from "@microsoft/signalr";
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import dayjs, { Dayjs } from "dayjs";
+import Dexie from "dexie";
 import { Subject } from "rxjs";
 import { EmptyResponseError, NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
@@ -124,15 +125,15 @@ export abstract class SignalR {
 
     // TODO：导致 LiveQuery 无限刷新
     const update = async () => {
-      const res = await Promise.resolve(this.Invoke<T | true | null>(methodName, key, find?.Version));
+      const res = await Dexie.waitFor(this.Invoke<T | true | null>(methodName, key, find?.Version));
 
       if (res === true) {
-        setCache(find!);
+        setCache(find!)
         return find!;
       }
 
       if (!res) {
-        Shared.Sto.delete(index);
+        await Shared.Sto.delete(index);
         throw new EmptyResponseError();
       }
 
@@ -159,7 +160,7 @@ export abstract class SignalR {
 
   /**
    * @author Aloento
-   * @since 1.3.0
+   * @since 1.3.5
    * @version 0.1.0
    */
   protected static useSWR<T>(
