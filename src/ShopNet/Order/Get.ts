@@ -1,4 +1,5 @@
 import { useConst } from "@fluentui/react-hooks";
+import { useAsyncEffect } from "ahooks";
 import { useState } from "react";
 import { IComment } from "~/Components/Order/Comment";
 import { ICartItem } from "~/Components/ShopCart";
@@ -90,60 +91,65 @@ export abstract class OrderGet extends OrderEntity {
       this.items,
       {
         defaultParams: [orderId],
-        onError: log.error,
-        async onSuccess(meta) {
-          const items: ICartItem[] = [];
-          let index = 0;
-
-          for (const combo of meta) {
-            const variType: Record<string, string> = {};
-            let prodId = 0;
-
-            for (const typeId of combo.Types) {
-              const type = await ProductData.Type(typeId);
-
-              if (!type) {
-                log.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
-                continue;
-              }
-
-              const vari = await ProductData.Variant(type.VariantId);
-
-              if (!vari) {
-                log.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
-                continue;
-              }
-
-              variType[vari.Name] = type.Name;
-              prodId = vari.ProductId;
-            }
-
-            const prod = await ProductData.Product(prodId);
-
-            if (!prod) {
-              log.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);
-              continue;
-            }
-
-            const [_, cover] = await ProductGet.PhotoList(prodId, log);
-
-            if (!cover)
-              log.warn(`Product ${prodId} has no photo`);
-
-            items.push({
-              Id: index++,
-              ProdId: prodId,
-              Cover: cover || "",
-              Name: prod.Name,
-              Type: variType,
-              Quantity: combo.Quantity,
-            });
-          }
-
-          setRes(items);
-        }
+        onError: log.error
       }
     );
+
+    useAsyncEffect(async () => {
+      const meta = req.data;
+      if (!meta)
+        return;
+
+      const items: ICartItem[] = [];
+      let index = 0;
+
+      for (const combo of meta) {
+        const variType: Record<string, string> = {};
+        let prodId = 0;
+
+        for (const typeId of combo.Types) {
+          const type = await ProductData.Type(typeId);
+
+          if (!type) {
+            log.warn(`[Mismatch] Type ${typeId} not found. Order : ${orderId}`);
+            continue;
+          }
+
+          const vari = await ProductData.Variant(type.VariantId);
+
+          if (!vari) {
+            log.warn(`[Mismatch] Variant ${type.VariantId} not found. Type : ${typeId}, Order : ${orderId}`);
+            continue;
+          }
+
+          variType[vari.Name] = type.Name;
+          prodId = vari.ProductId;
+        }
+
+        const prod = await ProductData.Product(prodId);
+
+        if (!prod) {
+          log.warn(`[Mismatch] Product ${prodId} not found. Order : ${orderId}`);
+          continue;
+        }
+
+        const [_, cover] = await ProductGet.PhotoList(prodId, log);
+
+        if (!cover)
+          log.warn(`Product ${prodId} has no photo`);
+
+        items.push({
+          Id: index++,
+          ProdId: prodId,
+          Cover: cover || "",
+          Name: prod.Name,
+          Type: variType,
+          Quantity: combo.Quantity,
+        });
+      }
+
+      setRes(items);
+    }, [req.data]);
 
     return {
       ...req,

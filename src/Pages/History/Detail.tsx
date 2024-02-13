@@ -1,4 +1,4 @@
-import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Link, SkeletonItem, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
@@ -146,8 +146,6 @@ function DeferredBody({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
   const style = useStyles();
   const { Nav } = useRouter();
 
-  const { data: cart, run: runItems } = Hub.Order.Get.useItems(OrderId, ParentLog);
-
   const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
     onError(e) {
       Nav("History");
@@ -155,6 +153,8 @@ function DeferredBody({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
     },
     manual: true
   });
+
+  const { data: cart, run: runItems, loading } = Hub.Order.Get.useItems(OrderId, ParentLog);
 
   const run = () => {
     runItems();
@@ -169,6 +169,8 @@ function DeferredBody({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
         Items={cart}
         Columns={[MakeCoverCol(44, ParentLog), ...columns]}
       />
+
+      {loading && <SkeletonItem size={48} />}
 
       <OrderComment OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
 

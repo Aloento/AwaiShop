@@ -127,13 +127,20 @@ export abstract class SignalR {
     const update = async () => {
       const res = await Dexie.waitFor(this.Invoke<T | true | null>(methodName, key, find?.Version));
 
+      function setCache(value: T) {
+        Shared.Set<T & { QueryExp: number; }>(index, {
+          ...value,
+          QueryExp: dayjs().add(10, "s").unix()
+        }, dayjs().add(1, "w"));
+      }
+
       if (res === true) {
         setCache(find!)
         return find!;
       }
 
       if (!res) {
-        await Shared.Sto.delete(index);
+        Shared.Sto.delete(index);
         throw new EmptyResponseError();
       }
 
@@ -142,20 +149,13 @@ export abstract class SignalR {
     }
 
     if (find) {
-      if (find.QueryExp <= dayjs().unix())
+      if (find.QueryExp < dayjs().unix())
         update();
 
       return find;
     }
 
     return update();
-
-    function setCache(value: T) {
-      Shared.Set<T & { QueryExp: number; }>(index, {
-        ...value,
-        QueryExp: dayjs().add(5, "s").unix()
-      }, dayjs().add(1, "w"));
-    }
   }
 
   /**
@@ -171,7 +171,7 @@ export abstract class SignalR {
     const req = useRequest(
       (...params) => this.Invoke<T>(methodName, ...params),
       {
-        staleTime: 1000,
+        staleTime: 5000,
         ...options,
         cacheKey: index,
         setCache: (data) => localStorage.setItem(index, JSON.stringify(data)),
