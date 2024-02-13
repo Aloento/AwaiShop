@@ -113,29 +113,64 @@ export abstract class SignalR {
 
   /**
    * @author Aloento
+   * @since 1.3.5
+   * @version 0.1.0
+   */
+  private static readonly reqPool = new Set<string>();
+
+  /**
+   * @author Aloento
+   * @since 1.3.5
+   * @version 0.1.0
+   */
+  private static async getLocker(key: string) {
+    if (this.reqPool.has(key))
+      return new Promise<void>(res => {
+        const t = setTimeout(() => this.reqPool.delete(key), 10000);
+
+        const i = setInterval(() => {
+          if (!this.reqPool.has(key)) {
+            clearInterval(i);
+            res();
+            clearTimeout(t);
+          }
+        }, 100);
+      });
+  }
+
+  /**
+   * @author Aloento
    * @since 1.0.0
-   * @version 1.0.0
+   * @version 1.1.0
    * @liveSafe
    */
   protected static async GetVersionCache<T extends IConcurrency>(
     this: INet, key: string | number, methodName: string
   ): Promise<T> {
     const index = this.Index(key, methodName);
+    await this.getLocker(index);
+
     const find = await Shared.Get<T & { QueryExp: number }>(index);
 
-    // TODO：导致 LiveQuery 无限刷新
-    const update = async () => {
+    const get = async () => {
+      this.reqPool.add(index);
+
       const res = await Dexie.waitFor(this.Invoke<T | true | null>(methodName, key, find?.Version));
 
-      function setCache(value: T) {
-        Shared.Set<T & { QueryExp: number; }>(index, {
-          ...value,
-          QueryExp: dayjs().add(10, "s").unix()
-        }, dayjs().add(1, "w"));
+      const set = (value: T) => {
+        Shared.Set<T & { QueryExp: number; }>(
+          index,
+          {
+            ...value,
+            QueryExp: dayjs().add(10, "s").unix()
+          }, dayjs().add(1, "w")
+        ).finally(
+          () => this.reqPool.delete(index)
+        );
       }
 
       if (res === true) {
-        setCache(find!)
+        set(find!);
         return find!;
       }
 
@@ -144,18 +179,18 @@ export abstract class SignalR {
         throw new EmptyResponseError();
       }
 
-      setCache(res);
+      set(res);
       return res;
     }
 
     if (find) {
       if (find.QueryExp < dayjs().unix())
-        update();
+        get();
 
       return find;
     }
 
-    return update();
+    return get();
   }
 
   /**

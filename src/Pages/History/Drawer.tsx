@@ -1,4 +1,4 @@
-import { Body1Strong, Caption1, DataGridCell, DataGridHeaderCell, Link, SkeletonItem, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1Strong, Caption1, DataGridCell, DataGridHeaderCell, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { OrderComment } from "~/Components/Order/Comment";
@@ -89,7 +89,7 @@ export function OrderDetailDrawer({ OrderId, ParentLog }: { OrderId: number } & 
     }
   });
 
-  const { data: cart, loading } = Hub.Order.Get.useItems(OrderId, ParentLog);
+  const { data: cart } = Hub.Order.Get.useItems(OrderId, ParentLog);
 
   return (
     <div className={style.body}>
@@ -99,8 +99,6 @@ export function OrderDetailDrawer({ OrderId, ParentLog }: { OrderId: number } & 
         Items={cart}
         Columns={[MakeCoverCol(44, ParentLog), ...columns]}
       />
-
-      {loading && <SkeletonItem size={48} />}
 
       <OrderComment OrderId={OrderId} Status={order?.Status} ParentLog={ParentLog} />
 
