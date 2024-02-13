@@ -80,7 +80,7 @@ export abstract class OrderGet extends OrderEntity {
     const log = useConst(() => pLog.With(...this.Log, "Items"));
     const [res, setRes] = useState<ICartItem[]>([]);
 
-    this.useSWR<
+    const req = this.useSWR<
       {
         Types: number[];
         Quantity: number;
@@ -145,7 +145,10 @@ export abstract class OrderGet extends OrderEntity {
       }
     );
 
-    return res;
+    return {
+      ...req,
+      data: res
+    };
   }
 
   /**

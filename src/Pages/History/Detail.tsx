@@ -2,8 +2,8 @@ import { Body1Strong, Button, Caption1, DataGridCell, DataGridHeaderCell, Link, 
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
-import { useBoolean, useRequest } from "ahooks";
-import { useEffect } from "react";
+import { useBoolean, useInViewport, useRequest } from "ahooks";
+import { useEffect, useRef } from "react";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { IComment, OrderComment } from "~/Components/Order/Comment";
 import { OrderInfo } from "~/Components/OrderInfo";
@@ -90,38 +90,18 @@ export interface IOrderDetail {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.4.0
+ * @version 1.0.0
  */
 export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
   const log = useConst(() => ParentLog.With("Detail"));
 
-  const style = useStyles();
-  const [open, { setTrue, setFalse }] = useBoolean();
-
+  const [open, { set }] = useBoolean();
   const { Nav, Paths } = useRouter();
   const curr = parseInt(Paths.at(1)!);
 
-  const cart = Hub.Order.Get.useItems(OrderId, log);
-
-  const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
-    onError(e) {
-      Nav("History");
-      log.error(e);
-    },
-    manual: true
-  });
-
-  function run() {
-    runOrder();
-  }
-
-  useEffect(() => {
-    if (curr === OrderId) {
-      run();
-      setTrue();
-    } else
-      setFalse();
-  }, [curr]);
+  useEffect(() => set(curr === OrderId), [curr]);
+  const ref = useRef(null);
+  const [inViewport] = useInViewport(ref);
 
   return <>
     <Button
@@ -150,20 +130,49 @@ export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompL
         </DrawerHeaderTitle>
       </DrawerHeader>
 
-      <DrawerBody>
-        <div className={style.body}>
-          <OrderInfo OrderId={OrderId} Order={order} />
-
-          <DelegateDataGrid
-            Items={cart}
-            Columns={[MakeCoverCol(44, log), ...columns]}
-          />
-
-          <OrderComment OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
-
-          <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={log} />
-        </div>
+      <DrawerBody ref={ref}>
+        {inViewport && <DeferredBody OrderId={OrderId} ParentLog={log} />}
       </DrawerBody>
     </Drawer>
   </>
+}
+
+/**
+ * @author Aloento
+ * @since 1.3.5
+ * @version 0.1.0
+ */
+function DeferredBody({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
+  const style = useStyles();
+  const { Nav } = useRouter();
+
+  const { data: cart, run: runItems } = Hub.Order.Get.useItems(OrderId, ParentLog);
+
+  const { data: order, run: runOrder } = useRequest(() => Hub.Order.Get.Order(OrderId), {
+    onError(e) {
+      Nav("History");
+      ParentLog.error(e);
+    },
+    manual: true
+  });
+
+  const run = () => {
+    runItems();
+    runOrder();
+  };
+
+  return (
+    <div className={style.body}>
+      <OrderInfo OrderId={OrderId} Order={order} />
+
+      <DelegateDataGrid
+        Items={cart}
+        Columns={[MakeCoverCol(44, ParentLog), ...columns]}
+      />
+
+      <OrderComment OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+
+      <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+    </div>
+  );
 }
