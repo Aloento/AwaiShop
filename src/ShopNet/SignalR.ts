@@ -220,20 +220,25 @@ export abstract class SignalR {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 0.2.0
+   * @version 0.3.0
    * @liveSafe
-   * @deprecated
+   * @deprecated Not recommend. Use {@link useSWR} if possible.
    */
   protected static async GetTimeCache<T>(
     this: INet, key: string | number, methodName: string, exp: (now: Dayjs) => Dayjs, ...args: any[]
   ): Promise<T> {
+    const index = this.Index(key, methodName);
+    await this.getLocker(index);
+
     const res = await Shared.GetOrSet(
-      this.Index(key, methodName),
-      async () => {
-        const db = await this.Invoke<T>(methodName, ...args);
-        return db;
+      index,
+      () => {
+        this.reqPool.add(index);
+        return this.Invoke<T>(methodName, ...args);
       },
       exp(dayjs())
+    ).finally(
+      () => this.reqPool.delete(index)
     );
 
     return res;
