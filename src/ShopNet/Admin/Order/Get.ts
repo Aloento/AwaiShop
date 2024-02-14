@@ -1,4 +1,4 @@
-import { IOrderDetail } from "~/Components/Order/Detail";
+import { IOrderComp } from "~/Components/Order";
 import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IAdminOrderItem } from "~/Pages/Admin/Order";
@@ -95,7 +95,7 @@ export abstract class AdminOrderGet extends AdminNet {
    * @since 1.0.0
    * @version 0.1.1
    */
-  public static async Detail(orderId: number, pLog: Logger): Promise<IOrderDetail> {
+  public static async Detail(orderId: number, pLog: Logger): Promise<IOrderComp> {
     this.EnsureLogin();
     const log = pLog.With(...this.Log, "Detail");
 

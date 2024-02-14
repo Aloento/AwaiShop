@@ -1,12 +1,12 @@
 import { useConst } from "@fluentui/react-hooks";
 import { HubConnectionState } from "@microsoft/signalr";
-import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import dayjs, { Dayjs } from "dayjs";
 import Dexie from "dexie";
 import { Subject } from "rxjs";
 import { EmptyResponseError, NotLoginError, NotTrueError } from "~/Helpers/Exceptions";
 import type { Logger } from "~/Helpers/Logger";
+import { useSWR } from "~/Helpers/useSWR";
 import type { AdminNet } from "./Admin/AdminNet";
 import { MSAL, Shared, type IConcurrency } from "./Database";
 import type { ShopNet } from "./ShopNet";
@@ -205,7 +205,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.3.0
    * @liveSafe
-   * @deprecated Not recommend. Use {@link useSWR} if possible.
+   * @deprecated Use {@link useTimeCache} if possible.
    */
   protected static async GetTimeCache<T>(
     this: INet, key: string | number, methodName: string, exp: (now: Dayjs) => Dayjs, ...args: any[]
@@ -225,6 +225,25 @@ export abstract class SignalR {
     );
 
     return res;
+  }
+
+  /**
+   * @author Aloento
+   * @since 1.3.5
+   * @version 0.1.0
+   */
+  protected static useTimeCache<T>(
+    this: INet, key: string | number, methodName: string, options: Options<T, any[]>
+  ) {
+    const index = useConst(() => this.Index(key, methodName));
+
+    const req = useSWR(
+      index,
+      (...params) => this.Invoke<T>(methodName, ...params),
+      options
+    );
+
+    return req;
   }
 
   /**
@@ -251,30 +270,6 @@ export abstract class SignalR {
       }, dayjs().add(1, "w"));
     else
       await Shared.Set<T>(index, data, exp || null);
-  }
-
-  /**
-   * @author Aloento
-   * @since 1.3.5
-   * @version 0.1.0
-   */
-  protected static useSWR<T>(
-    this: INet, key: string | number, methodName: string, options: Options<T, any[]>
-  ) {
-    const index = useConst(() => this.Index(key, methodName));
-
-    const req = useRequest(
-      (...params) => this.Invoke<T>(methodName, ...params),
-      {
-        staleTime: 5000,
-        ...options,
-        cacheKey: index,
-        setCache: (data) => localStorage.setItem(index, JSON.stringify(data)),
-        getCache: () => JSON.parse(localStorage.getItem(index) || "{}"),
-      }
-    );
-
-    return req;
   }
 
   //#endregion

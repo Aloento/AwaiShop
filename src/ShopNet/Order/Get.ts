@@ -81,7 +81,7 @@ export abstract class OrderGet extends OrderEntity {
     const log = useConst(() => pLog.With(...this.Log, "Items"));
     const [res, setRes] = useState<ICartItem[]>();
 
-    const req = this.useSWR<
+    const req = this.useTimeCache<
       {
         Types: number[];
         Quantity: number;
@@ -166,7 +166,7 @@ export abstract class OrderGet extends OrderEntity {
     const log = useConst(() => pLog.With(...this.Log, "Cmts"));
     const [res, setRes] = useState<IComment[]>();
 
-    const req = this.useSWR<number[]>(
+    const req = this.useTimeCache<number[]>(
       orderId,
       "OrderGetCmts",
       {

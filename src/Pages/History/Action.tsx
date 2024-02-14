@@ -1,6 +1,6 @@
 import { Button, Field, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
-import { IOrderComp } from "~/Components/Order/Comment";
+import { IOrderRef } from "~/Components/Order";
 import { useRouter } from "~/Components/Router";
 import { ColFlex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
  * @since 1.0.0
  * @version 0.1.2
  */
-export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderComp) {
+export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderRef) {
   const log = useConst(() => ParentLog.With("Action"));
 
   const style = useStyles();

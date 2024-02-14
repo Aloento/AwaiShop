@@ -2,14 +2,16 @@ import { Body1Strong, Caption1, DataGridCell, DataGridHeaderCell, Link, TableCol
 import { useRequest } from "ahooks";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { OrderComment } from "~/Components/Order/Comment";
-import { OrderInfo } from "~/Components/OrderInfo";
-import { useRouter } from "~/Components/Router";
+import { OrderInfo } from "~/Components/Order/Info";
 import { ICartItem } from "~/Components/ShopCart";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
-import { ICompLog } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
+import { useSWR } from "~/Helpers/useSWR";
 import { Hub } from "~/ShopNet";
+import { AdminHub } from "~/ShopNet/Admin";
+import { IOrderComp } from ".";
 import { OrderAction } from "../../Pages/History/Action";
+import { useRouter } from "../Router";
 
 /**
  * @author Aloento
@@ -76,13 +78,26 @@ const columns: TableColumnDefinition<ICartItem>[] = [
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 1.0.0
+ * @version 1.1.0
  */
-export function OrderDetailDrawer({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
+export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
   const style = useStyles();
+
   const { Nav } = useRouter();
 
-  const { data: order, run } = useRequest(() => Hub.Order.Get.Order(OrderId), {
+  useSWR(OrderId, Hub.Order.Get.order, {
+    onError(e) {
+      Nav("History");
+      ParentLog.error(e);
+    }
+  });
+
+  const { data: order, run } = useRequest(() => {
+    if (Admin)
+      return AdminHub.Order.Get.Order(OrderId);
+
+    return Hub.Order.Get.Order(OrderId);
+  }, {
     onError(e) {
       Nav("History");
       ParentLog.error(e);
@@ -93,16 +108,16 @@ export function OrderDetailDrawer({ OrderId, ParentLog }: { OrderId: number } & 
 
   return (
     <div className={style.body}>
-      <OrderInfo OrderId={OrderId} Order={order} />
+      <OrderInfo OrderId={OrderId} Order={order} ParentLog={ParentLog} />
 
       <DelegateDataGrid
         Items={cart}
         Columns={[MakeCoverCol(44, ParentLog), ...columns]}
       />
 
-      <OrderComment OrderId={OrderId} Status={order?.Status} ParentLog={ParentLog} />
+      <OrderComment OrderId={OrderId} ParentLog={ParentLog} />
 
-      <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+      <OrderAction OrderId={OrderId} Refresh={run} ParentLog={ParentLog} />
     </div>
   );
 }

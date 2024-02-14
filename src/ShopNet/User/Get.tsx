@@ -28,17 +28,19 @@ export abstract class UserGet extends ShopNet {
   protected static override readonly Log = [...super.Log, "User", "Get"];
 
   public static readonly me = "UserGetMe";
-
   /**
    * @author Aloento
    * @since 1.0.0
    * @version 0.4.2
    */
-  public static useMe(pLog: Logger): UserGet.Me | void {
+  public static useMe(pLog: Logger, admin?: true): UserGet.Me | void {
     const log = useConst(() => pLog.With(...this.Log, "Me"));
     const { dispatch } = useErrorToast(log);
 
     const res = useLiveQuery(async (): Promise<UserGet.Me | void> => {
+      if (admin)
+        return;
+
       try {
         this.EnsureLogin();
         return await this.GetVersionCache<UserGet.Me>(0, this.me);
@@ -54,7 +56,7 @@ export abstract class UserGet extends ShopNet {
             Request: ""
           });
       }
-    });
+    }, []);
 
     return res;
   }

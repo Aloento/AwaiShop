@@ -4,20 +4,22 @@ import { useConst } from "@fluentui/react-hooks";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useInViewport } from "ahooks";
 import { useEffect, useRef } from "react";
-import { IComment } from "~/Components/Order/Comment";
 import { useRouter } from "~/Components/Router";
-import { ICartItem } from "~/Components/ShopCart";
 import { ICompLog } from "~/Helpers/Logger";
 import { OrderDetailDrawer } from "./Drawer";
 
+export interface IOrderComp extends ICompLog {
+  OrderId: number;
+  Admin?: true;
+}
+
 /**
  * @author Aloento
- * @since 1.0.0
- * @version 0.1.1
+ * @since 0.5.0
+ * @version 0.2.0
  */
-export interface IOrderDetail {
-  ShopCart: ICartItem[];
-  Comments?: IComment[];
+export interface IOrderRef extends IOrderComp {
+  Refresh: () => void;
 }
 
 /**
@@ -25,7 +27,7 @@ export interface IOrderDetail {
  * @since 0.5.0
  * @version 1.1.0
  */
-export function OrderDetail({ OrderId, ParentLog }: { OrderId: number } & ICompLog) {
+export function OrderDetail({ OrderId, Admin, ParentLog }: IOrderComp) {
   const log = useConst(() => ParentLog.With("Detail"));
 
   const [open, { set }] = useBoolean();

@@ -1,11 +1,12 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
+import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
-import { IOrderComp } from "./Comment";
+import { IOrderRef } from ".";
 
 /**
  * @author Aloento
@@ -22,9 +23,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 1.0.0
+ * @version 1.1.0
  */
-export function CommentAppend({ OrderId, Refresh, Status, Admin, ParentLog }: IOrderComp) {
+export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef) {
   const log = useConst(() => ParentLog.With("Append"));
 
   const style = useStyles();
@@ -76,7 +77,12 @@ export function CommentAppend({ OrderId, Refresh, Status, Admin, ParentLog }: IO
     }
   });
 
-  switch (Status) {
+  const status = useLiveQuery(async () => {
+    const res = await Hub.Order.Get.Order(OrderId);
+    return res.Status;
+  }, []);
+
+  switch (status) {
     case "Cancelled":
     case "Finished":
       return null;
@@ -89,12 +95,12 @@ export function CommentAppend({ OrderId, Refresh, Status, Admin, ParentLog }: IO
 
     <div className={style.body}>
       {
-        !(Status === "Finished" || Status === "Returning") &&
+        !(status === "Finished" || status === "Returning") &&
         <Button onClick={() => cancel(OrderId, cmt!)}>
           {
             Admin
               ? "Force Close"
-              : Status === "Shipping" ? "Ask Return" : "Cancel Order"
+              : status === "Shipping" ? "Ask Return" : "Cancel Order"
           } with Reason
         </Button>
       }

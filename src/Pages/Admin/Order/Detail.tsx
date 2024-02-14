@@ -5,7 +5,7 @@ import { useBoolean, useRequest } from "ahooks";
 import { useEffect } from "react";
 import { CommentAppend } from "~/Components/Order/Append";
 import { OrderComment } from "~/Components/Order/Comment";
-import { OrderInfo } from "~/Components/OrderInfo";
+import { OrderInfo } from "~/Components/Order/Info";
 import { useRouter } from "~/Components/Router";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
