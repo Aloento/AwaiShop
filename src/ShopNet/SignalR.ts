@@ -37,11 +37,11 @@ export abstract class SignalR {
       || this.Hub.state === HubConnectionState.Disconnecting)
       await this.Hub.start();
 
-    return new Promise<void>(resolve => {
-      const interval = setInterval(() => {
+    return new Promise<void>(res => {
+      const i = setInterval(() => {
         if (this.Hub.state === HubConnectionState.Connected) {
-          clearInterval(interval);
-          resolve();
+          clearInterval(i);
+          res();
         }
       }, 100);
     });
@@ -79,36 +79,43 @@ export abstract class SignalR {
 
   /**
    * @author Aloento
-   * @since 1.3.0
-   * @version 0.1.0
+   * @since 1.0.0
+   * @version 0.1.2
    */
-  public static Index(key: string | number, methodName: string): string {
-    return `${methodName}_${key}`;
+  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, pLog: Logger) {
+    const chunkSize = 30 * 1024;
+    const chunks = Math.ceil(file.size / chunkSize);
+    let index = 0;
+
+    while (index < chunks) {
+      const start = index * chunkSize;
+      const end = Math.min(start + chunkSize, file.size);
+      const chunk = file.slice(start, end);
+
+      const reader = new FileReader();
+      const buffer = await new Promise<Uint8Array>((res, rej) => {
+        reader.onload = () => res(new Uint8Array(reader.result as ArrayBuffer));
+        reader.onerror = () => rej(reader.error);
+        reader.readAsArrayBuffer(chunk);
+      });
+
+      subject.next(buffer);
+      pLog?.debug(`Sent chunk ${index + 1}/${chunks}`);
+      index++;
+    }
+
+    subject.complete();
   }
+
+  //#region Cache
 
   /**
    * @author Aloento
    * @since 1.3.0
    * @version 0.1.0
    */
-  protected static async UpdateCache<T>(
-    this: INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs
-  ) {
-    const index = this.Index(key, methodName);
-    const find = await Shared.Get<T & { QueryExp?: number }>(index);
-
-    if (!find)
-      return;
-
-    const data = action(find);
-
-    if (find.QueryExp)
-      await Shared.Set<T & { QueryExp: number }>(index, {
-        ...data,
-        QueryExp: dayjs().add(1, "m").unix()
-      }, dayjs().add(1, "w"));
-    else
-      await Shared.Set<T>(index, data, exp || null);
+  public static Index(key: string | number, methodName: string): string {
+    return `${methodName}_${key}`;
   }
 
   /**
@@ -195,30 +202,6 @@ export abstract class SignalR {
 
   /**
    * @author Aloento
-   * @since 1.3.5
-   * @version 0.1.0
-   */
-  protected static useSWR<T>(
-    this: INet, key: string | number, methodName: string, options: Options<T, any[]>
-  ) {
-    const index = useConst(() => this.Index(key, methodName));
-
-    const req = useRequest(
-      (...params) => this.Invoke<T>(methodName, ...params),
-      {
-        staleTime: 5000,
-        ...options,
-        cacheKey: index,
-        setCache: (data) => localStorage.setItem(index, JSON.stringify(data)),
-        getCache: () => JSON.parse(localStorage.getItem(index) || "{}"),
-      }
-    );
-
-    return req;
-  }
-
-  /**
-   * @author Aloento
    * @since 1.0.0
    * @version 0.3.0
    * @liveSafe
@@ -246,31 +229,53 @@ export abstract class SignalR {
 
   /**
    * @author Aloento
-   * @since 1.0.0
-   * @version 0.1.2
+   * @since 1.3.0
+   * @version 0.1.0
+   * @deprecated
    */
-  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, pLog: Logger) {
-    const chunkSize = 30 * 1024;
-    const chunks = Math.ceil(file.size / chunkSize);
-    let index = 0;
+  protected static async UpdateCache<T>(
+    this: INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs
+  ) {
+    const index = this.Index(key, methodName);
+    const find = await Shared.Get<T & { QueryExp?: number }>(index);
 
-    while (index < chunks) {
-      const start = index * chunkSize;
-      const end = Math.min(start + chunkSize, file.size);
-      const chunk = file.slice(start, end);
+    if (!find)
+      return;
 
-      const reader = new FileReader();
-      const buffer = await new Promise<Uint8Array>((res, rej) => {
-        reader.onload = () => res(new Uint8Array(reader.result as ArrayBuffer));
-        reader.onerror = () => rej(reader.error);
-        reader.readAsArrayBuffer(chunk);
-      });
+    const data = action(find);
 
-      subject.next(buffer);
-      pLog?.debug(`Sent chunk ${index + 1}/${chunks}`);
-      index++;
-    }
-
-    subject.complete();
+    if (find.QueryExp)
+      await Shared.Set<T & { QueryExp: number }>(index, {
+        ...data,
+        QueryExp: dayjs().add(1, "m").unix()
+      }, dayjs().add(1, "w"));
+    else
+      await Shared.Set<T>(index, data, exp || null);
   }
+
+  /**
+   * @author Aloento
+   * @since 1.3.5
+   * @version 0.1.0
+   */
+  protected static useSWR<T>(
+    this: INet, key: string | number, methodName: string, options: Options<T, any[]>
+  ) {
+    const index = useConst(() => this.Index(key, methodName));
+
+    const req = useRequest(
+      (...params) => this.Invoke<T>(methodName, ...params),
+      {
+        staleTime: 5000,
+        ...options,
+        cacheKey: index,
+        setCache: (data) => localStorage.setItem(index, JSON.stringify(data)),
+        getCache: () => JSON.parse(localStorage.getItem(index) || "{}"),
+      }
+    );
+
+    return req;
+  }
+
+  //#endregion
 }
