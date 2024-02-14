@@ -39,7 +39,7 @@ export function OrderInfo({ OrderId, Order, Admin, ParentLog }: IOrderInfo) {
     onError: log.error
   });
 
-  const me = Hub.User.Get.useMe(log, Admin);
+  const { data: me } = Hub.User.Get.useMe(log, Admin);
 
   const data = Admin ? admin : me;
 
