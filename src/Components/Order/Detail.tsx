@@ -8,7 +8,7 @@ import { IComment } from "~/Components/Order/Comment";
 import { useRouter } from "~/Components/Router";
 import { ICartItem } from "~/Components/ShopCart";
 import { ICompLog } from "~/Helpers/Logger";
-import { OrderDetailDrawer } from "../../Components/Order/Drawer";
+import { OrderDetailDrawer } from "./Drawer";
 
 /**
  * @author Aloento

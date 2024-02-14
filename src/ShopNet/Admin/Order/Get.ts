@@ -1,8 +1,8 @@
+import { IOrderDetail } from "~/Components/Order/Detail";
 import { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
 import { IAdminOrderItem } from "~/Pages/Admin/Order";
 import { IComment } from "~/Pages/History/Comment";
-import { IOrderDetail } from "~/Pages/History/Detail";
 import { ProductData } from "~/ShopNet/Product/Data";
 import { ProductGet } from "~/ShopNet/Product/Get";
 import { AdminNet } from "../AdminNet";
