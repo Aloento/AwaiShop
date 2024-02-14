@@ -79,7 +79,7 @@ export abstract class OrderGet extends OrderEntity {
    */
   public static useItems(orderId: number, pLog: Logger) {
     const log = useConst(() => pLog.With(...this.Log, "Items"));
-    const [res, setRes] = useState<ICartItem[]>([]);
+    const [res, setRes] = useState<ICartItem[]>();
 
     const req = this.useSWR<
       {
@@ -159,30 +159,50 @@ export abstract class OrderGet extends OrderEntity {
 
   /**
    * @author Aloento
-   * @since 1.3.0
+   * @since 1.3.5
    * @version 0.1.0
    */
-  public static async Cmts(orderId: number, pLog: Logger): Promise<IComment[]> {
-    const log = pLog.With(...this.Log, "Cmts");
+  public static useCmts(orderId: number, pLog: Logger) {
+    const log = useConst(() => pLog.With(...this.Log, "Cmts"));
+    const [res, setRes] = useState<IComment[]>();
 
-    const cmts = await this.GetTimeCache<number[]>(orderId, "OrderGetCmts", (x) => x.add(1, "m"), orderId);
-    const comments: IComment[] = [];
+    const req = this.useSWR<number[]>(
+      orderId,
+      "OrderGetCmts",
+      {
+        defaultParams: [orderId],
+        onError: log.error
+      }
+    );
 
-    for (const cmtId of cmts) {
-      const cmt = await this.Comment(cmtId);
+    useAsyncEffect(async () => {
+      const cmts = req.data;
+      if (!cmts)
+        return;
 
-      if (!cmt) {
-        log.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
-        continue;
+      const comments: IComment[] = [];
+
+      for (const cmtId of cmts) {
+        const cmt = await this.Comment(cmtId);
+
+        if (!cmt) {
+          log.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
+          continue;
+        }
+
+        comments.push({
+          Content: cmt.Content,
+          Time: cmt.CreateAt,
+          User: cmt.Name || "You"
+        });
       }
 
-      comments.push({
-        Content: cmt.Content,
-        Time: cmt.CreateAt,
-        User: cmt.Name || "You"
-      });
-    }
+      setRes(comments.sort((a, b) => a.Time.getTime() - b.Time.getTime()));
+    }, [req.data]);
 
-    return comments.sort((a, b) => a.Time.getTime() - b.Time.getTime());
+    return {
+      ...req,
+      data: res
+    };
   }
 }
