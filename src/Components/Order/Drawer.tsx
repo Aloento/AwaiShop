@@ -9,7 +9,7 @@ import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ICompLog } from "~/Helpers/Logger";
 import { ColFlex } from "~/Helpers/Styles";
 import { Hub } from "~/ShopNet";
-import { OrderAction } from "./Action";
+import { OrderAction } from "../../Pages/History/Action";
 
 /**
  * @author Aloento
