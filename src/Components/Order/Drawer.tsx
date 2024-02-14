@@ -1,5 +1,5 @@
 import { Body1Strong, Caption1, DataGridCell, DataGridHeaderCell, Link, TableColumnDefinition, createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
-import { useRequest } from "ahooks";
+import { useConst } from "@fluentui/react-hooks";
 import { DelegateDataGrid } from "~/Components/DataGrid";
 import { OrderComment } from "~/Components/Order/Comment";
 import { OrderInfo } from "~/Components/Order/Info";
@@ -9,6 +9,7 @@ import { ColFlex } from "~/Helpers/Styles";
 import { useSWR } from "~/Helpers/useSWR";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
+import { SignalR } from "~/ShopNet/SignalR";
 import { IOrderComp } from ".";
 import { OrderAction } from "../../Pages/History/Action";
 import { useRouter } from "../Router";
@@ -78,21 +79,15 @@ const columns: TableColumnDefinition<ICartItem>[] = [
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 1.1.0
+ * @version 1.2.0
  */
 export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
   const style = useStyles();
 
   const { Nav } = useRouter();
+  const index = useConst(() => SignalR.Index(OrderId, Hub.Order.Get.order));
 
-  useSWR(OrderId, Hub.Order.Get.order, {
-    onError(e) {
-      Nav("History");
-      ParentLog.error(e);
-    }
-  });
-
-  const { data: order, run } = useRequest(() => {
+  const { data: order, run } = useSWR(index, async () => {
     if (Admin)
       return AdminHub.Order.Get.Order(OrderId);
 
@@ -101,7 +96,8 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
     onError(e) {
       Nav("History");
       ParentLog.error(e);
-    }
+    },
+    useMemory: true
   });
 
   const { data: cart } = Hub.Order.Get.useItems(OrderId, ParentLog);
@@ -117,7 +113,7 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
 
       <OrderComment OrderId={OrderId} ParentLog={ParentLog} />
 
-      <OrderAction OrderId={OrderId} Refresh={run} ParentLog={ParentLog} />
+      <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
     </div>
   );
 }

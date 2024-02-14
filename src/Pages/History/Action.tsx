@@ -21,9 +21,9 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 1.0.0
- * @version 0.1.2
+ * @version 0.2.0
  */
-export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderRef) {
+export function OrderAction({ OrderId, Status, Refresh, ParentLog }: IOrderRef & { Status?: string; }) {
   const log = useConst(() => ParentLog.With("Action"));
 
   const style = useStyles();
