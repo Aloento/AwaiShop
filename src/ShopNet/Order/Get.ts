@@ -1,10 +1,13 @@
 import { useConst } from "@fluentui/react-hooks";
 import { useAsyncEffect } from "ahooks";
 import { useState } from "react";
-import { IComment } from "~/Components/Order/Comment";
-import { ICartItem } from "~/Components/ShopCart";
+import type { IComment } from "~/Components/Order/Comment";
+import type { ICartItem } from "~/Components/ShopCart";
 import { Logger } from "~/Helpers/Logger";
-import { IOrderItem } from "~/Pages/History";
+import type { IOrderItem } from "~/Pages/History";
+import { AdminNet } from "../Admin/AdminNet";
+import { AdminOrderEntity } from "../Admin/Order/Entity";
+import { AdminUserEntity } from "../Admin/User/Entity";
 import { ProductData } from "../Product/Data";
 import { ProductGet } from "../Product/Get";
 import { OrderEntity } from "./Entity";
@@ -75,13 +78,13 @@ export abstract class OrderGet extends OrderEntity {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 2.0.0
+   * @version 2.1.0
    */
-  public static useItems(orderId: number, pLog: Logger) {
+  public static useItems(orderId: number, pLog: Logger, admin?: true) {
     const log = useConst(() => pLog.With(...this.Log, "Items"));
     const [res, setRes] = useState<ICartItem[]>();
 
-    const req = this.useTimeCache<
+    const req = (admin ? AdminNet : this).useTimeCache<
       {
         Types: number[];
         Quantity: number;
@@ -160,13 +163,13 @@ export abstract class OrderGet extends OrderEntity {
   /**
    * @author Aloento
    * @since 1.3.5
-   * @version 0.1.0
+   * @version 1.0.0
    */
-  public static useCmts(orderId: number, pLog: Logger) {
+  public static useCmts(orderId: number, pLog: Logger, admin?: true) {
     const log = useConst(() => pLog.With(...this.Log, "Cmts"));
     const [res, setRes] = useState<IComment[]>();
 
-    const req = this.useTimeCache<number[]>(
+    const req = (admin ? AdminNet : this).useTimeCache<number[]>(
       orderId,
       "OrderGetCmts",
       {
@@ -182,20 +185,47 @@ export abstract class OrderGet extends OrderEntity {
 
       const comments: IComment[] = [];
 
-      for (const cmtId of cmts) {
-        const cmt = await this.Comment(cmtId);
+      if (admin)
+        for (const cmtId of cmts) {
+          const cmt = await AdminOrderEntity.Comment(cmtId);
 
-        if (!cmt) {
-          log.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
-          continue;
+          if (!cmt) {
+            log.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
+            continue;
+          }
+
+          let name = "Client";
+
+          if (cmt.UserId) {
+            const user = await AdminUserEntity.User(cmt.UserId);
+
+            if (user)
+              name = user.Name;
+            else
+              log.warn(`[Mismatch] User ${cmt.UserId} not found. Order : ${orderId}`);
+          }
+
+          comments.push({
+            Content: cmt.Content,
+            Time: cmt.CreateAt,
+            User: name
+          });
         }
+      else
+        for (const cmtId of cmts) {
+          const cmt = await this.Comment(cmtId);
 
-        comments.push({
-          Content: cmt.Content,
-          Time: cmt.CreateAt,
-          User: cmt.Name || "You"
-        });
-      }
+          if (!cmt) {
+            log.warn(`[Mismatch] Comment ${cmtId} not found. Order : ${orderId}`);
+            continue;
+          }
+
+          comments.push({
+            Content: cmt.Content,
+            Time: cmt.CreateAt,
+            User: cmt.Name || "You"
+          });
+        }
 
       setRes(comments.sort((a, b) => a.Time.getTime() - b.Time.getTime()));
     }, [req.data]);

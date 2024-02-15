@@ -1,4 +1,4 @@
-import { Button, Field, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, makeStyles, tokens } from "@fluentui/react-components";
 import { Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle } from "@fluentui/react-components/unstable";
 import { DismissRegular, OpenRegular } from "@fluentui/react-icons";
 import { useBoolean, useRequest } from "ahooks";
@@ -96,9 +96,7 @@ export function AdminOrderDetail({ OrderId }: { OrderId: number; }) {
       <DrawerBody className={style.body}>
         <OrderInfo OrderId={OrderId} Order={order} Admin />
 
-        <Field label="Required Products" size="large">
-          <AdminOrderList Items={data?.ShopCart} />
-        </Field>
+        <AdminOrderList Items={data?.ShopCart} />
 
         <Shipment OrderId={OrderId} TrackingNumber={order?.TrackingNumber} Refresh={run} />
 

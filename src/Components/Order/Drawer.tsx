@@ -7,6 +7,7 @@ import { ICartItem } from "~/Components/ShopCart";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 import { useSWR } from "~/Helpers/useSWR";
+import { AdminOrderList } from "~/Pages/Admin/Order/List";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 import { SignalR } from "~/ShopNet/SignalR";
@@ -100,16 +101,22 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
     useMemory: true
   });
 
-  const { data: cart } = Hub.Order.Get.useItems(OrderId, ParentLog);
+  const { data: cart } = Hub.Order.Get.useItems(OrderId, ParentLog, Admin);
 
   return (
     <div className={style.body}>
-      <OrderInfo OrderId={OrderId} Order={order} ParentLog={ParentLog} />
+      <OrderInfo OrderId={OrderId} Order={order} Admin={Admin} ParentLog={ParentLog} />
 
-      <DelegateDataGrid
-        Items={cart}
-        Columns={[MakeCoverCol(44, ParentLog), ...columns]}
-      />
+      {
+        Admin
+          ?
+          <AdminOrderList Items={cart} />
+          :
+          <DelegateDataGrid
+            Items={cart}
+            Columns={[MakeCoverCol(44, ParentLog), ...columns]}
+          />
+      }
 
       <OrderComment OrderId={OrderId} ParentLog={ParentLog} />
 

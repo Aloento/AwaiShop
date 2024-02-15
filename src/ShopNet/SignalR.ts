@@ -11,12 +11,9 @@ import type { AdminNet } from "./Admin/AdminNet";
 import { MSAL, Shared, type IConcurrency } from "./Database";
 import type { ShopNet } from "./ShopNet";
 
-/**
- * @author Aloento
- * @since 1.0.0
- * @version 0.1.0
- */
-type INet = typeof ShopNet | typeof AdminNet;
+export namespace SignalR {
+  export type INet = typeof ShopNet | typeof AdminNet;
+}
 
 /**
  * @author Aloento
@@ -29,7 +26,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.1
    */
-  protected static async EnsureConnected(this: INet): Promise<void> {
+  protected static async EnsureConnected(this: SignalR.INet): Promise<void> {
     if (this.Hub.state === HubConnectionState.Connected)
       return Promise.resolve();
 
@@ -52,7 +49,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.0
    */
-  protected static async Invoke<T>(this: INet, methodName: string, ...args: any[]): Promise<T> {
+  protected static async Invoke<T>(this: SignalR.INet, methodName: string, ...args: any[]): Promise<T> {
     await this.EnsureConnected();
     return this.Hub.invoke<T>(methodName, ...args);
   }
@@ -62,7 +59,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.2.1
    */
-  protected static EnsureLogin(this: INet) {
+  protected static EnsureLogin(this: SignalR.INet) {
     if (!MSAL.getActiveAccount())
       throw new NotLoginError();
   }
@@ -72,7 +69,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.0
    */
-  protected static EnsureTrue(this: INet, res: boolean | null | undefined): asserts res is true {
+  protected static EnsureTrue(this: SignalR.INet, res: boolean | null | undefined): asserts res is true {
     if (!res)
       throw new NotTrueError();
   }
@@ -82,7 +79,7 @@ export abstract class SignalR {
    * @since 1.0.0
    * @version 0.1.2
    */
-  protected static async HandleFileStream(this: INet, file: File, subject: Subject<Uint8Array>, pLog: Logger) {
+  protected static async HandleFileStream(this: SignalR.INet, file: File, subject: Subject<Uint8Array>, pLog: Logger) {
     const chunkSize = 30 * 1024;
     const chunks = Math.ceil(file.size / chunkSize);
     let index = 0;
@@ -152,7 +149,7 @@ export abstract class SignalR {
    * @liveSafe
    */
   protected static async GetVersionCache<T extends IConcurrency>(
-    this: INet, key: string | number, methodName: string
+    this: SignalR.INet, key: string | number, methodName: string
   ): Promise<T> {
     const index = this.Index(key, methodName);
     await this.getLocker(index);
@@ -208,7 +205,7 @@ export abstract class SignalR {
    * @deprecated Use {@link useTimeCache} if possible.
    */
   protected static async GetTimeCache<T>(
-    this: INet, key: string | number, methodName: string, exp: (now: Dayjs) => Dayjs, ...args: any[]
+    this: SignalR.INet, key: string | number, methodName: string, exp: (now: Dayjs) => Dayjs, ...args: any[]
   ): Promise<T> {
     const index = this.Index(key, methodName);
     await this.getLocker(index);
@@ -233,7 +230,7 @@ export abstract class SignalR {
    * @version 0.1.0
    */
   protected static useTimeCache<T>(
-    this: INet, key: string | number, methodName: string, options: Options<T, any[]>
+    this: SignalR.INet, key: string | number, methodName: string, options: Options<T, any[]>
   ) {
     const index = useConst(() => this.Index(key, methodName));
 
@@ -253,7 +250,7 @@ export abstract class SignalR {
    * @deprecated
    */
   protected static async UpdateCache<T>(
-    this: INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs
+    this: SignalR.INet, action: (raw: T) => T, key: string | number, methodName: string, exp?: Dayjs
   ) {
     const index = this.Index(key, methodName);
     const find = await Shared.Get<T & { QueryExp?: number }>(index);

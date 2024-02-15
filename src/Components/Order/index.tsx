@@ -32,7 +32,7 @@ export function OrderDetail({ OrderId, Admin, ParentLog }: IOrderComp) {
 
   const [open, { set }] = useBoolean();
   const { Nav, Paths } = useRouter();
-  const curr = parseInt(Paths.at(1)!);
+  const curr = parseInt(Paths.at(Admin ? 2 : 1)!);
 
   useEffect(() => set(curr === OrderId), [curr]);
   const ref = useRef(null);
