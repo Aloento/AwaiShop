@@ -1,11 +1,12 @@
 import { Button, Field, Textarea, Toast, ToastTitle, makeStyles } from "@fluentui/react-components";
 import { useConst } from "@fluentui/react-hooks";
-import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
 import { Flex } from "~/Helpers/Styles";
+import { useSWR } from "~/Helpers/useSWR";
 import { useErrorToast } from "~/Helpers/useToast";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
+import { SignalR } from "~/ShopNet/SignalR";
 import { IOrderRef } from ".";
 
 /**
@@ -23,7 +24,7 @@ const useStyles = makeStyles({
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 1.1.0
+ * @version 1.2.0
  */
 export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef) {
   const log = useConst(() => ParentLog.With("Append"));
@@ -77,12 +78,15 @@ export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef)
     }
   });
 
-  const status = useLiveQuery(async () => {
-    const res = await Hub.Order.Get.Order(OrderId);
-    return res.Status;
-  }, []);
+  const index = useConst(() => SignalR.Index(OrderId, Hub.Order.Get.order));
 
-  switch (status) {
+  const { data: order } = useSWR(
+    index,
+    () => (Admin ? AdminHub : Hub).Order.Get.Order(OrderId),
+    { useMemory: true }
+  );
+
+  switch (order?.Status) {
     case "Cancelled":
     case "Finished":
       return null;
@@ -95,12 +99,12 @@ export function CommentAppend({ OrderId, Refresh, Admin, ParentLog }: IOrderRef)
 
     <div className={style.body}>
       {
-        !(status === "Finished" || status === "Returning") &&
+        !(order?.Status === "Finished" || order?.Status === "Returning") &&
         <Button onClick={() => cancel(OrderId, cmt!)}>
           {
             Admin
               ? "Force Close"
-              : status === "Shipping" ? "Ask Return" : "Cancel Order"
+              : order?.Status === "Shipping" ? "Ask Return" : "Cancel Order"
           } with Reason
         </Button>
       }
