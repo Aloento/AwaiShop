@@ -42,7 +42,7 @@ export function OrderDetail({ OrderId, Admin, ParentLog }: IOrderComp) {
     <Button
       appearance="subtle"
       icon={<OpenRegular />}
-      onClick={() => Nav("History", OrderId)}
+      onClick={() => Nav(Admin ? "Admin/Order" : "History", OrderId)}
     />
 
     <Drawer
@@ -57,7 +57,7 @@ export function OrderDetail({ OrderId, Admin, ParentLog }: IOrderComp) {
             <Button
               appearance="subtle"
               icon={<DismissRegular />}
-              onClick={() => Nav("History")}
+              onClick={() => Nav(Admin ? "Admin/Order" : "History")}
             />
           }
         >

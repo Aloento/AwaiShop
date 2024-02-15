@@ -95,7 +95,7 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
     () => (Admin ? AdminHub : Hub).Order.Get.Order(OrderId),
     {
       onError(e) {
-        Nav("History");
+        Nav(Admin ? "Admin/Order" : "History");
         ParentLog.error(e);
       },
       useMemory: true
