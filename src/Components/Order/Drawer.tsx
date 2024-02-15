@@ -7,7 +7,9 @@ import { ICartItem } from "~/Components/ShopCart";
 import { MakeCoverCol } from "~/Helpers/CoverCol";
 import { ColFlex } from "~/Helpers/Styles";
 import { useSWR } from "~/Helpers/useSWR";
+import { AdminOrderAction } from "~/Pages/Admin/Order/Action";
 import { AdminOrderList } from "~/Pages/Admin/Order/List";
+import { Shipment } from "~/Pages/Admin/Order/Ship";
 import { Hub } from "~/ShopNet";
 import { AdminHub } from "~/ShopNet/Admin";
 import { SignalR } from "~/ShopNet/SignalR";
@@ -80,7 +82,7 @@ const columns: TableColumnDefinition<ICartItem>[] = [
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 1.2.0
+ * @version 1.3.0
  */
 export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
   const style = useStyles();
@@ -88,18 +90,17 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
   const { Nav } = useRouter();
   const index = useConst(() => SignalR.Index(OrderId, Hub.Order.Get.order));
 
-  const { data: order, run } = useSWR(index, async () => {
-    if (Admin)
-      return AdminHub.Order.Get.Order(OrderId);
-
-    return Hub.Order.Get.Order(OrderId);
-  }, {
-    onError(e) {
-      Nav("History");
-      ParentLog.error(e);
-    },
-    useMemory: true
-  });
+  const { data: order, run } = useSWR(
+    index,
+    () => (Admin ? AdminHub : Hub).Order.Get.Order(OrderId),
+    {
+      onError(e) {
+        Nav("History");
+        ParentLog.error(e);
+      },
+      useMemory: true
+    }
+  );
 
   const { data: cart } = Hub.Order.Get.useItems(OrderId, ParentLog, Admin);
 
@@ -110,7 +111,10 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
       {
         Admin
           ?
-          <AdminOrderList Items={cart} />
+          <>
+            <AdminOrderList Items={cart} />
+            <Shipment OrderId={OrderId} TrackingNumber={order?.TrackingNumber} Refresh={run} />
+          </>
           :
           <DelegateDataGrid
             Items={cart}
@@ -118,9 +122,15 @@ export function OrderDetailDrawer({ OrderId, Admin, ParentLog }: IOrderComp) {
           />
       }
 
-      <OrderComment OrderId={OrderId} ParentLog={ParentLog} />
+      <OrderComment OrderId={OrderId} ParentLog={ParentLog} Admin={Admin} />
 
-      <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+      {
+        Admin
+          ?
+          <AdminOrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+          :
+          <OrderAction OrderId={OrderId} Status={order?.Status} Refresh={run} ParentLog={ParentLog} />
+      }
     </div>
   );
 }

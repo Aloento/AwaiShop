@@ -66,7 +66,7 @@ export function OrderDetail({ OrderId, Admin, ParentLog }: IOrderComp) {
       </DrawerHeader>
 
       <DrawerBody ref={ref}>
-        {inViewport && <OrderDetailDrawer OrderId={OrderId} ParentLog={log} />}
+        {inViewport && <OrderDetailDrawer OrderId={OrderId} ParentLog={log} Admin={Admin} />}
       </DrawerBody>
     </Drawer>
   </>
