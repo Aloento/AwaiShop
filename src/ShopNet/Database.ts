@@ -64,8 +64,8 @@ export const MSAL = new PublicClientApplication({
           case LogLevel.Warning:
             console.warn(message);
             return;
-          default:
-            console.debug(message);
+          // default:
+          //   console.debug(message);
         }
       }
     }
