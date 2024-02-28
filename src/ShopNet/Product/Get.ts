@@ -141,7 +141,7 @@ export abstract class ProductGet extends ProductData {
     list = list.sort((a, b) => a.Order - b.Order);
 
     if (!cover && list.length > 0) {
-      log.warn(`Product ${prodId} has no cover photo, using first photo instead`);
+      log.debug(`Product ${prodId} has no cover photo, using first photo instead`);
       return [list, list[0].ObjectId];
     }
 
@@ -156,10 +156,10 @@ export abstract class ProductGet extends ProductData {
   public static usePhotoList(prodId: number, pLog: Logger) {
     const req = useSWR(
       this.Index(prodId, this.photoList),
-      () => this.PhotoList(prodId, pLog),
+      (id) => this.PhotoList(id, pLog),
       {
         defaultParams: [prodId],
-        onError: pLog.error,
+        onError: pLog.error
       }
     );
 
