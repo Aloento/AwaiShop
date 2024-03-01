@@ -75,6 +75,7 @@ export abstract class ProductData extends ShopNet {
   public static Photo(key: number): Promise<ProductData.Photo> {
     return this.GetVersionCache(key, this.photo);
   }
+  /** @deprecated */
   public static PhotoUpdate(key: number, action: (raw: ProductData.Photo) => ProductData.Photo) {
     return this.UpdateCache(action, key, this.photo);
   }

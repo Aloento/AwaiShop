@@ -100,7 +100,7 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 1.0.0
-   * @version 2.0.0
+   * @version 2.0.1
    * @liveSafe
    * @deprecated Use {@link usePhotoList} if possible.
    */

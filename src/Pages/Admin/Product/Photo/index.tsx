@@ -46,9 +46,9 @@ export interface IPhotoItem {
  * @since 0.5.0
  * @version 0.1.4
  */
-const columns: TableColumnDefinition<IPhotoItem>[] = [
+const columns: TableColumnDefinition<number[]>[] = [
   MakeCoverCol(70, log),
-  createTableColumn<IPhotoItem>({
+  createTableColumn({
     columnId: "Caption",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Caption</DataGridHeaderCell>
@@ -57,7 +57,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
       return <DataGridCell>{item.Caption || "No Caption"}</DataGridCell>
     }
   }),
-  createTableColumn<IPhotoItem>({
+  createTableColumn({
     columnId: "Action",
     renderHeaderCell: () => {
       return (
@@ -79,18 +79,10 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 1.0.0
+ * @version 1.1.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
   const { data } = Hub.Product.Get.usePhotoList(ProdId, log);
-  const list = data
-    ? data[0].map(x => ({
-      Id: x.PhotoId,
-      Cover: x.ObjectId,
-      Caption: x.Caption,
-      ProductId: x.ProductId
-    }))
-    : undefined;
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
@@ -145,7 +137,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
     </div>
 
     <DelegateDataGrid
-      Items={list}
+      Items={data}
       Columns={columns}
     />
   </>

@@ -10,7 +10,7 @@ import { AdminProductPhotoEdit } from "./Edit";
 /**
  * @author Aloento
  * @since 1.4.0
- * @version 0.2.1
+ * @version 0.2.2
  */
 export function AdminProductPhotoAction(props: IPhotoItem & ICompLog) {
   const { Id, ProductId, ParentLog } = props;
@@ -27,22 +27,20 @@ export function AdminProductPhotoAction(props: IPhotoItem & ICompLog) {
         Error: e
       });
     },
-    onSuccess: (_, [__, up]) => mutate(old => {
-      const list = old![0];
-
-      const index = list.findIndex(x => x.PhotoId === Id);
+    onSuccess: (_, [__, up]) => mutate(list => {
+      const index = list!.findIndex(x => x === Id);
       if (index === -1)
-        return old;
+        return list;
 
       const newIndex = up ? index - 1 : index + 1;
-      if (newIndex < 0 || newIndex >= list.length)
-        return old;
+      if (newIndex < 0 || newIndex >= list!.length)
+        return list;
 
-      const temp = list[index];
-      list[index] = list[newIndex];
-      list[newIndex] = temp;
+      const temp = list![index];
+      list![index] = list![newIndex];
+      list![newIndex] = temp;
 
-      return old;
+      return list;
     })
   });
 
