@@ -13,7 +13,6 @@ export namespace ProductData {
 
   export type Photo = {
     PhotoId: number;
-    Cover?: boolean;
     Caption?: string;
     Order: number;
     ObjectId: string;
