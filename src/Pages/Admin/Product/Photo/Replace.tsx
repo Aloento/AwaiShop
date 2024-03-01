@@ -8,12 +8,12 @@ const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit", "Replace")
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.1.0
+ * @version 0.1.1
  */
 export function AdminProductPhotoEditReplace({ Id }: { Id: number; }) {
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run: updateFile } = AdminHub.Product.Patch.usePhoto(log, {
+  const { run: updateFile, loading } = AdminHub.Product.Patch.usePhoto(log, {
     manual: true,
     onBefore([prodId, file]) {
       dispatchToast(
@@ -41,18 +41,20 @@ export function AdminProductPhotoEditReplace({ Id }: { Id: number; }) {
   });
 
   return (
-    <Button onClick={() => {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "image/*";
+    <Button
+      disabled={loading}
+      onClick={() => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
 
-      input.onchange = () => {
-        if (input.files)
-          updateFile(Id, input.files[0]);
-      };
-      input.click();
-    }}>
-      Replace
+        input.onchange = () => {
+          if (input.files)
+            updateFile(Id, input.files[0]);
+        };
+        input.click();
+      }}>
+      {loading ? "Uploading..." : "Replace"}
     </Button>
   )
 }

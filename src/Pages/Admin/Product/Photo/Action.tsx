@@ -10,7 +10,7 @@ import { AdminProductPhotoEdit } from "./Edit";
 /**
  * @author Aloento
  * @since 1.4.0
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminProductPhotoAction(props: IPhotoItem & ICompLog) {
   const { Id, ProductId, ParentLog } = props;
@@ -18,7 +18,7 @@ export function AdminProductPhotoAction(props: IPhotoItem & ICompLog) {
 
   const { mutate } = Hub.Product.Get.usePhotoList(ProductId, ParentLog);
 
-  const { run } = AdminHub.Product.Post.useMovePhoto({
+  const { run, loading } = AdminHub.Product.Post.useMovePhoto({
     manual: true,
     onError(e, params) {
       dispatch({
@@ -48,12 +48,14 @@ export function AdminProductPhotoAction(props: IPhotoItem & ICompLog) {
 
   return <>
     <Button
+      disabled={loading}
       appearance="subtle"
       icon={<ArrowUpRegular />}
       onClick={() => run(Id, true)}
     />
 
     <Button
+      disabled={loading}
       appearance="subtle"
       icon={<ArrowDownRegular />}
       onClick={() => run(Id, false)}
