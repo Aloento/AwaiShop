@@ -1,3 +1,4 @@
+import { Options } from "ahooks/lib/useRequest/src/types";
 import type { Logger } from "~/Helpers/Logger";
 import { useSWR } from "~/Helpers/useSWR";
 import { IComboItem } from "~/Pages/Admin/Product/Combo";
@@ -121,15 +122,15 @@ export abstract class ProductGet extends ProductData {
   /**
    * @author Aloento
    * @since 1.4.0
-   * @version 0.2.0
+   * @version 0.3.0
    */
-  public static usePhotoList(prodId: number, pLog: Logger) {
+  public static usePhotoList(prodId: number, options?: Options<number[], number[]>) {
     const req = useSWR(
       this.Index(prodId, this.photoList),
       (id) => this.PhotoList(id),
       {
+        ...options,
         defaultParams: [prodId],
-        onError: pLog.error
       }
     );
 

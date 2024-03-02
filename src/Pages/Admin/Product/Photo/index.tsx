@@ -30,31 +30,35 @@ const log = new Logger("Admin", "Product", "Detail", "Photo");
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.2.0
+ * @version 0.3.0
  */
 export interface IPhotoItem {
-  /** PhotoId */
-  Id: number;
-  /** ObjectId */
-  Cover: string;
-  Caption?: string;
+  PhotoId: number;
   ProductId: number;
 }
 
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.4
+ * @version 1.0.0
  */
-const columns: TableColumnDefinition<number[]>[] = [
-  MakeCoverCol(70, log),
+const columns: TableColumnDefinition<IPhotoItem>[] = [
+  MakeCoverCol(70, log, ({ PhotoId }) => {
+    const { data } = Hub.Product.Get.usePhoto(PhotoId, {
+      onError: log.error
+    });
+    return data?.ObjectId || "";
+  }),
   createTableColumn({
     columnId: "Caption",
     renderHeaderCell: () => {
       return <DataGridHeaderCell>Caption</DataGridHeaderCell>
     },
-    renderCell(item) {
-      return <DataGridCell>{item.Caption || "No Caption"}</DataGridCell>
+    renderCell({ PhotoId }) {
+      const { data } = Hub.Product.Get.usePhoto(PhotoId, {
+        onError: log.error
+      });
+      return <DataGridCell>{data?.Caption || "No Caption"}</DataGridCell>
     }
   }),
   createTableColumn({
@@ -82,12 +86,13 @@ const columns: TableColumnDefinition<number[]>[] = [
  * @version 1.1.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
-  const { data } = Hub.Product.Get.usePhotoList(ProdId, log);
+  const { data } = Hub.Product.Get.usePhotoList(ProdId, {
+    onError: log.error
+  });
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
   const { run: newPhoto } = AdminHub.Product.Post.usePhoto(log, {
-    manual: true,
     onBefore([prodId, file]) {
       dispatchToast(
         <Toast>
@@ -137,8 +142,12 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
     </div>
 
     <DelegateDataGrid
-      Items={data}
+      Items={data?.map(x => ({
+        PhotoId: x,
+        ProductId: ProdId
+      }))}
       Columns={columns}
+      getRowId={x => x.PhotoId}
     />
   </>
 }
