@@ -2,8 +2,8 @@ import { useConst } from "@fluentui/react-hooks";
 import { useRequest } from "ahooks";
 import { Options } from "ahooks/lib/useRequest/src/types";
 import { Subject } from "rxjs";
-import { useGuidImage } from "~/Helpers/GuidImage";
 import { Logger } from "~/Helpers/Logger";
+import { ObjectStorage } from "~/ShopNet/ObjectStorage";
 import { ProductData } from "~/ShopNet/Product/Data";
 import { AdminNet } from "../AdminNet";
 
@@ -60,7 +60,7 @@ export abstract class AdminProductPatch extends AdminNet {
       onError: log.error
     });
 
-    const { mutate } = useGuidImage(data!.ObjectId, pLog);
+    const { mutate } = ObjectStorage.useGet(data!.ObjectId, pLog);
 
     return useRequest(async (file) => {
       if (!file.type.startsWith("image/"))

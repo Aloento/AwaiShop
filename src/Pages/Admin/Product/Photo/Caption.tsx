@@ -10,7 +10,7 @@ const log = new Logger("Admin", "Product", "Detail", "Photo", "Edit", "Caption")
 /**
  * @author Aloento
  * @since 1.3.5
- * @version 0.2.0
+ * @version 0.2.1
  */
 export function AdminProductPhotoEditCaption({ PhotoId }: { PhotoId: number; }) {
   const [cap, setCap] = useState("");
@@ -25,7 +25,7 @@ export function AdminProductPhotoEditCaption({ PhotoId }: { PhotoId: number; }) 
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run } = AdminHub.Product.Patch.useCaption(PhotoId, {
+  const { run, loading } = AdminHub.Product.Patch.useCaption(PhotoId, {
     onError(e, req) {
       dispatch({
         Message: "Failed Update Caption",
@@ -48,7 +48,10 @@ export function AdminProductPhotoEditCaption({ PhotoId }: { PhotoId: number; }) 
       <Input value={cap} placeholder="Write some infomation here?" onChange={(_, e) => setCap(e.value)} />
     </Field>
 
-    <Button onClick={() => run(cap)}>
+    <Button
+      disabled={loading}
+      onClick={() => run(cap)}
+    >
       Save Caption
     </Button>
   </>;

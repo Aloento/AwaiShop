@@ -72,12 +72,13 @@ export abstract class AdminProductPost extends AdminNet {
   /**
    * @author Aloento
    * @since 0.5.0
-   * @version 1.0.5
+   * @version 1.1.0
    */
-  public static usePhoto(pLog: Logger, options: Options<number, [number, File]>) {
+  public static usePhoto(prodId: number, pLog: Logger, options: Options<number, [File]>) {
     const log = useConst(() => pLog.With(...this.Log, "Photo"));
+    const { mutate } = ProductGet.usePhotoList(prodId);
 
-    return useRequest(async (prodId, file) => {
+    return useRequest(async (file) => {
       if (!file.type.startsWith("image/"))
         throw new TypeError("File is not an image");
 
@@ -88,7 +89,9 @@ export abstract class AdminProductPost extends AdminNet {
       const res = this.Invoke<number>("ProductPostPhoto", prodId, subject);
       await this.HandleFileStream(file, subject, log);
 
-      return res;
+      const id = await res;
+      mutate(x => [...x || [], id]);
+      return id;
     }, {
       ...options,
       manual: true

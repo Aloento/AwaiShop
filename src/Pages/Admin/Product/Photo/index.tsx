@@ -83,7 +83,7 @@ const columns: TableColumnDefinition<IPhotoItem>[] = [
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 1.1.0
+ * @version 1.2.0
  */
 export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
   const { data } = Hub.Product.Get.usePhotoList(ProdId, {
@@ -92,11 +92,11 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
   const { dispatch, dispatchToast } = useErrorToast(log);
 
-  const { run: newPhoto } = AdminHub.Product.Post.usePhoto(log, {
-    onBefore([prodId, file]) {
+  const { run: newPhoto, loading } = AdminHub.Product.Post.usePhoto(ProdId, log, {
+    onBefore([file]) {
       dispatchToast(
         <Toast>
-          <ToastTitle>Uploading Photo {file.name} for Product {prodId}</ToastTitle>
+          <ToastTitle>Uploading Photo {file.name} for Product {ProdId}</ToastTitle>
         </Toast>,
         { intent: "info" }
       );
@@ -123,6 +123,7 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
       <Subtitle1>Photos</Subtitle1>
 
       <Button
+        disabled={loading}
         appearance="primary"
         icon={<AddRegular />}
         onClick={() => {
@@ -132,12 +133,12 @@ export function AdminProductPhoto({ ProdId }: { ProdId: number }) {
 
           input.onchange = () => {
             if (input.files)
-              newPhoto(ProdId, input.files[0]);
+              newPhoto(input.files[0]);
           };
           input.click();
         }}
       >
-        New Image
+        {loading ? "Uploading..." : "New Image"}
       </Button>
     </div>
 
