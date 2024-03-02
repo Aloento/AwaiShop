@@ -128,6 +128,7 @@ const columns: TableColumnDefinition<IVariantItem>[] = [
  * @since 0.5.0
  * @version 0.1.0
  */
+/** @deprecated */
 let refreshVariant: () => void;
 
 /**
