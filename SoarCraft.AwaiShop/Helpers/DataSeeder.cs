@@ -46,7 +46,6 @@ internal static class DataSeeder {
             Category = cate1,
             Photos = [
                 new() {
-                    Cover = true,
                     Caption = "Demo Caption",
                     Order = 1,
                     Object = new() { Data = p1 }
@@ -64,7 +63,6 @@ internal static class DataSeeder {
             Category = cate2,
             Photos = [
                 new() {
-                    Cover = true,
                     Caption = "Demo Caption",
                     Order = 1,
                     Object = new() { Data = p3 }

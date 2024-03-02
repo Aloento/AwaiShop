@@ -52,6 +52,9 @@ const useStyles = makeStyles({
       fontSize: tokens.fontSizeBase300,
       lineHeight: tokens.lineHeightBase300,
     }
+  },
+  btn: {
+    width: "fit-content"
   }
 });
 
@@ -116,7 +119,7 @@ export function Banner() {
 
           <Dialog modalType="non-modal">
             <DialogTrigger disableButtonEnhancement>
-              <div>
+              <div className={style.btn}>
                 <Button appearance="outline" size="large" className={style.white}>
                   Learn More
                 </Button>

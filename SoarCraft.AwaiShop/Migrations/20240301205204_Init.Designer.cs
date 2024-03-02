@@ -12,7 +12,7 @@ using SoarCraft.AwaiShop;
 namespace SoarCraft.AwaiShop.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20240103162914_Init")]
+    [Migration("20240301205204_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,10 +20,7 @@ namespace SoarCraft.AwaiShop.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseHiLo(modelBuilder, "EntityFrameworkHiLoSequence");
@@ -217,9 +214,6 @@ namespace SoarCraft.AwaiShop.Migrations
                     b.Property<string>("Caption")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-                    b.Property<bool?>("Cover")
-                        .HasColumnType("boolean");
 
                     b.Property<Guid>("ObjectId")
                         .HasColumnType("uuid");
