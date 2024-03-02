@@ -13,17 +13,6 @@ import { AdminProductNewVariant } from "./New";
  * @since 0.5.0
  * @version 0.1.0
  */
-export interface IVariantItem {
-  Id: number;
-  Name: string;
-  Types: string[];
-}
-
-/**
- * @author Aloento
- * @since 0.5.0
- * @version 0.1.0
- */
 const useStyles = makeStyles({
   body: {
     ...Flex,

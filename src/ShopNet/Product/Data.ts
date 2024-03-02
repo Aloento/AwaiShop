@@ -30,7 +30,6 @@ export namespace ProductData {
   export type Variant = {
     Name: string;
     ProductId: number;
-    TypeIds: number[];
   } & IConcurrency;
 
   export type Combo = {

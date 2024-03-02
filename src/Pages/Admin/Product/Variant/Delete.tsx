@@ -10,6 +10,7 @@ const log = new Logger("Admin", "Product", "Detail", "Variant", "Delete");
  * @author Aloento
  * @since 0.5.0
  * @version 0.2.0
+ * @todo Add the ability to refresh the variant list
  */
 export function AdminProductVariantDelete({ VariantId }: { VariantId: number; }) {
   const { dispatch, dispatchToast } = useErrorToast(log);

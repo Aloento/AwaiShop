@@ -82,16 +82,6 @@ export abstract class AdminProductGet extends AdminNet {
    * @author Aloento
    * @since 0.5.0
    * @version 2.0.0
-   * @deprecated
-   */
-  public static async Variants(prodId: number): Promise<number[]> {
-    return this.GetTimeCache<number[]>(prodId, this.variants, (x) => x.add(3, "s"), prodId);
-  }
-
-  /**
-   * @author Aloento
-   * @since 0.5.0
-   * @version 2.0.0
    */
   public static useVariants(prodId: number, options?: Options<number[], [number]>) {
     const index = useConst(() => this.Index(prodId, this.variants));
@@ -117,6 +107,15 @@ export abstract class AdminProductGet extends AdminNet {
   }
 
   public static readonly types = "ProductGetTypes";
+  /**
+   * @author Aloento
+   * @since 1.4.5
+   * @version 0.1.0
+   */
+  public static async Types(variantId: number) {
+    return this.GetTimeCache<number[]>(variantId, this.types, (x) => x.add(5, "s"), variantId);
+  }
+
   /**
    * @author Aloento
    * @since 0.5.0
