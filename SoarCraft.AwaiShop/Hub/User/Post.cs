@@ -47,7 +47,7 @@ internal partial class ShopHub {
             var row1 = await this.Db.SaveChangesAsync();
 
             this.Context.Items.Remove("NewUser");
-            this.Logger.NewUser(req.Name, this.Context);
+            this.Logger.NewUser($"{req.Surname}, {req.Forename}", this.Context);
             return row1 > 0;
         }
 
