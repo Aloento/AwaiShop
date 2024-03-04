@@ -16,7 +16,8 @@ internal static class DataSeeder {
 
         var user = context.Users.Add(new() {
             UserId = Guid.Parse("171B20BE-E180-410D-AAE2-EE28773AA0B7"),
-            Name = "Aloento",
+            Surname = "Aloento",
+            Forename = "Soar",
             EMail = "me@example.com",
             Phone = "+1 300000000",
             Address = "Address, Address",

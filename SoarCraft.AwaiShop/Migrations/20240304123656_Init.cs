@@ -47,7 +47,8 @@ namespace SoarCraft.AwaiShop.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Surname = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Forename = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     EMail = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     Address = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
