@@ -1,5 +1,5 @@
 import { useMsal } from "@azure/msal-react";
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Toast, ToastBody, ToastTitle, Tooltip, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Label, Toast, ToastBody, ToastTitle, Tooltip, makeStyles, tokens } from "@fluentui/react-components";
 import { useEffect, useState } from "react";
 import { Logger } from "~/Helpers/Logger";
 import { ColFlex, Flex } from "~/Helpers/Styles";
@@ -21,7 +21,7 @@ interface ISetting {
 /**
  * @author Aloento
  * @since 0.5.0
- * @version 0.1.0
+ * @version 0.2.0
  */
 const useStyles = makeStyles({
   box: {
@@ -32,6 +32,12 @@ const useStyles = makeStyles({
     ...Flex,
     columnGap: tokens.spacingVerticalXXXL
   },
+  fill: {
+    flexGrow: 1
+  },
+  small: {
+    width: "100%"
+  }
 });
 
 const log = new Logger("Setting");
@@ -39,7 +45,7 @@ const log = new Logger("Setting");
 /**
  * @author Aloento
  * @since 0.1.0
- * @version 0.8.0
+ * @version 0.9.0
  */
 export function Setting({ Open, Toggle, New }: ISetting) {
   const style = useStyles();
@@ -49,7 +55,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   const [forename, setForename] = useState<string>();
 
   const [phone, setPhone] = useState<string>();
-  const [address, setAddress] = useState<string>();
+  const [address, setAddress] = useState(Array<string>(4).fill(""));
 
   const { data, mutate } = Hub.User.Get.useMe(log);
 
@@ -61,7 +67,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
     setSurname(Surname);
     setForename(Forename);
     setPhone(Phone);
-    setAddress(Address);
+    setAddress(Address.split("; "));
   }, [data]);
 
   const { dispatch, dispatchToast } = useErrorToast(log);
@@ -118,8 +124,13 @@ export function Setting({ Open, Toggle, New }: ISetting) {
                 relationship="description"
                 withArrow
               >
-                <Field label="Family Name" size="large" required>
-                  <Input size="medium" value={surname} maxLength={20} onChange={(_, v) => setSurname(v.value)} />
+                <Field className={style.fill} label="Family Name" size="large" required>
+                  <Input
+                    size="medium"
+                    value={surname}
+                    maxLength={20}
+                    onChange={(_, v) => setSurname(v.value)}
+                  />
                 </Field>
               </Tooltip>
 
@@ -128,8 +139,14 @@ export function Setting({ Open, Toggle, New }: ISetting) {
                 relationship="description"
                 withArrow
               >
-                <Field label="Given Name" size="large" required>
-                  <Input size="medium" value={forename} maxLength={20} onChange={(_, v) => setForename(v.value)} />
+                <Field className={style.fill} label="Given Name" size="large" required>
+                  <Input
+                    className={style.fill}
+                    size="medium"
+                    value={forename}
+                    maxLength={20}
+                    onChange={(_, v) => setForename(v.value)}
+                  />
                 </Field>
               </Tooltip>
             </div>
@@ -141,7 +158,12 @@ export function Setting({ Open, Toggle, New }: ISetting) {
                 withArrow
               >
                 <Field label="Phone" size="large" required>
-                  <Input size="medium" value={phone} maxLength={20} onChange={(_, v) => setPhone(v.value)} />
+                  <Input
+                    size="medium"
+                    value={phone}
+                    maxLength={20}
+                    onChange={(_, v) => setPhone(v.value)}
+                  />
                 </Field>
               </Tooltip>
 
@@ -150,21 +172,66 @@ export function Setting({ Open, Toggle, New }: ISetting) {
                 relationship="description"
                 withArrow
               >
-                <Field label="E-Mail" size="large">
+                <Field className={style.fill} label="E-Mail" size="large">
                   <Input size="medium" value={claim?.username} disabled />
                 </Field>
               </Tooltip>
             </div>
 
-            <Tooltip
-              content="Your full shipping address including street, number, ZIP, town and country. Separate lines by commas"
-              relationship="description"
-              withArrow
-            >
-              <Field label="Address" size="large" required>
-                <Input size="medium" value={address} maxLength={100} minLength={20} onChange={(_, v) => setAddress(v.value)} />
+            <Label size="large" required>
+              Address
+            </Label>
+
+            <Field hint="Street Address">
+              <Input
+                value={address[0]}
+                onChange={(_, v) => {
+                  address[0] = v.value;
+                  setAddress([...address]);
+                }}
+                maxLength={50}
+                minLength={10}
+              />
+            </Field>
+
+            <div className={style.one}>
+              <Field hint="City">
+                <Input
+                  value={address[1]}
+                  onChange={(_, v) => {
+                    address[1] = v.value;
+                    setAddress([...address]);
+                  }}
+                  maxLength={20}
+                  minLength={2}
+                />
               </Field>
-            </Tooltip>
+
+              <Field hint="State / Province">
+                <Input
+                  value={address[2]}
+                  onChange={(_, v) => {
+                    address[2] = v.value;
+                    setAddress([...address]);
+                  }}
+                  maxLength={20}
+                  minLength={2}
+                />
+              </Field>
+
+              <Field hint="Postal / Zip Code">
+                <Input
+                  input={{ className: style.small }}
+                  value={address[3]}
+                  onChange={(_, v) => {
+                    address[3] = v.value;
+                    setAddress([...address]);
+                  }}
+                  maxLength={10}
+                  minLength={2}
+                />
+              </Field>
+            </div>
           </DialogContent>
 
           <DialogActions>
@@ -178,7 +245,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
               EMail: claim?.username,
               Surname: surname,
               Forename: forename,
-              Address: address,
+              Address: address.join("; "),
               Phone: phone
             })}>
               Submit
