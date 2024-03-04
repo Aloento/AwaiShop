@@ -24,7 +24,6 @@ const useStyles = makeStyles({
  * @version 0.2.0
  */
 export interface IPersona {
-  Name: string;
   Surname: string;
   Forename: string;
   Phone: string;

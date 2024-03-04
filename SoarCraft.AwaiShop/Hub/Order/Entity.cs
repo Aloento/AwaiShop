@@ -49,6 +49,7 @@ internal partial class ShopHub {
 
         return await this.Db.Comments
             .Where(x => x.CommentId == key && x.Order.UserId == this.UserId)
+            .Include(x => x.User)
             .Select(x => new {
                 x.Content,
                 x.User!.Forename,

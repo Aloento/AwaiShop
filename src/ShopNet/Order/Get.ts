@@ -206,7 +206,7 @@ export abstract class OrderGet extends OrderEntity {
             const user = await AdminUserEntity.User(cmt.UserId);
 
             if (user)
-              name = user.Name;
+              name = user.Forename;
             else
               log.warn(`[Mismatch] User ${cmt.UserId} not found. Order : ${orderId}`);
           }
