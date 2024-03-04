@@ -229,7 +229,7 @@ export abstract class OrderGet extends OrderEntity {
           comments.push({
             Content: cmt.Content,
             Time: cmt.CreateAt,
-            User: cmt.Name || "You"
+            User: cmt.Forename || "You"
           });
         }
 
