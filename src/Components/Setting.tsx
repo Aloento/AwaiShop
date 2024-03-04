@@ -34,9 +34,6 @@ const useStyles = makeStyles({
   },
   fill: {
     flexGrow: 1
-  },
-  small: {
-    width: "100%"
   }
 });
 
@@ -55,7 +52,7 @@ export function Setting({ Open, Toggle, New }: ISetting) {
   const [forename, setForename] = useState<string>();
 
   const [phone, setPhone] = useState<string>();
-  const [address, setAddress] = useState(Array<string>(4).fill(""));
+  const [address, setAddress] = useState(Array<string>(5).fill(""));
 
   const { data, mutate } = Hub.User.Get.useMe(log);
 
@@ -218,13 +215,26 @@ export function Setting({ Open, Toggle, New }: ISetting) {
                   minLength={2}
                 />
               </Field>
+            </div>
 
-              <Field hint="Postal / Zip Code">
+            <div className={style.one}>
+              <Field hint="Country">
                 <Input
-                  input={{ className: style.small }}
                   value={address[3]}
                   onChange={(_, v) => {
                     address[3] = v.value;
+                    setAddress([...address]);
+                  }}
+                  maxLength={10}
+                  minLength={2}
+                />
+              </Field>
+
+              <Field hint="Postal / Zip Code">
+                <Input
+                  value={address[4]}
+                  onChange={(_, v) => {
+                    address[4] = v.value;
                     setAddress([...address]);
                   }}
                   maxLength={10}
